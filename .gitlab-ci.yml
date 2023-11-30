@@ -1,0 +1,37 @@
+variables:
+  DOCKER_REGISTRY: 613539523857.dkr.ecr.ap-southeast-1.amazonaws.com
+  AWS_DEFAULT_REGION: ap-southeast-1
+  APP_NAME: e-learning-frontend
+  #APP_VERSION: 1.0.1
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  AWS_ACCESS_KEY_ID: AKIAY5WOOFUIZ65EZCHN
+  AWS_SECRET_ACCESS_KEY: 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
+
+build:
+  image: 
+    name: amazon/aws-cli
+    entrypoint: [""]
+  services:
+    - docker:dind
+  before_script:
+    - amazon-linux-extras install docker
+    - aws --version
+    - cat /etc/os-release  
+    - docker --version
+  script:
+   # - docker build -t $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID . 
+    - docker build -t $DOCKER_REGISTRY/$APP_NAME:1.3.0-beta.5 . 
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $DOCKER_REGISTRY
+   # - docker push $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID
+    - docker push $DOCKER_REGISTRY/$APP_NAME:1.3.0-beta.5
+  only:
+    - tags
+    
+deploy:
+  only:
+    - tags
+  stage: deploy
+  script:
+    - echo "Deploy steps go here..."
