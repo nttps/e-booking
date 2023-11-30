@@ -9,7 +9,7 @@
             </li>
           
             <li class="px-4 pt-3 border-t border-[#C0C0C0]">
-                <SettingsLink @click="logout" class="flex items-center"><img src="~/assets/images/icon-logout.png" class="mr-2" alt=""> ออกจากระบบ</SettingsLink>
+                <SettingsLink @click="logout" class="flex items-center">ออกจากระบบ</SettingsLink>
             </li>
         </ul>
     </div>
