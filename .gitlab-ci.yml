@@ -1,7 +1,7 @@
 variables:
   DOCKER_REGISTRY: 613539523857.dkr.ecr.ap-southeast-1.amazonaws.com
   AWS_DEFAULT_REGION: ap-southeast-1
-  APP_NAME: e-learning-frontend
+  APP_NAME: E-Booking-frontend
   #APP_VERSION: 1.0.1
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""

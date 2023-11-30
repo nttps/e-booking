@@ -10,7 +10,7 @@
 <script setup>
   const route = useRoute()
   useHead({
-    title: `DDPM E-Learning - ${route.meta.title}`,
-    meta: [{ property: 'og:title', content: `DDPM E-Learning - ${route.meta.title}` }]
+    title: `DDPM E-Booking - ${route.meta.title}`,
+    meta: [{ property: 'og:title', content: `DDPM E-Booking - ${route.meta.title}` }]
   })
 </script>

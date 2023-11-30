@@ -34,13 +34,13 @@ definePageMeta({
     layout: 'auth',
 })
 useHead({
-    title: `DDPM E-Learning - เข้าสู่ระบบ`,
+    title: `DDPM E-Booking - เข้าสู่ระบบ`,
 })
 
 const loginForm = ref({
   username: "tammon.y",
   password: "1234",
-  AppsID: "E-Learning"
+  AppsID: "E-Booking"
 })
 
 const register = ref(false)

@@ -8,7 +8,7 @@
                 3/12 ถ.อู่ทองนอก แขวงดุสิต เขตดุสิต กรุงเทพมหานคร 10300 <br />
                 โทรศัพท์ 0-2637-3000 <br />
             </div>
-            <div>DDPM - E-Learning Version {{ config.public.version }}</div>
+            <div>DDPM - E-Booking Version {{ config.public.version }}</div>
         </div>
     </footer>
 </template>
