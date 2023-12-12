@@ -1,12 +1,11 @@
 export default defineAppConfig({
     ui: {
-        primary: "orange",
-        gray: "cool",
+        primary: "amber",
         input: {
             color: {
                 white: {
                     outline:
-                        "shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-0 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-orange-500",
+                        "shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-orange-500",
                 },
             },
             padding: {

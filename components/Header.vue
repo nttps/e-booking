@@ -46,7 +46,7 @@
         
     </header>
 
-    <div class="bg-black/50 mb-10 h-64 md:h-96 relative">
+    <div class="bg-black/50 h-64 md:h-96 relative">
         <div class="absolute top-0 right-0 block w-full h-full">
             <img
             alt="Snowy mountain lake"

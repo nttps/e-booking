@@ -17,7 +17,7 @@
         "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
         "@types/node": "^18.16.19",
         "nuxt": "^3.8.2",
-        "nuxt-icon": "^0.4.2",
+        "nuxt-icon": "^0.6.7",
         "sass": "^1.63.6"
     },
     "dependencies": {
