@@ -46,19 +46,19 @@
             <img src="" alt="">
         </div>
         <div class="w-8/12">
-            <div class="font-bold text-xl mb-2">{{ room.name }}</div>
+            <div class="font-bold text-xl mb-2">{{ room.room_name }}</div>
             <div class="flex items-center space-x-2 mb-2 text-gray-500">
-                <Icon name="heroicons:user-group-20-solid" size="30px" /> <span>{{ room.count }}</span>
+                <Icon name="heroicons:user-group-20-solid" size="30px" /> <span>{{ room.capacity }}</span>
             </div>
             <div class="flex items-center space-x-2 mb-2 text-gray-500">
-                <Icon name="clarity:building-line" size="30px" /> <span>{{ room.building }}</span>
+                <Icon name="clarity:building-line" size="30px" /> <span>{{ room.building_id }}</span>
             </div>
             <div class="flex items-center space-x-2 mb-2 text-gray-500">
-                <span>สถานะ</span> <span class="rounded-full px-4 text-black" :class="{ 'bg-green-400': room.status === 'ว่าง', 'bg-red-400': room.status !== 'ว่าง'}">{{ room.status }}</span>
+                <span>สถานะ</span> <span class="rounded-full px-4 text-black" :class="{ 'bg-green-400': room.status === 'ปกติ', 'bg-red-400': room.status !== 'ปกติ'}">{{ room.status }}</span>
             </div>
             <div class="text-right">
-                <NuxtLink to="#" class="mr-4">ดูเพิ่มเติม</NuxtLink>
-                <UButton label="จอง" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+                <NuxtLink :to="`/room/${room.room_id}`" class="mr-4">ดูเพิ่มเติม</NuxtLink>
+                <UButton label="จอง" @click="navigateTo(`/room/${room.room_id}/booking`)" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
             </div>
         </div>
       
@@ -77,36 +77,17 @@
 
 
     onMounted(() => {
-      
+        fetchRooms()
 
     });
 
+    const rooms = ref()
+
+    const fetchRooms = async () => {
+       rooms.value = await listRooms({})
+    }
    
-    const rooms = ref([{
-        id: 5,
-        name: 'ห้องประชุม A',
-        count: 20,
-        building: 'อาคาร 4 ชั้น 6',
-        status: 'ว่าง'
-    }, {
-        id: 6,
-        name: 'ห้องประชุม B',
-        count: 5,
-        building: 'อาคาร 4 ชั้น 6',
-        status: 'ว่าง'
-    }, {
-        id: 7,
-        name: 'ห้องประชุม C',
-        count: 6,
-        building: 'อาคาร 4 ชั้น 6',
-        status: 'ว่าง'
-    }, {
-        id: 8,
-        name: 'ห้องประชุม D',
-        count: 4,
-        building: 'อาคาร 4 ชั้น 6',
-        status: 'ไม่ว่าง'
-    }])
+   
 </script>
 
 

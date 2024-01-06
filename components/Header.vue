@@ -13,7 +13,7 @@
             "
         >
             <div>
-                <a href="#" class="flex justify-center items-center">
+                <a href="/" class="flex justify-center items-center">
                     <img src="~/assets/images/logo.png" class="w-[70px]" alt="E-Booking Logo">
                     <div class="text-lg 2xl:text-xl ml-4 font-semibold">
                         <div>ระบบงานดิจิทัล</div> 
@@ -46,7 +46,7 @@
         
     </header>
 
-    <div class="bg-black/50 h-64 md:h-96 relative">
+    <div class="bg-black/50 h-64 md:h-96 relative" v-if="tumbotron === undefined || tumbotron">
         <div class="absolute top-0 right-0 block w-full h-full">
             <img
             alt="Snowy mountain lake"
@@ -112,6 +112,7 @@
     const buttonNotificationRef = ref(null);
     const config = useRuntimeConfig();
 
+    const props = defineProps(['tumbotron'])
     const autocompleteResult = ref()
     const searchText = ref('')
     const searchBar = ref()

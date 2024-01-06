@@ -1,3 +1,10 @@
+const isDev = process.env.NODE_ENV === "development";
+
+// const apiBaseUrl = 'http://localhost:3001'
+const apiBaseUrl =
+    process.env.NUXT_PUBLIC_API_URL || "https://dpm-vote.gooddev.net/api";
+const version = process.env.NUXT_PUBLIC_VERSION || "0.0.1";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     ssr: false,
@@ -33,9 +40,10 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            version: "",
-            apiUrl: "",
-            baseFileUrl: "",
+            cookieLifetime: 7,
+            version: version,
+            apiUrl: apiBaseUrl,
+            authUrl: "",
         },
     },
 });

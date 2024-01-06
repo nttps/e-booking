@@ -4,7 +4,13 @@
         <ul>
             <li class="px-4 py-2">
                 <SettingsLink to="/profile" class="flex items-center">
-                    <img src="~/assets/images/icon-profile-user.png" class="mr-2" alt=""> ข้อมูลผู้ใช้
+                    <Icon name="material-symbols:account-box-sharp" size="35px" class="text-amber-500" /> ข้อมูลผู้ใช้
+                </SettingsLink>
+            </li>
+
+            <li class="px-4 py-2">
+                <SettingsLink to="/settings" class="flex items-center">
+                    <Icon name="material-symbols:settings-applications-sharp" size="35px" class="text-amber-500" /> ตั้งค่า
                 </SettingsLink>
             </li>
           
