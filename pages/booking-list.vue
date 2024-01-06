@@ -5,22 +5,22 @@
             <!-- Filters -->
             <div class="flex items-center justify-between gap-3">
                 <div class="flex items-center gap-1.5">
-                    <UInput v-model="nameSearch" placeholder="ชื่อห้องประชุม" />
+                    <UInput v-model="nameSearch" placeholder="ชื่อห้องประชุม" size="xl" />
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <UInput v-model="nameSearch" placeholder="ตำนวนผู้เข้าประชุม" />
+                    <UInput v-model="nameSearch" placeholder="ตำนวนผู้เข้าประชุม" size="xl" />
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <UInput v-model="nameSearch" placeholder="วันที่เริ่ม" />
+                    <UInput v-model="nameSearch" placeholder="วันที่เริ่ม" size="xl" />
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <UInput v-model="nameSearch" placeholder="วันที่สิ้นสุด" />
+                    <UInput v-model="nameSearch" placeholder="วันที่สิ้นสุด" size="xl" />
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <UInput v-model="nameSearch" placeholder="อาคาร" />
+                    <UInput v-model="nameSearch" placeholder="อาคาร" size="xl" />
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <UInput v-model="nameSearch" placeholder="สถานะ" />
+                    <UInput v-model="nameSearch" placeholder="สถานะ" size="xl" />
                 </div>
             </div>
             
@@ -28,31 +28,29 @@
                 <UButton
                     icon="i-heroicons-magnifying-glass"
                     color="gray"
-                    size="xs"
+                    size="xl"
                     trailing
                 >
                     ค้นหา
                 </UButton>
                 <UButton
                     color="gray"
-                    size="xs"
+                    size="xl"
                     :disabled="nameSearch === '' && typeSearch === ''"
                     @click="resetFilters"
                 >
                     ล้างค่าการค้นหา
                 </UButton>
-                <UButton label="เพิ่มข้อมูล" color="amber" @click="modalAdd = true; getOtherItems()"/>
             </div>
         </div>
         
         <!-- Table -->
         <UTable
         
-            :rows="booking.stations"
+            :rows="booking"
             :columns="columns"
             :loading="pending"
             class="w-full"
-            :ui="{ td: { base: 'max-w-[0] truncate' } }"
             :loading-state="{ label: 'กำลังโหลด ...' }" 
             :empty-state="{ label: 'ไม่พบรายการ' }"
         >
@@ -74,8 +72,21 @@
             <template #status-data="{ row }">
                
             </template>
+            <template #actions-data="{ row }">
+                <div class="flex space-x-4">
+                    <div v-if="row.status === 'รออนุมัติ'">
+                        <UButton label="แก้ไข" @click="edit(row.bk_no)" />
+                    </div>
+
+                    <div v-if="row.status !== 'อนุมัติ'">
+                        <UButton label="ลบ" color="red" @click="modalDelete = true; dataDelete = row.bk_no"/>
+                    </div>
+                </div>
+              
+            </template>
+            
         </UTable>
-        <div class="flex flex-wrap justify-between items-center bg-white px-4 pb-4">
+        <div class="flex flex-wrap justify-between items-center bg-white px-4 pb-4 pt-4">
             <div>
                 <span class="text-sm leading-5">
                     Showing
@@ -104,6 +115,17 @@
             />
         </div>
     </div>
+
+    <UModal v-model="modalEdit" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal">
+        <UForm :state="form" @submit="submit">
+
+            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" /> 
+        </UForm>
+        
+    </UModal>
+
+    <ModalAlertDelete v-model="modalDelete" @confirm="deleteItem"/>
+
 </template>
 
 <script setup>
@@ -111,14 +133,18 @@
 
     const authStore = useAuthStore()
 
-    const modalAdd = ref(false)
+    const modalEdit = ref(false)
     const nameSearch = ref("")
     const typeSearch = ref("")
 
 
+    const modalDelete = ref(false)
+    const dataDelete = ref(null)
+
+
     // Columns
     const columns = [{
-        key: 'id',
+        key: 'bk_no',
         label: 'เลขที่เอกสาร',
     }, {
         key: 'station_name',
@@ -130,14 +156,17 @@
         key: 'date_end',
         label: 'ถึง',
     }, {
-        key: 'count_other_machine',
+        key: 'agenda',
         label: 'หัวข้อการประชุม',
     }, {
-        key: 'modified_by',
-        label: 'รายละเอยีด',
+        key: 'reason_desc',
+        label: 'รายละเอียด',
     }, {
         key: 'status',
         label: 'สถานะ',
+    }, {
+        key: 'actions',
+        label: 'จัดการ',
     }]
 
     const resetFilters = () => {
@@ -163,6 +192,29 @@
         watch: [page, pageFrom, pageCount, nameSearch, typeSearch]
     })
 
+    const form = ref({})
+
+
+    const edit = async (id) => {
+        const data = await getApi(`/bk/room/GetDocSet?room_id=${id}`)
+
+        form.value = data.booking
+        form.joiners = data.joiners
+
+
+        modalEdit.value = true
+    }
+
+     
+    const deleteItem = async () => {
+        const data = await deleteApi('/bk/book/DeleteDoc' , {
+            bkNO: dataDelete.value,//รหัส staff
+            ActionBy: authStore.username//current user login
+        })
+
+        modalDelete.value = false
+        refresh()
+    }
 </script>
 
 <style lang="scss" scoped>

@@ -12,14 +12,14 @@
         >
             <template #header>
                 <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
-                    ตำแหน่งในที่ประชุม
+                    สิ่งคำนวยความสะดวก
                 </h2>
             </template>
             <div class="flex justify-between items-center w-full mb-4">
                 <!-- Filters -->
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-1.5">
-                        <UInput v-model="nameSearch" placeholder="ชื่อตำแหน่ง" />
+                        <UInput v-model="nameSearch" placeholder="สิ่งคำนวยความสะดวก" />
                     </div>
                 </div>
                 
@@ -133,15 +133,15 @@
             
                 <template #header>
                     <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
-                        ตำแหน่งในที่ประชุม
+                        สิ่งคำนวยความสะดวก
                     </h2>
                 </template>
 
-                <UFormGroup label="ตำแหน่ง" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
+                <UFormGroup label="สิ่งคำนวยความสะดวก" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <UInput placeholder="" v-model="form.type_name" required />
                 </UFormGroup>
                 <UFormGroup label="คำอธิบาย" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <UInput placeholder="" v-model="form.type_color" required />
+                    <UInput placeholder="" v-model="form.type_color" />
                 </UFormGroup>
                 <template #footer>
                     <div class="text-center flex justify-center space-x-8">
@@ -177,7 +177,6 @@
 
 
     const modalAdd = ref(false)
-    const imageSelect = ref(false)
     const modalDelete = ref(false)
 
     const dataDelete = ref(null)
@@ -185,13 +184,11 @@
     const nameSearch = ref("")
     const typeSearch = ref("")
 
-    const images = ref([])
-
 
     // Columns
     const columns = [ {
         key: 'type_name',
-        label: 'ชื่อตำแหน่ง',
+        label: 'สิ่งอำนวยความสะดวก',
     }, {
         key: 'type_color',
         label: 'อธิบาย',
@@ -209,14 +206,6 @@
         label: 'จัดการ',
     }]
   
-    onMounted(async ()=> {
-  
-
-    })
-
-   
-  
-
     const resetFilters = () => {
         nameSearch.value = ""
     }
@@ -229,7 +218,7 @@
 
     // Data
     const { data: joinRoles, pending, refresh } = await useAsyncData('joinRoles', async () => await postApi('/bk/type/ListData' , {
-            TypeKey: "JOIN_ROLE",
+            TypeKey: "AMENITIES",
             SearchText: nameSearch.value,
         }) 
     , {
@@ -238,7 +227,7 @@
     })
 
     const dataForm = {
-        type_key:"JOIN_ROLE",//VEHICLE , REASON , JOIN_ROLE
+        type_key:"AMENITIES",//VEHICLE , REASON , AMENITIES
         type_id: genID(),
         type_name:"",//ชื่อของประเภท
         type_color:"",//color
@@ -248,7 +237,7 @@
 
     const closeModal = () => {
         form.value = {
-            type_key:"JOIN_ROLE",//VEHICLE , REASON , JOIN_ROLE
+            type_key:"AMENITIES",//VEHICLE , REASON , AMENITIES
             type_id: genID(),
             type_name:"",//ชื่อของประเภท
             type_color:"",//color
@@ -283,7 +272,7 @@
 
     const deleteItem = async () => {
         const data = await deleteApi('/bk/type/Delete' , {
-            TypeKey:"JOIN_ROLE",
+            TypeKey:"AMENITIES",
             TypeID: dataDelete.value,
             DeletedBy: authStore.username
         })

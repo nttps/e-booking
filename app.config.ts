@@ -21,7 +21,7 @@ export default defineAppConfig({
             },
             tbody: "bg-white",
             td: {
-                base: "whitespace-nowrap first:border-l border-r border-b border-[#FFA800] truncate",
+                base: "first:border-l border-r border-b border-[#FFA800] ",
                 size: "text-base",
             },
             th: {

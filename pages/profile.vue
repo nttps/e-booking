@@ -1,10 +1,8 @@
-<template>
-    <div>
+<template></template>
 
-    </div>
-</template>
 
 <script setup>
+    
     definePageMeta({ 
         layout: 'settings', 
         title: 'การตั้งค่า', 
@@ -14,18 +12,4 @@
         },
         middleware: 'auth'
     })
-
-    const authStore = useAuthStore()
-
-
-
-    if ( authStore.isAdmin) {
-        await navigateTo('/settings/booking');
-    }else {
-        await navigateTo('/settings/profile');
-    }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

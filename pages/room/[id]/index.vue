@@ -16,8 +16,8 @@
                     </div>
                 </div>
                 <div class="lg:w-1/2">
-                    <h2 class="font-bold text-xl">รายละเอียดห้องประชุม</h2>
-                    <table class="border-separate border-spacing-y-2 w-full">
+                    <h2 class="font-bold text-2xl">รายละเอียดห้องประชุม</h2>
+                    <table class="border-separate border-spacing-y-2 w-full text-xl">
                         <tr>
                             <td>รหัสห้องประชุม</td>
                             <td>{{ room.room_id }}</td>

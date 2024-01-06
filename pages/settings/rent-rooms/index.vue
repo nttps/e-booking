@@ -56,7 +56,7 @@
             <!-- Table -->
             <UTable
             
-                :rows="rooms"
+                :rows="rooms.slice((page - 1) * pageCount, (page) * pageCount)"
                 :columns="columns"
                 :loading="pending"
                 class="w-full"
@@ -328,6 +328,8 @@
             modified_by:"",//current user login กรณีที่ต้องการแก้ไข
 
         }
+
+        images.value = []
     }
 
     const form = ref(dataForm)
@@ -349,10 +351,12 @@
 
         if(images.value.length > 0) {
             uploadImage(data.rooms.room_id)
+        }else {
+            closeModal()
+            refresh()
         }
 
-        closeModal()
-        refresh()
+       
 
     }
 
@@ -371,7 +375,10 @@
 
         console.log(formdata);
 
-        //const data = await imageUpload(`/room/UploadRoomPhotos?room_id=${id}` ,form.value)
+        const data = await imageUpload(`/bk/room/UploadRoomPhotos?room_id=${id}&created_by=${authStore.username}` , formdata )
+
+        closeModal()
+        refresh()
 
     }
 

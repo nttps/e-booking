@@ -46,18 +46,17 @@
                     >
                         ล้างค่าการค้นหา
                     </UButton>
-                    <UButton label="เพิ่มข้อมูล" color="amber" @click="modalAdd = true; getOtherItems()"/>
+                    <UButton label="เพิ่มรายการจอง" color="amber" @click="modalAdd = true; getOtherItems()"/>
                 </div>
             </div>
             
             <!-- Table -->
             <UTable
             
-                :rows="booking.stations"
+                :rows="booking"
                 :columns="columns"
                 :loading="pending"
                 class="w-full"
-                :ui="{ td: { base: 'max-w-[0] truncate' } }"
                 :loading-state="{ label: 'กำลังโหลด ...' }" 
                 :empty-state="{ label: 'ไม่พบรายการ' }"
             >
@@ -66,20 +65,13 @@
                     {{ pageFrom + index }}
                 </template>
 
-                <template #modified_date-data="{ row }">
-                    {{ row.modified_date ? moment(row.modified_date).format('DD/MM/YYYY HH:hh') : '-' }}
-                </template>
-
-                <template #station_name-data="{ row }">
-                    {{ row.station_name || row.loc_name }}
-                </template>
                 <template #actions-data="{ row }">
                     <UButton
                         icon="i-heroicons-pencil-solid"
                         color="emerald"
                         square
                         variant="link"
-                        @click="edit(row.fire_station_id)"
+                        @click="edit(row.bk_no)"
                     />
 
                     <UButton
@@ -87,7 +79,7 @@
                         color="red"
                         square
                         variant="link"
-                        @click="modalDelete = true; dataDelete = row.fire_station_id"
+                        @click="modalDelete = true; dataDelete = row.bk_no"
                     />
                 </template>
             </UTable>
@@ -128,26 +120,9 @@
     </div>
 
     <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal">
-        <UForm :state="form" @submit="submit">
-            <UCard
-                class="w-full"
-            >
-            
-                <template #header>
-                    <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
-                        เพิ่มหน่วยดับเพลิง / ทรัพยากร
-                    </h2>
-                </template>
+       <UForm :state="form" @submit="submit">
 
-
-                <template #footer>
-                    <div class="text-center flex justify-center space-x-8">
-                        <UButton type="submit" label="เพิ่มข้อมูล" color="amber" size="xl" />
-                        <UButton type="button" label="กลับ" color="gray" variant="outline" size="xl" @click="modalAdd = false; closeModal()" />
-                    </div>  
-                </template>
-        
-            </UCard>
+            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" /> 
         </UForm>
         
     </UModal>
@@ -188,19 +163,19 @@
         key: 'station_name',
         label: 'ห้องประชุม',
     }, {
-        key: 'count_water_truck',
+        key: 'num_attendee',
         label: 'จำนวนผู้เข้าประชุม',
     }, {
-        key: 'count_pump',
+        key: 'date_begin',
         label: 'ตั้งแต่',
     }, {
-        key: 'count_fire_truck',
+        key: 'date_end',
         label: 'ถึง',
     }, {
         key: 'count_other_machine',
         label: 'ผู้อำนวยการ',
     }, {
-        key: 'modified_by',
+        key: 'bk_date',
         label: 'วันที่ขอ',
     }, {
         key: 'actions',
@@ -211,9 +186,6 @@
   
 
     })
-
-   
-  
 
     const resetFilters = () => {
         nameSearch.value = ""
@@ -238,45 +210,57 @@
         watch: [page, pageFrom, pageCount, nameSearch, typeSearch]
     })
 
-    const dataForm = {
-        fire_station_id:"",//รหัสสถานีดับเพลิง ปล่อยว่างหากต้องการสร้างใหม่ ,ถ้ามีค่าเป็นการอัพเดท
-        loc_id: '',//รหัสของ Location หรือ อปท
-        station_ref:"",//รหัสอ้างอิงสถานีดับเพลิง
-        station_name:"",// ชื่อสถานะดับเพลิง
-        station_type:"",//ชนิดถานี (ตอนนี้ยังไม่มี)
-        boss_name:"",//ชื่อหัวหน้าหน่วย
-        email:"",
-        tel:"",
-        lat: 13.736717,
-        lon: 100.523186,
-        created_by: authStore.username,//current user login 
-        modified_by:"",//current user login กรณีที่ต้องการแก้ไข
-        has_station: false,
-        p_no: "",
-        a_no: ""
-
-    }
 
     const closeModal = () => {
         form.value = {
-            fire_station_id:"",//รหัสสถานีดับเพลิง ปล่อยว่างหากต้องการสร้างใหม่ ,ถ้ามีค่าเป็นการอัพเดท
-            loc_id: authStore.user.currentUserInfo.aptCode,//รหัสของ Location หรือ อปท
-            station_ref:"",//รหัสอ้างอิงสถานีดับเพลิง
-            station_name:"",// ชื่อสถานะดับเพลิง
-            station_type:"",//ชนิดถานี (ตอนนี้ยังไม่มี)
-            boss_name:"",//ชื่อหัวหน้าหน่วย
-            email:"",
-            tel:"",
-            lat: authStore?.lat || 13.736717,
-            lon: authStore?.lon || 100.523186,
-            created_by: authStore.username,//current user login 
-            modified_by:"",//current user login กรณีที่ต้องการแก้ไข
-            has_station: false,
-            p_no: "",
-            a_no: ""
-
+            bk_no:"",//กรณีเพิ่มใหม่ไม่ต้องส่งค่ามา แต่ถ้าเป็นการแก้ไขให้เลขเอกสารมา
+            bk_date: dateNow.value.format('YYYY-MM-DDTHH:mm:ss.000'),//วันที่จอง
+            reason_id:"",//รหัสเหตุผลเชื่อมกับตาราง bk_type(REASON)
+            reason_desc:"",//เหตุผลในการจอง
+            bk_type:"จองห้องประชุม",//จองห้องประชุม, จองยานพาหนะ ,จองพนักงานขับรถ
+            bk_by_username: authStore.username,//จองด้วยชื่อยูสเซอร์
+            bk_by_fullname: authStore.fullName, //จองด้วยชื่อเต็ม
+            bk_for_dep_id:"",//จำนวนเอกสารแนบ 
+            remark1:"",//จุดหมายปลายทาง
+            remark2:"",//สัมภาระ
+            remark3:"",//หมายเหตุุ
+            is_need_driver:true,//ต้องการพนักงานขับรถ 
+            count_file:1,//
+            num_attendee: null,//จำนวนผู้เข้าร่วม   
+            agenda:"",//รายละเอียดการประชุม
+            date_begin: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
+            date_end: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
+            created_by: authStore.username, //ผู้ทำรายการ
+            modified_by:"",//ผู้แก้ไขรายการ
+            joiners: []
         }
-        getListItems()
+    }
+
+    
+    const dateNow = ref(moment(new Date()))
+
+    const room = ref({})
+    const dataForm = {
+        bk_no:"",//กรณีเพิ่มใหม่ไม่ต้องส่งค่ามา แต่ถ้าเป็นการแก้ไขให้เลขเอกสารมา
+        bk_date: dateNow.value.format('YYYY-MM-DDTHH:mm:ss.000'),//วันที่จอง
+        reason_id:"",//รหัสเหตุผลเชื่อมกับตาราง bk_type(REASON)
+        reason_desc:"",//เหตุผลในการจอง
+        bk_type:"จองห้องประชุม",//จองห้องประชุม, จองยานพาหนะ ,จองพนักงานขับรถ
+        bk_by_username: authStore.username,//จองด้วยชื่อยูสเซอร์
+        bk_by_fullname: authStore.fullName, //จองด้วยชื่อเต็ม
+        bk_for_dep_id:"",//จำนวนเอกสารแนบ 
+        remark1:"",//จุดหมายปลายทาง
+        remark2:"",//สัมภาระ
+        remark3:"",//หมายเหตุุ
+        is_need_driver:true,//ต้องการพนักงานขับรถ 
+        count_file:1,//
+        num_attendee: null,//จำนวนผู้เข้าร่วม   
+        agenda:"",//รายละเอียดการประชุม
+        date_begin: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
+        date_end: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
+        created_by: authStore.username, //ผู้ทำรายการ
+        modified_by:"",//ผู้แก้ไขรายการ
+        joiners: []
     }
 
     const form = ref(dataForm)
@@ -290,65 +274,16 @@
         groupFireItem.value = data.items
 
         modalAdd.value = true
-
     }
 
 
     const submit = async ()  => {
-        
-        const groupItemMap = groupFireItem.value.filter(g => g.sum_total > 0).map(group => {
-            return group.items.filter(item => item.qty > 0).map(item => {
-
-                if(item.qty < 1) return
-                return {
-                    item_id: item.item_id,
-                    qty: item.qty
-                }
-            })
-         }).flat()
-
-
-        items.value = groupItemMap.concat(...machines.value.filter(item => item.item_id && item.qty))
-        
-        
-        if(form.value.has_station) {
-            addItemToFireStation()
-        }else {
-            addItemToLog()
-        }
-
-
-        modalAdd.value = false
-
-        closeModal()
-        refresh()
-
-    }
-
-    const addItemToFireStation = async () => {
-        const data = await postApi('/fr/FireStation/Save' , {
-            FireStationInfo: form.value,
-            ItemsInStation: items.value
+        const data = await postApi('/bk/book/save' , {
+            booking: form.value,
+            joiners: []
         })
-
-        console.log(data);
-
     }
-
-    const searchLoc = () => {
-
-    }
-    const addItemToLog = async () => {
-        const data = await postApi('/fr/ItemInLoc/SaveBulkItem' , {
-            ActionBy: authStore.username, 
-            LocID: authStore.level ===  'อปท.' ? authStore.user.currentUserInfo.aptCode : form.value.loc_id,  //ถ้า Save ลงอปท. ให้มีเลข อปท.และปล่อยว่างที่ FireStationID
-            FireStationID:"",//ถ้า Save FireStation. ให้มีเลข Fire Station และปล่อยว่างที่ LocID
-            Items: items.value
-        })
-
-        console.log(data);
-    }
-
+ 
     const deleteItem = async () => {
         const data = await deleteApi('/fr/FireStation/DeleteDoc' , {
             StationID: dataDelete.value,//รหัส staff

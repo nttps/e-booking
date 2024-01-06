@@ -22,12 +22,10 @@ export const postApi = async (url, data) => {
     }
 };
 
-export const imageUpload = async (url, data) => {
-    var raw = JSON.stringify(data);
-
+export const imageUpload = async (url, images) => {
     var requestOptions = {
         method: "POST",
-        body: raw,
+        body: images,
     };
 
     try {
