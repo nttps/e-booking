@@ -6,11 +6,26 @@
 
         <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="auth" :items="items" :room="room" /> 
+            <FormBooking :form="form" :auth="auth" :items="items" :room="room.room_name" /> 
         </UForm>
-
-
     </div>
+
+    <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal" prevent-close>
+        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+                <div class="text-center">ยืนยันการจอง</div>
+            </template>
+
+            <div class="font-bold text-xl text-center">คุณต้องการยืนยันการจองนี้ใช่หรือไม่</div>
+
+            <template #footer>
+                <div class="flex justify-between">
+                    <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
+                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
+                </div>
+            </template>
+        </UCard>
+    </UModal>
 </template>
 
 <script setup>
@@ -19,7 +34,8 @@
 
     const auth = useAuthStore()
     const dateNow = ref(moment(new Date()))
-
+    
+    const modalConfirm = ref(false)
     
     const items = ref([])
     const itemJoin = computed(() => items.value.join(',')) 
@@ -39,6 +55,7 @@
         bk_date: dateNow.value.format('YYYY-MM-DDTHH:mm:ss.000'),//วันที่จอง
         reason_id:"",//รหัสเหตุผลเชื่อมกับตาราง bk_type(REASON)
         reason_desc:"",//เหตุผลในการจอง
+        room_id: '',
         bk_type:"จองห้องประชุม",//จองห้องประชุม, จองยานพาหนะ ,จองพนักงานขับรถ
         bk_by_username: auth.username,//จองด้วยชื่อยูสเซอร์
         bk_by_fullname: auth.fullName, //จองด้วยชื่อเต็ม
@@ -58,13 +75,25 @@
     })
 
     const submit = async ()  => {
+       modalConfirm.value = true
+    }
+
+     const submitConfirm = async ()  => {
 
         form.value.remark2 = itemJoin.value
+        form.value.room_id = room.value.room_id
         const data = await postApi('/bk/book/save' , {
             booking: form.value,
-            joiners: []
+            joiners: form.value.joiners.map(joiner => {
+                return {username: joiner.username, join_role: joiner.join_role }
+            })
         })
+
+
+        await navigateTo('/booking-list')
     }
+
+    
 
 </script>
 

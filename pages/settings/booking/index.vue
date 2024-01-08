@@ -66,21 +66,42 @@
                 </template>
 
                 <template #actions-data="{ row }">
-                    <UButton
-                        icon="i-heroicons-pencil-solid"
-                        color="emerald"
-                        square
-                        variant="link"
-                        @click="edit(row.bk_no)"
-                    />
 
-                    <UButton
-                        icon="i-heroicons-trash-solid"
-                        color="red"
-                        square
-                        variant="link"
-                        @click="modalDelete = true; dataDelete = row.bk_no"
-                    />
+                    <div class="flex items-center">
+                        <div v-if="row.status === 'รออนุมัติ'" class="flex items-center">
+                            <UButton  
+                                label="อนุมัติ"
+                                color="emerald"
+                                square
+                                @click="approve(row.bk_no)" 
+                            />
+                            <UButton  
+                                icon="i-heroicons-pencil-solid"
+                                color="emerald"
+                                square
+                                variant="link" 
+                                class=" self-center"
+                                @click="edit(row.bk_no)" 
+                            />
+                        </div>
+
+                        <div v-if="row.status !== 'อนุมัติ'">
+                            <UButton  
+                                icon="i-heroicons-trash-solid"
+                                color="red"
+                                square
+                                variant="link" 
+                                @click="modalDelete = true; dataDelete = row.bk_no"
+                            />
+                        </div>
+                        <div v-else>
+
+                            <UButton  
+                                label="รายละเอียด"
+                                @click="edit(row.bk_no, true)"
+                            />
+                        </div>
+                    </div>
                 </template>
             </UTable>
 
@@ -122,7 +143,7 @@
     <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal">
        <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" /> 
+            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" /> 
         </UForm>
         
     </UModal>
@@ -152,19 +173,19 @@
 
     const nameSearch = ref("")
     const typeSearch = ref("")
-    const groupFireItem = ref(null)
+    const view = ref(false)
 
 
     // Columns
-    const columns = [{
-        key: 'id',
+        const columns = [{
+        key: 'bk_no',
         label: 'เลขที่เอกสาร',
     }, {
-        key: 'station_name',
+        key: 'room_name',
         label: 'ห้องประชุม',
     }, {
-        key: 'num_attendee',
-        label: 'จำนวนผู้เข้าประชุม',
+        key: 'bk_date',
+        label: 'วันที่จอง',
     }, {
         key: 'date_begin',
         label: 'ตั้งแต่',
@@ -172,11 +193,14 @@
         key: 'date_end',
         label: 'ถึง',
     }, {
-        key: 'count_other_machine',
-        label: 'ผู้อำนวยการ',
+        key: 'agenda',
+        label: 'หัวข้อการประชุม',
     }, {
-        key: 'bk_date',
-        label: 'วันที่ขอ',
+        key: 'reason_desc',
+        label: 'รายละเอียด',
+    }, {
+        key: 'status',
+        label: 'สถานะ',
     }, {
         key: 'actions',
         label: 'จัดการ',
@@ -234,6 +258,8 @@
             modified_by:"",//ผู้แก้ไขรายการ
             joiners: []
         }
+
+        view.value = false
     }
 
     
@@ -267,14 +293,18 @@
     const items = ref([])
 
 
-    const edit = async (id) => {
-        const data = await getApi(`/fr/FireStation/GetDocSet?station_id=${id}`)
+    const edit = async (id, viewS = false) => {
+        const data = await getApi(`/bk/book/GetDocSet?bk_id=${id}`)
 
-        form.value = data.fireStationInfo
-        groupFireItem.value = data.items
+        form.value = data.booking
+        form.value.joiners = data.joiners
 
+        items.value = data.booking.remark2.split(',');
         modalAdd.value = true
+        view.value = viewS
     }
+    
+
 
 
     const submit = async ()  => {
@@ -298,6 +328,9 @@
         if (index > -1) { // only splice array when item is found
             machines.value.splice(index, 1); // 2nd parameter means remove one item only
         }
+    }
+
+    const approve = () => {
     }
     
 

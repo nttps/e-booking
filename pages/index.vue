@@ -1,41 +1,25 @@
 <template>
     <h2 class="text-4xl font-bold mb-4">จองห้องประชุม</h2>
     <div class="flex space-x-4 mb-4">
-        <div class="w-2/6">
-            <label for="">วันที่/เวลา เริ่มประชุม *</label>
-        </div>
         <div class="w-4/6">
-
-        </div>
-       
-    </div>
-    <div class="flex space-x-4 mb-4">
-        <div class="w-2/6">
-            <label for="">วันที่/เวลา สิ้นสุดประชุม *</label>
-        </div>
-        <div class="w-4/6">
-
-        </div>
-    </div>
-
-    <div class="flex space-x-4 mb-4">
-        <div class="w-4/6">
-            <UInput placeholder="ชื่อห้องประชุม" size="xl" />
+            <UInput placeholder="ชื่อห้องประชุม" v-model="nameSearch" size="xl" />
         </div>
         <div class="w-2/6">
-            <UInput placeholder="จำนวนผุ้เข้าประชุม" size="xl" />
+            <UInput placeholder="จำนวนผู้เข้าประชุมหรือมากกว่า" v-model="capacitySearch" size="xl" />
         </div>
     </div>
 
     <div class="flex space-x-4">
         <div class="w-3/6">
-            <UInput placeholder="อาคาร" size="xl" />
+            <UInput placeholder="อาคาร" v-model="buildingSearch" size="xl" />
         </div>
         <div class="w-2/6">
-            <USelect :options="[]" placeholder="สถานะ" size="xl" />
+            <USelect :options="['ปกติ', 'ปิดการใช้งาน']" v-model="statusSearch" placeholder="สถานะ" size="xl" />
         </div>
         <div class="w-1/6 text-center">
             <UButton label="ค้นหา" size="xl" />
+            <UButton label="รีเซ็ท" color="gray" size="xl" class="ml-4" @click="resetSearch" />
+
         </div>
     </div>
 
@@ -94,23 +78,45 @@
 
 
     onMounted(() => {
-        fetchRooms()
     });
 
-    const rooms = ref([])
+    const nameSearch = ref('')
+    const capacitySearch = ref(null)
+    const buildingSearch = ref('')
+    const statusSearch = ref('')
 
-        // Pagination
+
+
+         // Pagination
     const page = ref(1)
-    const pageCount = ref(10)
+    const pageCount = ref(5)
+
+     // Data
+    const { data: rooms, pending, refresh } = await useAsyncData('rooms', async () => await listRooms({
+        RoomName: nameSearch.value,
+        Capacity: capacitySearch.value,
+        Building: buildingSearch.value,
+        Status: statusSearch.value
+
+
+       })
+    , {
+        default: () => [],
+        watch: [nameSearch, capacitySearch, buildingSearch, statusSearch]
+    })
+
+    const rowRooms = computed(() => rooms.value.slice((page - 1) * pageCount, (page) * pageCount))
+   
     const pageFrom = computed(() => (page.value - 1) * pageCount.value + 1)
     const pageTotal = computed(() => rooms.value.length )
     const pageTo = computed(() => Math.min(page.value * pageCount.value, pageTotal.value))
 
-
-    const fetchRooms = async () => {
-       rooms.value = await listRooms({})
+    const resetSearch = () =>{
+        nameSearch.value = ''
+        capacitySearch.value = null
+        buildingSearch.value = ''
+        statusSearch.value = ''
     }
-   
    
 </script>
 

@@ -2,7 +2,7 @@
     <div class="bg-white rounded-md py-2 px-4">
         <div class="flex justify-between items-center border-b-2 border-black pb-2 mb-4">
             <div class="text-xl font-bold">รายละเอียดเอกสารการจองห้อง</div>
-            <div>
+            <div v-if="!view">
                 <UButton type="submit" label="ยืนยัน" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
             </div>
         </div>
@@ -75,7 +75,7 @@
                         <td class="w-1/6">วันที่ - เวลาเริ่มการประชุม</td>
                         <td class="w-5/6 text-zinc-400">
                             <UPopover :popper="{ placement: 'bottom-start' }">
-                                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelStartDate" />
+                                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelStartDate" :disabled="view" />
                                 <template #panel="{ close }">
                                     <FormDatePicker v-model="form.date_begin" @close="close" :date-time="true" />
                                 </template>
@@ -86,7 +86,7 @@
                         <td>วันที่ - เวลาสิ้นสุดการประชุม</td>
                         <td class="text-zinc-400">
                             <UPopover :popper="{ placement: 'bottom-start' }">
-                                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" />
+                                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" :disabled="view"  />
                                 <template #panel="{ close }">
                                     <FormDatePicker v-model="form.date_end" @close="close" :date-time="true"/>
                                 </template>
@@ -95,7 +95,7 @@
                     </tr>
                     <tr>
                         <td>ห้องประชุม</td>
-                        <td class="text-zinc-400">{{ room.room_name }}</td>
+                        <td class="text-zinc-400">{{ props.room ?? form.room_name }}</td>
                     </tr>
                     <tr>
                         <td>หัวข้อการประชุม</td>
@@ -103,6 +103,7 @@
                             <div class="relative w-full min-w-[200px]">
                                 <input
                                 v-model="form.agenda"
+                                 :disabled="view" 
                                 required
                                 class="peer h-full w-full border-b border-zinc-400 bg-transparent outline py-1 outline-0 transition-all focus:border-black focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
                             </div>
@@ -115,6 +116,7 @@
                                 placeholder="เลือกวัตถุประสงค์" 
                                 value-attribute="type_name" 
                                 option-attribute="type_name" 
+                                 :disabled="view" 
                                 required
                             />
                             
@@ -128,6 +130,7 @@
                                     v-model.number="form.num_attendee"
                                     type="number"
                                     required
+                                     :disabled="view" 
                                     class="peer h-full w-full border-b border-zinc-400 bg-transparent outline py-1 outline-0 transition-all focus:border-black focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                                 />
                             </div>
@@ -139,6 +142,7 @@
                             <div class="relative w-full min-w-[200px]">
                                 <input
                                     v-model="form.remark3"
+                                     :disabled="view" 
                                     class="peer h-full w-full border-b border-zinc-400 bg-transparent outline py-1 outline-0 transition-all focus:border-black focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" 
                                 />
                             </div>
@@ -151,6 +155,8 @@
                                 <UCheckbox color="primary" 
                                     :value="amenitie.type_name" 
                                     :label="amenitie.type_name" 
+                                    :checked="checkedItems(amenitie.type_name)"
+                                     :disabled="view" 
                                     class="mb-2" 
                                     :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
                                     @change="addItems"
@@ -165,7 +171,8 @@
                         <td class="text-zinc-400">
                             <div class="relative w-full min-w-[200px]">
                                 <input
-                                v-model="form.remark3"
+                                v-model="form.remark1"
+                                 :disabled="view" 
                                 class="peer h-full w-full border-b border-zinc-400 bg-transparent outline py-1 outline-0 transition-all focus:border-black focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
                             </div>
                         </td>
@@ -173,13 +180,11 @@
                     <tr>
                         <td>ผู้เข้าร่วมประชุม</td>
                         <td class="text-zinc-400">
-                            <div class="flex space-x-2">
+                            <div class="flex space-x-2"  v-if="!view">
                                 <div class="w-1/4">
                                     <USelectMenu
                                         placeholder="เลือกผู้เข้าร่วมประชุม" 
                                         v-model="joiner.username"
-                                        value-attribute="type_name" 
-                                        option-attribute="type_name" 
                                         :searchable="searchUser"
                                         searchable-placeholder="ค้นหาผู้เข้าร่วม"
                                     />
@@ -187,7 +192,7 @@
                                 <div class="w-1/4">
                                     <USelectMenu
                                         placeholder="เลือกตำแหน่งที่ประชุม" 
-                                        v-model="joiner.position"
+                                        v-model="joiner.role"
                                         :searchable="searchPosition"
                                         searchable-placeholder="ค้นหาตำแหน่ง"
                                         value-attribute="label" 
@@ -195,17 +200,17 @@
                                     />
 
                                 </div>
-                                <div>
+                                <div >
                                     <UButton 
                                         label="เพิ่มผู้เข้าร่วม" 
                                         color="amber" 
                                         @click="addJoiners" 
                                         class=" disabled:bg-slate-300" 
-                                        :disabled="!joiner.username"
+                                        :disabled="!joiner.username && !joiner.role"
                                     />
                                 </div>
                             </div>
-                            
+                            <div v-else class="text-lg text-black font-bold">ผู้เข้าร่วมประชุม</div>
                         </td>
                     </tr>
                     <tr>
@@ -219,16 +224,28 @@
                                 :ui="{
                                     th: {
                                         color: 'text-gray-900 dark:text-white',
-                                        base: 'text-left rtl:text-right bg-white',
+                                        base: 'bg-white border border-[#FFA800]',
                                         size: 'text-sm'
                                     }
                                 }"
                             >
+                                <template #id-data="{ index }">
+                                    {{index+1}}
+                                </template>
+                                <template #actions-data="{ index }">
+                                    <div class="flex items-center space-x-4" v-if="!view">
+                                        <div>
+                                            <UButton label="ลบ" color="red" @click="deleteJoiner(index)"/>
+                                        </div>
+                                    </div>
+                                    <div v-else></div>
+                                </template>
                             </UTable>
                             <UPagination
                                 v-model="pagejoiner"
                                 :page-count="pagejoinerCount"
                                 :total="pagejoinerTotal"
+                                class="mt-2"
                                 :ui="{
                                     wrapper: 'flex items-center gap-1',
                                     rounded: '!rounded-full min-w-[32px] justify-center',
@@ -252,8 +269,8 @@
     import moment from "moment"
 
 
-    const props = defineProps(['form', 'auth', 'items', 'room'])
-   
+    const props = defineProps(['form', 'auth', 'items', 'room', 'view'])
+
 
     const objectives = ref([])
     const amenities = ref([])
@@ -268,7 +285,8 @@
 
     const joiner = ref({
         username: null,
-        position: null
+        role: null,
+        positionID: null
     })
 
      const fetchAmenities = async () => {
@@ -277,7 +295,6 @@
             SearchText: '',
         }) 
 
-        console.log(resObject);
         amenities.value = resObject
     }
 
@@ -294,13 +311,13 @@
             key: 'id',
             label: 'ลำดับ',
         }, {
-            key: 'name',
+            key: 'fullname',
             label: 'ชื่อ - นามสกุล',
         }, {
-            key: 'actions',
+            key: 'positionID',
             label: 'ตำแหน่งบริหาร',
         }, {
-            key: 'actions',
+            key: 'join_role',
             label: 'ตำแหน่งที่ประชุม',
         }, {
             key: 'actions',
@@ -320,12 +337,15 @@
 
 
     const searchUser = async (q) => {
-        const users = []
+        const users = await postApi('/Person/ListUserInfoWithPage' , {
+            Search: q,
+            skip: 0,
+            take: 50,
+        }) 
 
-        return users.map(user => ({ id: user.username, label: user.fullName, positionID: user.positionID })).filter(Boolean)
+        return users.userInfo.map(user => ({ id: user.username, label: user.fullName, positionID: user.positionID, fullname: user.fullName })).filter(Boolean)
     }
 
-    
 
     const searchPosition = async (q) => {
         const positions = await postApi('/bk/type/ListData' , {
@@ -336,17 +356,45 @@
     }
     const addJoiners = () => {
 
+        const index = props.form.joiners.findIndex(join => join.username === joiner.username);
+        if (index > -1) { // only splice array when item is found
+            props.form.joiners.splice(index, 1); // 2nd parameter means remove one item only
+        }else {
+            props.form.joiners.push({
+                username: joiner.value.username.id,
+                fullname: joiner.value.username.fullname,
+
+                positionID: joiner.value.username.positionID,
+                join_role: joiner.value.role,
+            })
+        }
+
+        joiner.value = {
+            username: null,
+            role: null,
+            positionID: null
+        }
+
+    }
+
+    const deleteJoiner = (index) => {
+        props.form.joiners.splice(index, 1); 
     }
 
     const addItems = (e) => {
         const { value } = e.target
 
-        const index = items.value.indexOf(value);
+        const index = props.items.indexOf(value);
         if (index > -1) { // only splice array when item is found
-            items.value.splice(index, 1); // 2nd parameter means remove one item only
+            props.items.splice(index, 1); // 2nd parameter means remove one item only
         }else {
-            items.value.push(value)
+            props.items.push(value)
         }
     } 
+
+    const checkedItems = (name) => {
+        return props.items.some(item => item == name)
+    }
+    
 
 </script>
