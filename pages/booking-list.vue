@@ -328,7 +328,10 @@
         })
 
 
-        await navigateTo('/booking-list')
+        refresh()
+
+        modalConfirm.value = false
+
     }
 </script>
 
