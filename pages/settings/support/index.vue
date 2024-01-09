@@ -188,7 +188,7 @@
     // Columns
     const columns = [ {
         key: 'type_name',
-        label: 'สิ่งอำนวยความสะดวก',
+        label: 'การสนับสนุนเจ้าหน้าที่',
     }, {
         key: 'type_color',
         label: 'อธิบาย',
