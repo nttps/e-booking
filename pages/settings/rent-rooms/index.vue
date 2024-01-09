@@ -129,7 +129,7 @@
         </UCard>
     </div>
 
-    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal" prevent-close>
+    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal">
         <UForm :state="form" @submit="submit">
             <UCard
                 class="w-full"
