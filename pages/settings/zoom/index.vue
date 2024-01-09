@@ -181,11 +181,8 @@
         key: 'bk_no',
         label: 'เลขที่เอกสาร',
     }, {
-        key: 'room_name',
-        label: 'ห้องประชุม',
-    }, {
         key: 'bk_date',
-        label: 'วันที่จอง',
+        label: 'วันที่',
     }, {
         key: 'date_begin',
         label: 'ตั้งแต่',
