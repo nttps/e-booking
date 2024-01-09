@@ -9,10 +9,6 @@
         <li class="children">
             <SettingsLink to="">การแจ้งเตือน</SettingsLink>
         </li>
-        <li class="children">
-            <SettingsLink to="">ประวัติการเข้าใช้งาน</SettingsLink>
-        </li>
-       
     </ul>
     <ul class="text-lg menu-left" v-if="authStore.isAdmin">
         <li>
