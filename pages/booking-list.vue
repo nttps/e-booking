@@ -58,7 +58,7 @@
         <!-- Table -->
         <UTable
         
-            :rows="booking"
+            :rows="booking.slice((page - 1) * pageCount, (page) * pageCount)"
             :columns="columns"
             :loading="pending"
             class="w-full"

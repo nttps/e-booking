@@ -43,9 +43,6 @@
         <li class="children">
             <SettingsLink to="/settings/amenities">สิ่งคำนวยความสะดวก</SettingsLink>
         </li>
-        <li class="children">
-            <SettingsLink to="/settings/official-holiday">วันหยุดราชการ</SettingsLink>
-        </li>
     </ul>
 </template>
 

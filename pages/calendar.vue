@@ -34,22 +34,21 @@
     const events = ref([
         // ...
         {
-            title: "Advanced algebra",
-            with: "Chandler Bing",
+            title: "agenda",
+            with: "จองโดย",
             time: { start: "2024-01-10 12:05", end: "2024-01-10 23:05" },
-            color: "yellow",
-            isEditable: false,
+            color: "#ff0000",
             id: "753944708f0f",
-            description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!"
+            description: "วันที่จอง ชื่อห้องประชุม ตึก อาคาร จำนวนผู้เข้าร่วม"
         },
         {
-            title: "Ralph on holiday",
-            with: "Rachel Greene",
-            time: { start: "2024-01-07 12:05", end: "2024-01-10 23:05"  },
-            color: "green",
-            isEditable: false,
-            id: "5602b6f589fc"
-        }
+            title: "agenda",
+            with: "จองโดย",
+            time: { start: "2024-01-10", end: "2024-01-10" },
+            color: "#ff0020",
+            id: "753944708f0f",
+            description: "วันที่จอง ชื่อห้องประชุม ตึก อาคาร จำนวนผู้เข้าร่วม"
+        },
         // ...
     ]) 
 </script>
