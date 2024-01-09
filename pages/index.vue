@@ -1,5 +1,5 @@
 <template>
-    <h2 class="text-4xl font-bold mb-4">จองห้องประชุม</h2>
+    <h2 class="text-3xl font-bold mb-4">จองห้องประชุม</h2>
     <div class="flex space-x-4 mb-4">
         <div class="w-4/6">
             <UInput placeholder="ชื่อห้องประชุม" v-model="nameSearch" size="xl" />
@@ -26,7 +26,7 @@
 
     <div class="bg-white flex space-x-4  p-4 my-4" v-for="room in rooms.slice((page - 1) * pageCount, (page) * pageCount)">
         <div class="w-4/12">
-            <img src="" alt="">
+            <img :src="room.photo_url" alt="">
         </div>
         <div class="w-8/12">
             <div class="flex">

@@ -1,6 +1,8 @@
 <template>
-    <div class="bg-white rounded-md">
-        <div class="flex items-center justify-between gap-3">
+    <div class="text-3xl font-bold mb-4">ปฎิทิน</div>
+    <div class="bg-white rounded-md py-4 px-6">
+        
+        <div class="flex items-center justify-between gap-3 mb-2">
             <div class="flex items-center gap-1.5">
                 <UInput v-model="nameSearch" placeholder="ชื่อห้องประชุม" size="xl" />
             </div>
@@ -8,7 +10,8 @@
         <Qalendar 
             :events="events"
             :config="config"
-        />
+        >
+        </Qalendar>
     </div>
 </template>
 
