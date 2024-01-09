@@ -58,8 +58,7 @@
 
 
                 <template #type_color-data="{ row }">
-                    <div class="p-1 inline-block" :style="`background-color: ${row.type_color};`">
-                         {{ row.type_color }}
+                    <div class="p-1 w-10 h-5" :style="`background-color: ${row.type_color};`">
                     </div>
                 </template>
                 <template #modified_date-data="{ row }">
