@@ -163,6 +163,21 @@
                 <UFormGroup label="ชั้น" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <UInput placeholder="" v-model="form.floor_id" required />
                 </UFormGroup>
+
+                <UFormGroup label="สิ่งอำนวยความสะดวก" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
+                    <UCheckbox color="primary" 
+                        :value="amenitie.type_name" 
+                        :label="amenitie.type_name" 
+                        :checked="checkedItems(amenitie.type_name)"
+                            :disabled="view" 
+                        class="mb-2" 
+                        :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
+                        @change="addItems"
+                        v-for="amenitie in amenities"
+                    />
+                </UFormGroup>
+
+                
                 <div class="flex space-x-2">
                     <div class="flex content-center items-center justify-between w-1/3">รูปภาพ</div>
                     <div class="mt-1 relative min-w-auto w-full">
@@ -242,7 +257,19 @@
     const typeSearch = ref("")
 
     const images = ref([])
+    const amenities = ref([])
 
+    onMounted(() => {
+        fetchAmenities()
+    })
+   const fetchAmenities = async () => {
+        const resObject = await postApi('/bk/type/ListData' , {
+            TypeKey: "AMENITIES",
+            SearchText: '',
+        }) 
+
+        amenities.value = resObject
+    }
 
     // Columns
     const columns = [{
@@ -271,14 +298,6 @@
         label: 'จัดการ',
     }]
   
-    onMounted(async ()=> {
-  
-
-    })
-
-   
-  
-
     const resetFilters = () => {
         nameSearch.value = ""
     }
@@ -355,17 +374,27 @@
             closeModal()
             refresh()
         }
-
-       
-
     }
 
     const deleteImage = async (id) => {
-
         const data = await getApi(`/bk/room/DeleteRoomPhoto?room_id=${id}`)
-        
     }
 
+    const addItems = (e) => {
+        const { value } = e.target
+
+        const index = items.value.indexOf(value);
+        if (index > -1) { // only splice array when item is found
+            items.value.splice(index, 1); // 2nd parameter means remove one item only
+        }else {
+            items.value.push(value)
+        }
+    } 
+
+    const checkedItems = (name) => {
+        return items.value.some(item => item == name)
+    }
+    
     const uploadImage = async (id)  => {
 
         var formdata = new FormData();
