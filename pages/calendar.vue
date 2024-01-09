@@ -22,6 +22,15 @@
 
     const nameSearch = ref('')
 
+   const { data: events, pending, refresh } = await useAsyncData('events', async () => await postApi('/bk/book/ListCalendar' , {
+            search: nameSearch.value,
+
+        }) 
+    , {
+        default: () => [],
+        watch: [nameSearch]
+    })
+
     
     const config = ref({
         //locale: "th-TH",
@@ -31,26 +40,6 @@
         },
     })
 
-    const events = ref([
-        // ...
-        {
-            title: "agenda",
-            with: "จองโดย",
-            time: { start: "2024-01-10 12:05", end: "2024-01-10 23:05" },
-            color: "#ff0000",
-            id: "753944708f0f",
-            description: "วันที่จอง ชื่อห้องประชุม ตึก อาคาร จำนวนผู้เข้าร่วม"
-        },
-        {
-            title: "agenda",
-            with: "จองโดย",
-            time: { start: "2024-01-10", end: "2024-01-10" },
-            color: "#ff0020",
-            id: "753944708f0f",
-            description: "วันที่จอง ชื่อห้องประชุม ตึก อาคาร จำนวนผู้เข้าร่วม"
-        },
-        // ...
-    ]) 
 </script>
 
 <style lang="css">

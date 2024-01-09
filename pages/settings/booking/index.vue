@@ -53,7 +53,7 @@
             <!-- Table -->
             <UTable
             
-                :rows="booking"
+                :rows="booking.slice((page - 1) * pageCount, (page) * pageCount)"
                 :columns="columns"
                 :loading="pending"
                 class="w-full"
@@ -65,16 +65,29 @@
                     {{ pageFrom + index }}
                 </template>
 
-                <template #actions-data="{ row }">
+                <template #bk_date-data="{ row }">
+                    {{ moment(row.bk_date).format('DD/MM/YYYY') }}
+                </template>
 
+                <template #date_begin-data="{ row }">
+                    {{ moment(row.date_begin).format('DD/MM/YYYY เวลา HH:mm') }}
+                </template>
+
+                <template #date_end-data="{ row }">
+                    {{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}
+                </template>
+
+
+                <template #actions-data="{ row }">
                     <div class="flex items-center">
+                        <UButton  
+                            icon="i-heroicons-eye-20-solid"
+                            square
+                            variant="link" 
+                            class=" self-center"
+                            @click="edit(row.bk_no, true)" 
+                        />
                         <div v-if="row.status === 'รออนุมัติ'" class="flex items-center">
-                            <UButton  
-                                label="อนุมัติ"
-                                color="emerald"
-                                square
-                                @click="approve(row.bk_no)" 
-                            />
                             <UButton  
                                 icon="i-heroicons-pencil-solid"
                                 color="emerald"
@@ -86,6 +99,7 @@
                         </div>
 
                         <div v-if="row.status !== 'อนุมัติ'">
+                            
                             <UButton  
                                 icon="i-heroicons-trash-solid"
                                 color="red"
@@ -94,13 +108,7 @@
                                 @click="modalDelete = true; dataDelete = row.bk_no"
                             />
                         </div>
-                        <div v-else>
-
-                            <UButton  
-                                label="รายละเอียด"
-                                @click="edit(row.bk_no, true)"
-                            />
-                        </div>
+                    
                     </div>
                 </template>
             </UTable>
@@ -140,11 +148,39 @@
         </UCard>
     </div>
 
-    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal">
+    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal" :prevent-close="preventClose">
        <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" /> 
+            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view"  @approve="approve" /> 
         </UForm>
+
+        <UModal v-model="modalConfirmApprove" prevent-close @close="preventClose = false">
+            <UForm :state="dataApprove" @submit="submitApprove">
+                <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                    <template #header>
+                        <div class="text-center">แจ้งเตือนการยืนยัน</div>
+                    </template>
+
+                    <div class="font-bold text-xl text-center" v-if="dataApprove.Action === 'อนุมัติ'">อนุมัติรายการจองนี้ใช่หรือไม่</div>
+
+                    <div v-else>
+                        
+                        <div class="text-red-600 font-bold text-xl text-center">ไม่อนุมัติรายการจองนี้ใช่หรือไม่</div>
+                        <UFormGroup label="กรอกเหตุผล" name="Reason" size="xl">
+                            <UTextarea v-model="dataApprove.Reason" placeholder="" ref="reason" required/>
+                        </UFormGroup>
+                    </div>
+
+
+                    <template #footer>
+                        <div class="flex justify-between">
+                            <button type="submit" class="px-4 py-2 bg-red-600 text-base rounded-[5px] text-white">ตกลง</button>
+                            <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirmApprove = false;preventClose = false">ยกเลิก</button>
+                        </div>
+                    </template>
+                </UCard>
+            </UForm>
+        </UModal>
         
     </UModal>
 
@@ -291,9 +327,15 @@
 
     const form = ref(dataForm)
     const items = ref([])
-
+    const dataApprove = ref({
+        bkNO:"",  
+        Action:"",//สถานะมี 2 สถานะคือ  (อนุมัติ , ปฏิเสธ)
+        ActionBy: authStore.username,//อนุมัติหรือปฏิเสธโดย
+        Reason:""//เหตุผลการไม่อนุมัติ ถ้าอนุมัติไม่ต้องใส่
+    })
 
     const edit = async (id, viewS = false) => {
+        dataApprove.value.bkNO = id
         const data = await getApi(`/bk/book/GetDocSet?bk_id=${id}`)
 
         form.value = data.booking
@@ -324,13 +366,24 @@
         refresh()
     }
 
-    const removeItem = (index) => {
-        if (index > -1) { // only splice array when item is found
-            machines.value.splice(index, 1); // 2nd parameter means remove one item only
-        }
+    const modalConfirmApprove = ref(false)
+    const preventClose = ref(false)
+
+    const approve = async (status) => {
+        preventClose.value = true
+        await nextTick()
+        dataApprove.value.Action = status ? "อนุมัติ" : "ปฏิเสธ"
+
+        modalConfirmApprove.value = true
     }
 
-    const approve = () => {
+    const submitApprove = async () => {
+        const res = await postApi('/bk/book/UpdateStatus', dataApprove.value)
+
+        modalConfirmApprove.value = false
+        preventClose.value = false
+        modalAdd.value = false
+        refresh()
     }
     
 
