@@ -225,7 +225,7 @@
 
     const modalEdit = ref(false)
     const modalConfirm = ref(false)
-    const nameSearch = ref('')
+    const nameSearch = ref('ทั้งหมด')
 
     const nameUserSearch = ref('')
     const attendeeSearch = ref(null)
@@ -248,7 +248,10 @@
     const labelEndDate = computed(() => searchDateEnd.value ?  moment(searchDateEnd.value).format('DD/MM/YYYY') : 'เลือกวันที่สิ้นสุด')
 
 
-    const rooms = ref([])
+    const rooms = ref([{
+        room_name: 'ทั้งหมด'
+    }])
+
 
     onMounted(() => {
         fetchRooms()
@@ -257,7 +260,7 @@
     const fetchRooms = async () => {
         const resObject = await listRooms({ })
 
-        rooms.value = resObject
+        rooms.value = rooms.value.concat(resObject)
     }
     const checkSearch = (e) => {
         const { checked } = e.target
@@ -299,7 +302,7 @@
     }]
 
     const resetFilters = () => {
-        nameSearch.value = ""
+        nameSearch.value = "ทั้งหมด"
         searchDateBegin.value = null
         searchDateEnd.value = null
         attendeeSearch.value = null
@@ -321,7 +324,7 @@
             date_end: searchDateEnd.value,
             Type: "จองห้องประชุม",
             Status: statusSearch.value === 'ทั้งหมด' ? '' : statusSearch.value,
-            RoomName: nameSearch.value,
+            RoomName: nameSearch.value  === 'ทั้งหมด' ? '' : nameSearch.value,
             Attendee: attendeeSearch.value,
             Building: buildingSearch.value,
             Agenda:agedaSearch.value

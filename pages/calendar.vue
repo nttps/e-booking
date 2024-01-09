@@ -2,16 +2,17 @@
     <div class="text-3xl font-bold mb-4">ปฎิทิน</div>
     <div class="bg-white rounded-md py-4 px-6">
         
-        <div class="flex items-center justify-between gap-3 mb-2">
-            <div class="flex items-center gap-1.5">
-                <UInput v-model="nameSearch" placeholder="ชื่อห้องประชุม" size="xl" />
-            </div>
+        <div class="mb-2">
+                <UFormGroup label="ค้นหาห้องประชุม">
+
+                    <USelectMenu value-attribute="room_name" class="w-full" option-attribute="room_name" :options="rooms" v-model="nameSearch" searchable placeholder="ค้นหาห้องประชุม" size="xl" search-attributes="ค้นหาห้องประชุม" />
+                </UFormGroup>
         </div>
-        <Qalendar 
+        <!-- <Qalendar 
             :events="events"
             :config="config"
         >
-        </Qalendar>
+        </Qalendar> -->
     </div>
 </template>
 
@@ -22,8 +23,22 @@
 
     const nameSearch = ref('')
 
-   const { data: events, pending, refresh } = await useAsyncData('events', async () => await postApi('/bk/book/ListCalendar' , {
-            search: nameSearch.value,
+    const rooms = ref([{
+        room_name: 'ทั้งหมด'
+    }])
+
+    onMounted(() => {
+        fetchRooms()
+    })
+
+    const fetchRooms = async () => {
+        const resObject = await listRooms({ })
+
+        rooms.value = rooms.value.concat(resObject)
+    }
+
+    const { data: events, pending, refresh } = await useAsyncData('events', async () => await postApi('/bk/book/ListCalendar' , {
+            search: nameSearch.value === 'ทั้งหมด' ? '' : nameSearch.value,
 
         }) 
     , {

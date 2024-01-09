@@ -11,7 +11,7 @@
         </li>
     </ul>
     <ul class="text-lg menu-left" v-if="authStore.isAdmin">
-        <li>
+        <!-- <li>
             <span class="font-bold text-lg flex items-center"> <Icon name="ic:round-settings" size="30" /> <span class="ml-1">การตั้งค่า</span></span>
         </li>
         <li class="children">
@@ -23,10 +23,10 @@
        
         <li class="children">
             <SettingsLink to="">ประวัติการใช้งาน</SettingsLink>
-        </li>
-
+        </li> -->
+       
         <li>
-            <span class="font-bold text-lg flex items-center"> <Icon name="ic:round-settings" size="30" /> <span class="ml-1">ข้อมูลพื้นฐาน</span></span>
+            <span class="font-bold text-lg flex items-center"> <Icon name="ic:round-settings" size="30" /> <span class="ml-1">การตั้งค่าข้อมูลพื้นฐาน</span></span>
         </li>
          <li class="children">
             <SettingsLink to="/settings/rent-rooms">ห้องประชุม</SettingsLink>
@@ -42,6 +42,10 @@
         </li>
         <li class="children">
             <SettingsLink to="/settings/amenities">สิ่งคำนวยความสะดวก</SettingsLink>
+        </li>
+
+         <li class="children">
+            <SettingsLink to="">ประวัติการใช้งาน</SettingsLink>
         </li>
     </ul>
 </template>

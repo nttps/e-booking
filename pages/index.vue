@@ -24,7 +24,7 @@
     </div>
 
 
-    <div class="bg-white flex space-x-4  p-4 my-4" v-for="room in rooms.slice((page - 1) * pageCount, (page) * pageCount)">
+    <div class="bg-white flex space-x-4 p-4 mt-4 last-of-type:!mb-0 last:!border-b-0 border-2 border-[#FFA800] rounded-md" v-for="room in rooms.slice((page - 1) * pageCount, (page) * pageCount)" v-if="rooms.length > 0">
         <div class="w-4/12">
             <img :src="room.photo_url" class="h-[250px]" alt="">
         </div>
@@ -51,7 +51,10 @@
             </div>
         </div>
     </div>
-    <div class="bg-white py-4">
+    <div v-else class="bg-white text-red-600 text-center text-xl p-4 mt-4 border-2 border-[#FFA800] ">
+        ไม่พบรายการ
+    </div>
+    <div class="bg-white py-4 border-r-2 border-l-2 border-b-2 border-[#FFA800]"  v-if="rooms.length > 0">
         <UPagination
             v-model="page"
             :page-count="pageCount"

@@ -54,7 +54,7 @@
             src="~/assets/images/bg-header.jpg"
             />
         </div>
-        <div class="z-30 flex flex-col justify-around absolute w-full h-full py-4 lg:py-16 ">
+        <div class="flex flex-col justify-around absolute w-full h-full py-4 lg:py-16 ">
             <h2 class="text-xl md:text-2xl lg:text-4xl xl:text-6xl text-white font-bold text-center mb-4">จองห้องประชุม</h2>
             <div class="grid grid-cols-4 gap-x-10 px-4 lg:px-20">
                 <NuxtLink 
