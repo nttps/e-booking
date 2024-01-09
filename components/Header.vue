@@ -56,7 +56,7 @@
         </div>
         <div class="z-30 flex flex-col justify-around absolute w-full h-full py-4 lg:py-16 ">
             <h2 class="text-xl md:text-2xl lg:text-4xl xl:text-6xl text-white font-bold text-center mb-4">จองห้องประชุม</h2>
-            <div class="grid grid-cols-3 gap-x-10 px-4 lg:px-20">
+            <div class="grid grid-cols-4 gap-x-10 px-4 lg:px-20">
                 <NuxtLink 
                     to="/" 
                     v-slot="{ isActive }" 
@@ -66,6 +66,18 @@
                         :class="{ 'bg-amber-500': isActive, 'text-white': !isActive}"
                     >
                         จองห้องประชุม
+                    </div>
+                    
+                </NuxtLink>
+                <NuxtLink 
+                    to="/zoom" 
+                    v-slot="{ isActive }" 
+                >
+                    <div 
+                        class="rounded-lg border-amber-500 border-2 py-2 px-4  text-center text-2xl font-bold" 
+                        :class="{ 'bg-amber-500': isActive, 'text-white': !isActive}"
+                    >
+                        จองระบบ Zoom
                     </div>
                     
                 </NuxtLink>

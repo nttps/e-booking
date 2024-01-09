@@ -19,9 +19,20 @@
             <span class="font-bold text-lg flex items-center"> <Icon name="ic:round-settings" size="30" /> <span class="ml-1">การตั้งค่า</span></span>
         </li>
         <li class="children">
-            <SettingsLink to="/settings/booking">รายการจอง</SettingsLink>
+            <SettingsLink to="/settings/booking">รายการจองห้องประชุม</SettingsLink>
         </li>
         <li class="children">
+            <SettingsLink to="/settings/zoom">รายการจองระบบ Zoom</SettingsLink>
+        </li>
+       
+        <li class="children">
+            <SettingsLink to="">ประวัติการใช้งาน</SettingsLink>
+        </li>
+
+        <li>
+            <span class="font-bold text-lg flex items-center"> <Icon name="ic:round-settings" size="30" /> <span class="ml-1">ข้อมูลพื้นฐาน</span></span>
+        </li>
+         <li class="children">
             <SettingsLink to="/settings/rent-rooms">ห้องประชุม</SettingsLink>
         </li>
         <li class="children">
@@ -31,10 +42,13 @@
             <SettingsLink to="/settings/locations">ตำแหน่งในที่ประชุม</SettingsLink>
         </li>
         <li class="children">
+            <SettingsLink to="/settings/support">การสนับสนุนเจ้าหน้าที่</SettingsLink>
+        </li>
+        <li class="children">
             <SettingsLink to="/settings/amenities">สิ่งคำนวยความสะดวก</SettingsLink>
         </li>
         <li class="children">
-            <SettingsLink to="">ประวัติการใช้งาน</SettingsLink>
+            <SettingsLink to="/settings/official-holiday">วันหยุดราชการ</SettingsLink>
         </li>
     </ul>
 </template>

@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="border-b-2 border-black pb-2">
-            <div class="text-xl font-bold">รายละเอียดห้องประชุม</div>
+            <div class="text-xl font-bold">รายละเอียดห้อง Zoom</div>
         </div>
         <div class="mb-4">
             <div class="flex justify-between">
@@ -92,10 +92,6 @@
                                 </template>
                             </UPopover>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>ห้องประชุม</td>
-                        <td class="text-zinc-400">{{ props.room ?? form.room_name }}</td>
                     </tr>
                     <tr>
                         <td>หัวข้อการประชุม</td>
@@ -137,6 +133,11 @@
                         </td>
                     </tr> 
                     <tr>
+                        <td>แนบเอกสาร</td>
+                        <td class="text-zinc-400">
+                        </td>
+                    </tr> 
+                    <tr>
                         <td>หมายเหตุ</td>
                         <td class="text-zinc-400">
                             <div class="relative w-full min-w-[200px]">
@@ -148,49 +149,6 @@
                             </div>
                         </td>
                     </tr> 
-                    <tr>
-                        <td>สิ่งอำนวยความสะดวก</td>
-                        <td class="text-zinc-400">
-                            <div class="flex space-x-4 mt-2">
-                                <UCheckbox color="primary" 
-                                    :value="amenitie.type_name" 
-                                    :label="amenitie.type_name" 
-                                    :checked="checkedItems(amenitie.type_name)"
-                                     :disabled="view" 
-                                    class="mb-2" 
-                                    :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
-                                    @change="addItems"
-                                    v-for="amenitie in amenities"
-                                />
-                               
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>การสนับสนุนเจ้าหน้าที่</td>
-                        <td class="text-zinc-400">
-                            <div class="flex space-x-4 mt-2">
-                                <UCheckbox color="primary" 
-                                    label="ช่างภาพ" 
-                                     :disabled="view" 
-                                    class="mb-2" 
-                                    :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
-                                />
-                               
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>อื่น ๆ</td>
-                        <td class="text-zinc-400">
-                            <div class="relative w-full min-w-[200px]">
-                                <input
-                                v-model="form.remark1"
-                                 :disabled="view" 
-                                class="peer h-full w-full border-b border-zinc-400 bg-transparent outline py-1 outline-0 transition-all focus:border-black focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
-                            </div>
-                        </td>
-                    </tr>
                     <tr>
                         <td>ผู้เข้าร่วมประชุม</td>
                         <td class="text-zinc-400">

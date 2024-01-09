@@ -26,7 +26,7 @@
 
     <div class="bg-white flex space-x-4  p-4 my-4" v-for="room in rooms.slice((page - 1) * pageCount, (page) * pageCount)">
         <div class="w-4/12">
-            <img :src="room.photo_url" alt="">
+            <img :src="room.photo_url" class="h-[250px]" alt="">
         </div>
         <div class="w-8/12">
             <div class="flex">
