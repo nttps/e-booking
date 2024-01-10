@@ -51,59 +51,75 @@
             </div>
             
             <!-- Table -->
-            <UTable
-            
-                :rows="booking"
-                :columns="columns"
-                :loading="pending"
-                class="w-full"
-                :loading-state="{ label: 'กำลังโหลด ...' }" 
-                :empty-state="{ label: 'ไม่พบรายการ' }"
-            >
+           <!-- Table -->
+        <UTable
+        
+            :rows="booking.slice((page - 1) * pageCount, (page) * pageCount)"
+            :columns="columns"
+            :loading="pending"
+            class="w-full"
+            :loading-state="{ label: 'กำลังโหลด ...' }" 
+            :empty-state="{ label: 'ไม่พบรายการ' }"
+        >
 
-                <template #id-data="{ row, index }">
-                    {{ pageFrom + index }}
-                </template>
 
-                <template #actions-data="{ row }">
+            <template #detail-data="{ row }">
+                <NuxtLink to="">รายละเอียด </NuxtLink>
+            </template>
 
-                    <div class="flex items-center">
-                        <div v-if="row.status === 'รออนุมัติ'" class="flex items-center">
-                            <UButton  
-                                label="อนุมัติ"
-                                color="emerald"
-                                square
-                                @click="approve(row.bk_no)" 
-                            />
-                            <UButton  
-                                icon="i-heroicons-pencil-solid"
-                                color="emerald"
-                                square
-                                variant="link" 
-                                class=" self-center"
-                                @click="edit(row.bk_no)" 
-                            />
-                        </div>
+            <template #bk_date-data="{ row }">
+                {{ moment(row.bk_date).format('DD/MM/YYYY') }}
+            </template>
 
-                        <div v-if="row.status !== 'อนุมัติ'">
-                            <UButton  
-                                icon="i-heroicons-trash-solid"
-                                color="red"
-                                square
-                                variant="link" 
-                                @click="modalDelete = true; dataDelete = row.bk_no"
-                            />
-                        </div>
-                        <div v-else>
+            <template #date_begin-data="{ row }">
+                {{ moment(row.date_begin).format('DD/MM/YYYY เวลา HH:mm') }}
+            </template>
 
-                            <UButton  
-                                label="รายละเอียด"
-                                @click="edit(row.bk_no, true)"
-                            />
-                        </div>
+            <template #date_end-data="{ row }">
+               {{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}
+            </template>
+
+
+            <template #status-data="{ row }">
+               
+            </template>
+            <template #actions-data="{ row }">
+                <div class="flex items-center">
+                    <UButton  
+                        icon="i-heroicons-eye-20-solid"
+                        square
+                        variant="link" 
+                        class=" self-center"
+                        @click="edit(row.bk_no, true)" 
+                    />
+                    <div v-if="row.status === 'รออนุมัติ'" class="flex items-center">
+                        <UButton  
+                            icon="i-heroicons-pencil-solid"
+                            color="emerald"
+                            square
+                            variant="link" 
+                            class=" self-center"
+                            @click="edit(row.bk_no)" 
+                        />
                     </div>
-                </template>
-            </UTable>
+
+                    <div v-if="row.status !== 'อนุมัติ'">
+                        
+                        <UButton  
+                            icon="i-heroicons-trash-solid"
+                            color="red"
+                            square
+                            variant="link" 
+                            @click="modalDelete = true; dataDelete = row.bk_no"
+                        />
+                    </div>
+                   
+                </div>
+            
+            </template>
+            
+        </UTable>
+
 
             <!-- Number of rows & Pagination -->
             <template #footer>

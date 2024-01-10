@@ -20,7 +20,7 @@
 
 
     if ( authStore.isAdmin) {
-        await navigateTo('/settings/booking');
+        await navigateTo('/settings/rent-rooms');
     }else {
         await navigateTo('/settings/profile');
     }

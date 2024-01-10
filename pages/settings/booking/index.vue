@@ -46,7 +46,7 @@
                     >
                         ล้างค่าการค้นหา
                     </UButton>
-                    <UButton label="เพิ่มรายการจอง" color="amber" @click="modalAdd = true; getOtherItems()"/>
+                    <UButton label="เพิ่มรายการจอง" color="amber" @click="modalAdd = true;"/>
                 </div>
             </div>
             

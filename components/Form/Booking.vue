@@ -303,6 +303,8 @@
 
     const props = defineProps(['form', 'auth', 'items', 'room', 'view'])
     const emit = defineEmits(['approve', 'notApprove'])
+    const authStore = useAuthStore()
+
 
 
     const objectives = ref([])

@@ -11,7 +11,10 @@ export const useAuthStore = defineStore("auth-store", {
     }),
     getters: {
         isLoggedIn: (state) => !!state.user,
-        isAdmin: (state) => state.info?.jobLevel !== "อปท.",
+        isAdmin: (state) =>
+            state.user.userInGroups.some((p) =>
+                p.userGroupId.includes("ADMIN")
+            ),
         level: (state) => state.user?.currentUserInfo.jobLevel,
         provinceNo: (state) => state.user?.currentUserInfo.addrProvince,
         aptCode: (state) => state.user?.currentUserInfo.aptCode,

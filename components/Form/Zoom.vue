@@ -2,9 +2,6 @@
     <div class="bg-white rounded-md py-2 px-4">
         <div class="flex justify-between items-center border-b-2 border-black pb-2 mb-4">
             <div class="text-xl font-bold">รายละเอียดเอกสารการจองห้อง</div>
-            <div v-if="!view">
-                <UButton type="submit" label="ยืนยัน" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
-            </div>
         </div>
         <div class="mb-4">
             <table class="border-separate border-spacing-x-2 ">
@@ -232,6 +229,27 @@
                     </tr>
                 </table>
             </div>
+            <div v-if="!view" class="flex space-x-4 justify-center mb-6">
+                <UButton  
+                    label="อนุมัติ"
+                    color="emerald"
+                    size="xl"
+                    @click="emit('approve', true)" 
+                    :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
+                    v-if="authStore.isAdmin && form.bk_no"
+
+                />
+                <UButton  
+                    label="ไม่อนุมัติ"
+                    color="red"
+                    size="xl"
+                    @click="emit('approve', false)" 
+                    :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
+                    v-if="authStore.isAdmin && form.bk_no"
+                />
+                
+                <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+            </div>
         </div>
     </div>
 </template>
@@ -242,6 +260,9 @@
 
 
     const props = defineProps(['form', 'auth', 'items', 'room', 'view'])
+    const emit = defineEmits(['approve', 'notApprove'])
+
+    const authStore = useAuthStore()
 
 
     const objectives = ref([])
