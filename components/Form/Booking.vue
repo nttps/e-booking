@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     <td>เจ้าหน้าที่ทำรายการ</td>
-                    <td class="text-zinc-400">{{ auth.user.currentUserInfo.fullName}}</td>
+                    <td class="text-zinc-400">{{ form.bk_by_fullname || auth.user.currentUserInfo.fullName}}</td>
                 </tr>
             </table>
         </div>
@@ -29,16 +29,16 @@
                     <table class="border-separate border-spacing-x-2 ">
                         <tr>
                             <td>รหัสพนักงาน</td>
-                            <td class=" text-zinc-400">{{ auth.user.currentUserInfo.fullName}}</td>
+                            <td class=" text-zinc-400">{{  form.bk_by_username || auth.user.currentUserInfo.fullName}}</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td>สำนัก</td>
                             <td class="text-zinc-400">{{ auth.user.currentUserInfo.positionID}}</td>
                         </tr>
                         <tr>
                             <td>ประเภทงาน</td>
                             <td class="text-zinc-400">{{ auth.user.currentUserInfo.positionID}}</td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td>เบอร์ติดต่อ</td>
                             <td class="text-zinc-400">{{ auth.user.currentUserInfo.tel || '-' }}</td>
@@ -48,17 +48,17 @@
                 <div class="w-1/2">
                     <table class="border-separate border-spacing-x-2 ">
                         <tr>
-                            <td>ชื่อ - นามสกุล</td>
-                            <td class=" text-zinc-400">{{ auth.user.currentUserInfo.fullName}}</td>
+                            <td>ชื่อ - นามสกุล / ตำแหน่ง</td>
+                            <td class=" text-zinc-400">{{ form.bk_by_fullname || auth.user.currentUserInfo.fullName}}</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td>ฝ่าย</td>
                             <td class="text-zinc-400">{{  auth.user.currentUserInfo.fullName }}</td>
                         </tr>
                         <tr>
                             <td>ตำแหน่ง</td>
                             <td class="text-zinc-400">{{ auth.user.currentUserInfo.positionID}}</td>
-                        </tr>
+                        </tr> -->
                     </table>
                 </div>
             </div>
@@ -273,7 +273,7 @@
                 size="xl"
                 @click="emit('approve', true)" 
                 :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                v-if="form.bk_no"
+                v-if="form.bk_no && canApprove"
             />
             <UButton  
                 label="ไม่อนุมัติ"
@@ -281,7 +281,7 @@
                 size="xl"
                 @click="emit('approve', false)" 
                 :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                v-if="form.bk_no"
+                v-if="form.bk_no && canApprove"
             />
             
             <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
@@ -297,6 +297,7 @@
     const props = defineProps(['form', 'auth', 'items', 'room', 'view'])
     const emit = defineEmits(['approve', 'notApprove'])
     const authStore = useAuthStore()
+    
 
 
 
@@ -316,6 +317,7 @@
         positionID: null
     })
 
+    const canApprove = computed(() => authStore.user.userInGroups.some(p => p.userGroupId === "แอดมิน Meeting/Booking" && p.isInGroup === true))
   
 
     const fetchType = async () => {

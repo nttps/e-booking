@@ -32,6 +32,8 @@
                     <div class="flex items-center" v-if="authStore.isAdmin">
                         <UCheckbox color="primary" 
                             :value="true" 
+                            :model-value="nameUserSearch !== ''" 
+
                             label="แสดงรายการจองเฉพาะของคุณ"
                             class="mb-2" 
                             :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 text-lg dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
@@ -228,7 +230,7 @@
     const modalConfirm = ref(false)
     const nameSearch = ref('ทั้งหมด')
 
-    const nameUserSearch = ref('')
+    const nameUserSearch = ref(authStore.username)
     const attendeeSearch = ref(null)
     const buildingSearch = ref('')
     const statusSearch = ref('')

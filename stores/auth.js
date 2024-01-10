@@ -12,8 +12,10 @@ export const useAuthStore = defineStore("auth-store", {
     getters: {
         isLoggedIn: (state) => !!state.user,
         isAdmin: (state) =>
-            state.user.userInGroups.some((p) =>
-                p.userGroupId.includes("ADMIN")
+            state.user.userInGroups.some(
+                (p) =>
+                    p.userGroupId === "แอดมิน Meeting/Booking" &&
+                    p.isInGroup === true
             ),
         level: (state) => state.user?.currentUserInfo.jobLevel,
         provinceNo: (state) => state.user?.currentUserInfo.addrProvince,
