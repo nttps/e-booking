@@ -2,11 +2,21 @@
     <div class="text-3xl font-bold mb-4">ปฎิทิน</div>
     <div class="bg-white rounded-md py-4 px-6">
         
-        <div class="mb-2">
-                <UFormGroup label="ค้นหาห้องประชุม">
+        <div class="mb-2 flex justify-between items-center space-x-4">
+            <UFormGroup label="ค้นหาห้องประชุม" class="w-4/6">
 
-                    <USelectMenu value-attribute="room_name" class="w-full" option-attribute="room_name" :options="rooms" v-model="nameSearch" searchable placeholder="ค้นหาห้องประชุม" size="xl" search-attributes="ค้นหาห้องประชุม" />
-                </UFormGroup>
+                <USelectMenu value-attribute="room_name" class="w-full" option-attribute="room_name" :options="rooms" v-model="nameSearch" searchable placeholder="ค้นหาห้องประชุม" size="xl" search-attributes="ค้นหาห้องประชุม" />
+            </UFormGroup>
+            <div class="w-2/6 self-end">
+                 <UButton
+                    color="gray"
+                    size="xl"
+                    :disabled="nameSearch === ''"
+                    @click="resetFilters"
+                >
+                    ล้างค่าการค้นหา
+                </UButton>
+            </div>
         </div>
         <Qalendar 
             :events="events"
@@ -26,6 +36,10 @@
     const rooms = ref([{
         room_name: 'ทั้งหมด'
     }])
+
+    const resetFilters = () => {
+        nameSearch.value = "ทั้งหมด"
+    }
 
     onMounted(() => {
         fetchRooms()
