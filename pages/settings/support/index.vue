@@ -140,9 +140,9 @@
                 <UFormGroup label="ชื่อเจ้าหน้าที่" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <UInput placeholder="" v-model="form.type_name" required />
                 </UFormGroup>
-                <UFormGroup label="หน่วยงานดูแลการสนับสนุนเจ้าหน้าที่" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
+                <!-- <UFormGroup label="หน่วยงานดูแลการสนับสนุนเจ้าหน้าที่" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <USelect :options="[]" v-model="statusSearch" placeholder="เลือกหน่วยงาน" size="xl" />
-                </UFormGroup>
+                </UFormGroup> -->
                 <template #footer>
                     <div class="text-center flex justify-center space-x-8">
                         <UButton type="submit" label="เพิ่มข้อมูล" color="amber" size="xl" />
@@ -218,7 +218,7 @@
 
     // Data
     const { data: joinRoles, pending, refresh } = await useAsyncData('joinRoles', async () => await postApi('/bk/type/ListData' , {
-            TypeKey: "SUPPORT",
+            TypeKey: "PERSON",
             SearchText: nameSearch.value,
         }) 
     , {
@@ -227,7 +227,7 @@
     })
 
     const dataForm = {
-        type_key:"SUPPORT",//VEHICLE , REASON , SUPPORT
+        type_key:"PERSON",//VEHICLE , REASON , PERSON
         type_id: genID(),
         type_name:"",//ชื่อของประเภท
         type_color:"",//color
@@ -237,7 +237,7 @@
 
     const closeModal = () => {
         form.value = {
-            type_key:"SUPPORT",//VEHICLE , REASON , SUPPORT
+            type_key:"PERSON",//VEHICLE , REASON , PERSON
             type_id: genID(),
             type_name:"",//ชื่อของประเภท
             type_color:"",//color
@@ -272,7 +272,7 @@
 
     const deleteItem = async () => {
         const data = await deleteApi('/bk/type/Delete' , {
-            TypeKey:"SUPPORT",
+            TypeKey:"PERSON",
             TypeID: dataDelete.value,
             DeletedBy: authStore.username
         })

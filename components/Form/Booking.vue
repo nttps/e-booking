@@ -93,7 +93,7 @@
                     </tr>
                     <tr>
                         <td>ห้องประชุม</td>
-                        <td class="text-zinc-400">{{ props.room ?? form.room_name }}</td>
+                        <td class="text-zinc-400">{{ props.room.room_name ?? form.room_name }}</td>
                     </tr>
                     <tr>
                         <td>หัวข้อการประชุม</td>
@@ -149,17 +149,8 @@
                     <tr>
                         <td>สิ่งอำนวยความสะดวก</td>
                         <td class="text-zinc-400">
-                            <div class="flex space-x-4 mt-2">
-                                <UCheckbox color="primary" 
-                                    :value="amenitie.type_name" 
-                                    :label="amenitie.type_name" 
-                                    :checked="checkedItems(amenitie.type_name)"
-                                     :disabled="view" 
-                                    class="mb-2" 
-                                    :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
-                                    @change="addItems"
-                                    v-for="amenitie in amenities"
-                                />
+                            <div class="flex flex-wrap space-x-4 mt-2">
+                                <div v-for="facilitie in room.facilities.filter(f => f.isSelect == true)">{{ facilitie.facility_name }}</div>
                                
                             </div>
                         </td>
@@ -167,12 +158,14 @@
                     <tr>
                         <td>การสนับสนุนเจ้าหน้าที่</td>
                         <td class="text-zinc-400">
-                            <div class="flex space-x-4 mt-2">
+                            <div class="flex space-x-4 mt-2 ">
                                 <UCheckbox color="primary" 
-                                    label="ช่างภาพ" 
+                                    v-model="support.isSelect" 
+                                    :label="support.facility_name" 
                                      :disabled="view" 
                                     class="mb-2" 
-                                    :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
+                                    :ui="{container: 'flex items-center h-6 ', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent', label: ' text-base'}"
+                                    v-for="support in form.staff"
                                 />
                                
                             </div>
@@ -308,11 +301,10 @@
 
 
     const objectives = ref([])
-    const amenities = ref([])
+    const supports = ref([])
 
     onMounted(() => {
         fetchType()
-        fetchAmenities()
     })
 
     const dateNow = ref(moment(new Date()))
@@ -324,15 +316,7 @@
         positionID: null
     })
 
-     const fetchAmenities = async () => {
-        const resObject = await postApi('/bk/type/ListData' , {
-            TypeKey: "AMENITIES",
-            SearchText: '',
-        }) 
-
-        amenities.value = resObject
-    }
-
+  
 
     const fetchType = async () => {
         const resObject = await postApi('/bk/type/ListData' , {

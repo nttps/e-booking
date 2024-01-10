@@ -164,7 +164,7 @@
     <UModal v-model="modalEdit" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose">
         <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="authStore" :items="items" :room="form.roomname" :view="view" @approve="approve"/> 
+            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" @approve="approve"/> 
         </UForm>
 
         <UModal v-model="modalConfirmApprove" prevent-close @close="preventClose = false">
@@ -194,26 +194,27 @@
                 </UCard>
             </UForm>
         </UModal>
+        <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
+            <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                <template #header>
+                    <div class="text-center">ยืนยันการจอง</div>
+                </template>
+
+                <div class="font-bold text-xl text-center">คุณต้องการยืนยันการจองนี้ใช่หรือไม่</div>
+
+                <template #footer>
+                    <div class="flex justify-between">
+                        <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
+                        <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
+                    </div>
+                </template>
+            </UCard>
+        </UModal>
         
     </UModal>
 
     <ModalAlertDelete v-model="modalDelete" @confirm="deleteItem"/>
-    <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
-        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-                <div class="text-center">ยืนยันการจอง</div>
-            </template>
-
-            <div class="font-bold text-xl text-center">คุณต้องการยืนยันการจองนี้ใช่หรือไม่</div>
-
-            <template #footer>
-                <div class="flex justify-between">
-                    <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
-                </div>
-            </template>
-        </UCard>
-    </UModal>
+    
 
     
 </template>
@@ -348,12 +349,24 @@
         Reason:""//เหตุผลการไม่อนุมัติ ถ้าอนุมัติไม่ต้องใส่
     })
 
+    const room = ref(null)
     const edit = async (id, viewS = false) => {
         dataApprove.value.bkNO = id
         const data = await getApi(`/bk/book/GetDocSet?bk_id=${id}`)
 
+        const dataRoom = await getApi(`/bk/room/GetDocSet?room_id=${data.booking.room_id}`)
+
+
         form.value = data.booking
         form.value.joiners = data.joiners
+        form.value.staff = data.staff
+
+
+        
+        room.value = dataRoom.rooms
+        room.value.facilities = dataRoom.facilities
+
+
 
         items.value = data.booking.remark2.split(',');
         modalEdit.value = true 
@@ -382,13 +395,16 @@
             booking: form.value,
             joiners: form.value.joiners.map(joiner => {
                 return {username: joiner.username, join_role: joiner.join_role }
-            })
+            }),
+            staff: form.value.staff
         })
 
 
         refresh()
 
         modalConfirm.value = false
+        modalEdit.value = false
+
 
     }
 

@@ -6,26 +6,28 @@
 
         <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="auth" :items="items" :room="room.room_name" /> 
+            <FormBooking :form="form" :auth="auth" :items="items" :room="room" v-if="room" /> 
+
+            <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
+                <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                    <template #header>
+                        <div class="text-center">ยืนยันการจอง</div>
+                    </template>
+
+                    <div class="font-bold text-xl text-center">คุณต้องการยืนยันการจองนี้ใช่หรือไม่</div>
+
+                    <template #footer>
+                        <div class="flex justify-between">
+                            <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
+                            <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
+                        </div>
+                    </template>
+                </UCard>
+            </UModal>
         </UForm>
     </div>
 
-    <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal" prevent-close>
-        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-                <div class="text-center">ยืนยันการจอง</div>
-            </template>
-
-            <div class="font-bold text-xl text-center">คุณต้องการยืนยันการจองนี้ใช่หรือไม่</div>
-
-            <template #footer>
-                <div class="flex justify-between">
-                    <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
-                </div>
-            </template>
-        </UCard>
-    </UModal>
+    
 </template>
 
 <script setup>
@@ -40,16 +42,13 @@
     const items = ref([])
     const itemJoin = computed(() => items.value.join(',')) 
 
-    const room = ref({})
-
-     onMounted(() => {
-        fetchData()
+    const room = ref(null)
+    const data = await getApi(`/bk/room/GetDocSet?room_id=${route.params.id}`)
+    room.value = data.rooms
+    room.value.facilities = data.facilities
+    onMounted(() => {
+        fetchSupports()
     })
-    const fetchData = async () => {
-        const data = await getApi(`/bk/room/GetDocSet?room_id=${route.params.id}`)
-        room.value = data.rooms
-    }
-
     const form = ref({
         bk_no:"",//กรณีเพิ่มใหม่ไม่ต้องส่งค่ามา แต่ถ้าเป็นการแก้ไขให้เลขเอกสารมา
         bk_date: dateNow.value.format('YYYY-MM-DDTHH:mm:ss.000'),//วันที่จอง
@@ -71,8 +70,16 @@
         date_end: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
         created_by: auth.username, //ผู้ทำรายการ
         modified_by:"",//ผู้แก้ไขรายการ
-        joiners: []
+        joiners: [],
+        staff: []
     })
+
+    const fetchSupports = async () => {
+        const resObject = await getApi('/bk/type/ListBookFacilitiesSelect') 
+
+        form.value.staff = resObject
+    }
+
 
     const submit = async ()  => {
        modalConfirm.value = true
@@ -80,13 +87,13 @@
 
      const submitConfirm = async ()  => {
 
-        form.value.remark2 = itemJoin.value
         form.value.room_id = room.value.room_id
         const data = await postApi('/bk/book/save' , {
             booking: form.value,
             joiners: form.value.joiners.map(joiner => {
                 return {username: joiner.username, join_role: joiner.join_role }
-            })
+            }),
+            staff: form.value.staff
         })
 
 

@@ -49,7 +49,7 @@
                     >
                         ล้างค่าการค้นหา
                     </UButton>
-                    <UButton label="เพิ่มข้อมูล" color="amber" @click="modalAdd = true;"/>
+                    <UButton label="เพิ่มข้อมูล" color="amber" @click="modalAdd = true; form.facilities = amenities"/>
                 </div>
             </div>
             
@@ -129,7 +129,7 @@
         </UCard>
     </div>
 
-    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal">
+    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" @close="closeModal" :prevent-close="preventClose">
         <UForm :state="form" @submit="submit">
             <UCard
                 class="w-full"
@@ -164,17 +164,16 @@
                     <UInput placeholder="" v-model="form.floor_id" required />
                 </UFormGroup>
 
-                <UFormGroup label="สิ่งอำนวยความสะดวก" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <UCheckbox color="primary" 
-                        :value="amenitie.type_name" 
-                        :label="amenitie.type_name" 
-                        :checked="checkedItems(amenitie.type_name)"
-                            :disabled="view" 
-                        class="mb-2" 
-                        :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
-                        @change="addItems"
-                        v-for="amenitie in amenities"
-                    />
+                <UFormGroup label="สิ่งอำนวยความสะดวก" class="flex items-center space-x-2 mb-4" size="xl" :ui="uiFormGroup">
+                    <div class="flex space-x-4 items-center">
+                        <UCheckbox color="primary" 
+                            v-model="facilitie.isSelect" 
+                            :label="facilitie.facility_name" 
+                            class="mb-2" 
+                            :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
+                            v-for="facilitie in form.facilities"
+                        />
+                    </div>
                 </UFormGroup>
 
                 
@@ -206,29 +205,31 @@
         
             </UCard>
         </UForm>
+
+        
+        <UModal v-model="imageSelect">
+            <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+                <div class="text-center">เลือกรูปภาพ</div>
+            </template>
+
+            <UInput type="file" @change="pickImage"/>
+
+            <img :src="imageState.imgUrl" class="w-full"/>
+
+            <template #footer>
+                <div class="flex justify-between">
+                    <button type="button" class="px-4 py-2 bg-red-600 text-base rounded-[5px] text-white" @click="confirmImage">ยืนยัน</button>
+                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="imageSelect = false">ยกเลิก</button>
+                </div>
+            </template>
+            </UCard>
+        </UModal>
         
     </UModal>
 
     <ModalAlertDelete v-model="modalDelete" @confirm="deleteItem"/>
 
-    <UModal v-model="imageSelect">
-        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-          <template #header>
-              <div class="text-center">เลือกรูปภาพ</div>
-          </template>
-
-          <UInput type="file" @change="pickImage"/>
-
-          <img :src="imageState.imgUrl" class="w-full"/>
-
-          <template #footer>
-              <div class="flex justify-between">
-                  <button type="button" class="px-4 py-2 bg-red-600 text-base rounded-[5px] text-white" @click="confirmImage">ยืนยัน</button>
-                  <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="imageSelect = false">ยกเลิก</button>
-              </div>
-          </template>
-        </UCard>
-    </UModal>
 </template>
 
 <script setup>  
@@ -250,6 +251,7 @@
     const modalAdd = ref(false)
     const imageSelect = ref(false)
     const modalDelete = ref(false)
+    const preventClose = ref(false)
 
     const dataDelete = ref(null)
 
@@ -263,10 +265,7 @@
         fetchAmenities()
     })
    const fetchAmenities = async () => {
-        const resObject = await postApi('/bk/type/ListData' , {
-            TypeKey: "AMENITIES",
-            SearchText: '',
-        }) 
+        const resObject = await getApi('/bk/type/ListRoomFacilitiesSelect') 
 
         amenities.value = resObject
     }
@@ -331,6 +330,7 @@
         floor_id:"",
         created_by: authStore.username,//current user login 
         modified_by:"",//current user login กรณีที่ต้องการแก้ไข
+        facilities: []
 
     }
 
@@ -345,6 +345,7 @@
             floor_id:"",
             created_by: authStore.username,//current user login 
             modified_by:"",//current user login กรณีที่ต้องการแก้ไข
+            facilities: []
 
         }
 
@@ -359,13 +360,17 @@
         const data = await getApi(`/bk/room/GetDocSet?room_id=${id}`)
 
         form.value = data.rooms
+        form.value.facilities = data.facilities
         images.value = data.imgs
         modalAdd.value = true
 
     }
     const submit = async ()  => {
         
-        const data = await postApi('/bk/room/save' ,form.value)
+        const data = await postApi('/bk/room/save' ,{
+            rooms: form.value,
+            facilities: form.value.facilities
+        })
         modalAdd.value = false
 
         if(images.value.length > 0) {
@@ -447,12 +452,14 @@
             imgUrl: null
         }
         imageSelect.value = false
+        preventClose.value = false
     }
 
     const editImage =  (index) => {
         imageState.value = images.value[index]
         imageStateType.value = index
         imageSelect.value = true
+        preventClose.value = true
     }
     const removeImage = (index) => {
         if (index > -1) { // only splice array when item is found

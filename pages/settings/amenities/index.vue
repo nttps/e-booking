@@ -140,9 +140,6 @@
                 <UFormGroup label="สิ่งคำนวยความสะดวก" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <UInput placeholder="" v-model="form.type_name" required />
                 </UFormGroup>
-                <UFormGroup label="คำอธิบาย" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <UInput placeholder="" v-model="form.type_color" />
-                </UFormGroup>
                 <template #footer>
                     <div class="text-center flex justify-center space-x-8">
                         <UButton type="submit" label="เพิ่มข้อมูล" color="amber" size="xl" />
@@ -218,7 +215,7 @@
 
     // Data
     const { data: joinRoles, pending, refresh } = await useAsyncData('joinRoles', async () => await postApi('/bk/type/ListData' , {
-            TypeKey: "AMENITIES",
+            TypeKey: "OBJECT",
             SearchText: nameSearch.value,
         }) 
     , {
@@ -227,7 +224,7 @@
     })
 
     const dataForm = {
-        type_key:"AMENITIES",//VEHICLE , REASON , AMENITIES
+        type_key:"OBJECT",//VEHICLE , REASON , OBJECT
         type_id: genID(),
         type_name:"",//ชื่อของประเภท
         type_color:"",//color
@@ -237,7 +234,7 @@
 
     const closeModal = () => {
         form.value = {
-            type_key:"AMENITIES",//VEHICLE , REASON , AMENITIES
+            type_key:"OBJECT",//VEHICLE , REASON , OBJECT
             type_id: genID(),
             type_name:"",//ชื่อของประเภท
             type_color:"",//color
@@ -272,7 +269,7 @@
 
     const deleteItem = async () => {
         const data = await deleteApi('/bk/type/Delete' , {
-            TypeKey:"AMENITIES",
+            TypeKey:"OBJECT",
             TypeID: dataDelete.value,
             DeletedBy: authStore.username
         })
