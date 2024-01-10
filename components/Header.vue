@@ -89,7 +89,7 @@
                         class="rounded-lg border-amber-500 border-2 py-2 px-4  text-center text-2xl font-bold" 
                         :class="{ 'bg-amber-500': isActive, 'text-white': !isActive}"
                     >
-                        รายการจอง
+                        รายการจอง{{ user.isAdmin ? `` : `ของฉัน` }}
                     </div>
 
                     
