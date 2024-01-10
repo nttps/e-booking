@@ -8,11 +8,11 @@
                     <USelectMenu value-attribute="room_name" class="w-full" option-attribute="room_name" :options="rooms" v-model="nameSearch" searchable placeholder="ค้นหาห้องประชุม" size="xl" search-attributes="ค้นหาห้องประชุม" />
                 </UFormGroup>
         </div>
-        <!-- <Qalendar 
+        <Qalendar 
             :events="events"
             :config="config"
         >
-        </Qalendar> -->
+        </Qalendar>
     </div>
 </template>
 
@@ -49,6 +49,7 @@
     
     const config = ref({
         //locale: "th-TH",
+        defaultMode: 'month',
         style: {
             // When adding a custom font, please also set the fallback(s) yourself
             fontFamily: `'Kanit', sans-serif`,
