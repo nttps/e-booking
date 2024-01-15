@@ -12,7 +12,7 @@
         >
             <template #header>
                 <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
-                    ห้องประชุม
+                    วัตุประสงค์
                 </h2>
             </template>
             <div class="flex justify-between items-center w-full mb-4">
@@ -61,13 +61,6 @@
                     <div class="p-1 w-10 h-5" :style="`background-color: ${row.type_color};`">
                     </div>
                 </template>
-                <template #modified_date-data="{ row }">
-                    {{ row.modified_date ? moment(row.modified_date).format('DD/MM/YYYY HH:hh') : '-' }}
-                </template>
-
-                <template #station_name-data="{ row }">
-                    {{ row.station_name || row.loc_name }}
-                </template>
                 <template #actions-data="{ row }">
                     <div class="text-center">
                         <UButton
@@ -75,7 +68,7 @@
                             color="emerald"
                             square
                             variant="link"
-                            @click="edit(row.fire_station_id)"
+                            @click="edit(row.type_id)"
                         />
 
                         <UButton
@@ -83,7 +76,7 @@
                             color="red"
                             square
                             variant="link"
-                            @click="modalDelete = true; dataDelete = row.fire_station_id"
+                            @click="modalDelete = true; dataDelete = row.type_id"
                         />
                     </div>
                 </template>
@@ -261,9 +254,9 @@
 
 
     const edit = async (id) => {
-        const data = await getApi(`/bk/room/GetDocSet?room_id=${id}`)
+        const data = await getApi(`/bk/type/GetDocSet?type_key=OBJECTIVE&type_id=${id}`)
 
-        form.value = data.objectives
+        form.value = data.types
         modalAdd.value = true
 
     }
