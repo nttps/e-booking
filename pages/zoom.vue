@@ -71,8 +71,11 @@
                 </div>
            
         </div>
+            <div class="text-right mb-2">
+                <UButton label="เพิ่มรายการจอง" color="amber" @click="modalAdd = true;"/>
+            </div>
             
-               <!-- Table -->
+            <!-- Table -->
             <UTable
             
                 :rows="booking.slice((page - 1) * pageCount, (page) * pageCount)"
