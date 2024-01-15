@@ -136,7 +136,7 @@
                     <UInput placeholder="" v-model="form.type_name" required />
                 </UFormGroup>
                 <UFormGroup label="คำอธิบาย" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <UInput placeholder="" v-model="form.type_color" required />
+                    <UInput placeholder="" v-model="form.type_color" />
                 </UFormGroup>
                 <template #footer>
                     <div class="text-center flex justify-center space-x-8">
@@ -187,9 +187,6 @@
     const columns = [ {
         key: 'type_name',
         label: 'ชื่อตำแหน่ง',
-    }, {
-        key: 'type_color',
-        label: 'อธิบาย',
     }, {
         key: 'modified_by',
         label: 'สร้างโดย',
