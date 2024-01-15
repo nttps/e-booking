@@ -71,7 +71,7 @@
                             color="emerald"
                             square
                             variant="link"
-                            @click="edit(row.fire_station_id)"
+                            @click="edit(row.type_id)"
                         />
 
                         <UButton
@@ -79,7 +79,7 @@
                             color="red"
                             square
                             variant="link"
-                            @click="modalDelete = true; dataDelete = row.fire_station_id"
+                            @click="modalDelete = true; dataDelete = row.type_id"
                         />
                     </div>
                 </template>
@@ -256,9 +256,9 @@
 
 
     const edit = async (id) => {
-        const data = await getApi(`/bk/room/GetDocSet?room_id=${id}`)
+        const data = await getApi(`/bk/type/GetDocSet?type_key=JOIN_ROLE&type_id=${id}`)
 
-        form.value = data.joinRoles
+        form.value = data.types
         modalAdd.value = true
 
     }
@@ -280,7 +280,7 @@
         const data = await deleteApi('/bk/type/Delete' , {
             TypeKey:"JOIN_ROLE",
             TypeID: dataDelete.value,
-            DeletedBy: authStore.username
+            ActionBy: authStore.username
         })
 
         modalDelete.value = false
