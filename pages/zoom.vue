@@ -100,7 +100,7 @@
                 </template>
 
                 <template #date_end-data="{ row }">
-                {{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}
+                    {{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}
                 </template>
 
 
