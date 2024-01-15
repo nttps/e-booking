@@ -12,14 +12,14 @@
         >
             <template #header>
                 <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
-                    สิ่งคำนวยความสะดวก
+                    สิ่งอำนวยความสะดวก
                 </h2>
             </template>
             <div class="flex justify-between items-center w-full mb-4">
                 <!-- Filters -->
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-1.5">
-                        <UInput v-model="nameSearch" placeholder="สิ่งคำนวยความสะดวก" />
+                        <UInput v-model="nameSearch" placeholder="สิ่งอำนวยความสะดวก" />
                     </div>
                 </div>
                 
@@ -133,11 +133,11 @@
             
                 <template #header>
                     <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
-                        สิ่งคำนวยความสะดวก
+                        สิ่งอำนวยความสะดวก
                     </h2>
                 </template>
 
-                <UFormGroup label="สิ่งคำนวยความสะดวก" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
+                <UFormGroup label="สิ่งอำนวยความสะดวก" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <UInput placeholder="" v-model="form.type_name" required />
                 </UFormGroup>
                 <template #footer>

@@ -41,7 +41,7 @@
             <SettingsLink to="/settings/support">การสนับสนุนเจ้าหน้าที่</SettingsLink>
         </li>
         <li class="children">
-            <SettingsLink to="/settings/amenities">สิ่งคำนวยความสะดวก</SettingsLink>
+            <SettingsLink to="/settings/amenities">สิ่งอำนวยความสะดวก</SettingsLink>
         </li>
 
          <li class="children">
