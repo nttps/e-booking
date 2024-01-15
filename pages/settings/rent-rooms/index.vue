@@ -165,7 +165,7 @@
                 </UFormGroup>
 
                 <UFormGroup label="สิ่งอำนวยความสะดวก" class="flex items-center space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <div class="flex space-x-4 items-center">
+                    <div class="grid grid-cols-4 gap-x-4 items-center">
                         <UCheckbox color="primary" 
                             v-model="facilitie.isSelect" 
                             :label="facilitie.facility_name" 
