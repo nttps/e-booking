@@ -269,7 +269,7 @@
         const data = await deleteApi('/bk/type/Delete' , {
             TypeKey:"OBJECT",
             TypeID: dataDelete.value,
-            DeletedBy: authStore.username
+            ActionBy: authStore.username
         })
 
         modalDelete.value = false

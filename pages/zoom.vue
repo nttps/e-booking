@@ -434,7 +434,8 @@ import moment from 'moment'
             booking: form.value,
             joiners: form.value.joiners.map(joiner => {
                 return {username: joiner.username, join_role: joiner.join_role }
-            })
+            }),
+            staff: []
         })
 
 
