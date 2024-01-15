@@ -2,12 +2,19 @@
     <div class="bg-white rounded-md py-2 px-4">
         <div class="flex justify-between items-center border-b-2 border-black pb-2 mb-4">
             <div class="text-xl font-bold">รายละเอียดเอกสารการจองห้อง</div>
+            <div v-if="form.status === 'ปฏิเสธ'">
+                <UBadge color="red" variant="solid" size="lg">ถูกปฎิเสธ เนื่องจาก {{ form.reject_reason }}</UBadge>
+            </div>
+            <UBadge color="green" variant="solid" size="lg" v-else-if="form.status === 'อนุมัติ'">อนุมัติเรียบร้อยแล้ว</UBadge>
+            <UBadge color="yellow" variant="solid" size="lg" v-else-if="form.status === 'รออนุมัติ'">{{ form.status }}</UBadge>
+
+            
         </div>
         <div class="mb-4">
             <table class="border-separate border-spacing-x-2 ">
                 <tr>
                     <td>เลขที่เอกสาร</td>
-                    <td class=" text-zinc-400">AUTO</td>
+                    <td class=" text-zinc-400">{{ form.bk_no || 'AUTO' }}</td>
                 </tr>
                 <tr>
                     <td>วันที่ขอ</td>
