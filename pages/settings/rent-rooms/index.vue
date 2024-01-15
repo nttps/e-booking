@@ -22,9 +22,6 @@
                         <UInput v-model="nameSearch" placeholder="ชื่อห้องประชุม" />
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <UInput v-model="nameSearch" placeholder="สาขา" />
-                    </div>
-                    <div class="flex items-center gap-1.5">
                         <UInput v-model="nameSearch" placeholder="อาคาร" />
                     </div>
                     <div class="flex items-center gap-1.5">
@@ -146,9 +143,6 @@
                     </h2>
                 </template>
 
-                <UFormGroup label="รหัสห้องประชุม" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <UInput placeholder="" v-model="form.room_ref" required />
-                </UFormGroup>
                 <UFormGroup label="ชื่อห้องประชุม" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <UInput placeholder="" v-model="form.room_name" required/>
                 </UFormGroup>
@@ -158,9 +152,6 @@
                             <span class="text-gray-500 dark:text-gray-400 ">คน</span>
                         </template>
                     </UInput>
-                </UFormGroup>
-                <UFormGroup label="สาขา" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <UInput placeholder="" v-model="form.branch_id" required />
                 </UFormGroup>
                 <UFormGroup label="อาคาร" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
                     <UInput placeholder="" v-model="form.building_id" required />
@@ -277,7 +268,7 @@
 
     // Columns
     const columns = [{
-        key: 'room_ref',
+        key: 'room_id',
         label: 'รหัสห้องประชุม',
     }, {
         key: 'room_name',
@@ -285,9 +276,6 @@
     }, {
         key: 'capacity',
         label: 'จำนวนผู้เข้าประชุม',
-    }, {
-        key: 'branch_name',
-        label: 'สาขา',
     }, {
         key: 'building_id',
         label: 'อาคาร',
