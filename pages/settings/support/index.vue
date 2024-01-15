@@ -76,7 +76,7 @@
                             color="emerald"
                             square
                             variant="link"
-                            @click="edit(row.fire_station_id)"
+                            @click="edit(row.type_id)"
                         />
 
                         <UButton
@@ -84,7 +84,7 @@
                             color="red"
                             square
                             variant="link"
-                            @click="modalDelete = true; dataDelete = row.fire_station_id"
+                            @click="modalDelete = true; dataDelete = row.type_id"
                         />
                     </div>
                 </template>
@@ -190,9 +190,6 @@
         key: 'type_name',
         label: 'การสนับสนุนเจ้าหน้าที่',
     }, {
-        key: 'type_color',
-        label: 'อธิบาย',
-    }, {
         key: 'modified_by',
         label: 'สร้างโดย',
     }, {
@@ -250,9 +247,8 @@
 
 
     const edit = async (id) => {
-        const data = await getApi(`/bk/room/GetDocSet?room_id=${id}`)
-
-        form.value = data.joinRoles
+        const data = await getApi(`/bk/type/GetDocSet?type_key=PERSON&type_id=${id}`)
+        form.value = data.types
         modalAdd.value = true
 
     }
@@ -274,7 +270,7 @@
         const data = await deleteApi('/bk/type/Delete' , {
             TypeKey:"PERSON",
             TypeID: dataDelete.value,
-            DeletedBy: authStore.username
+            ActionBy: authStore.username
         })
 
         modalDelete.value = false
