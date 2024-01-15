@@ -70,6 +70,11 @@
                     {{ row.modified_date ? moment(row.modified_date).format('DD/MM/YYYY HH:hh') : '-' }}
                 </template>
 
+                 <template #image-data="{ row }">
+                    <img :src="row.photo_url" class="w-[150px] object-contain" alt="">
+                </template>
+
+
                 <template #station_name-data="{ row }">
                     {{ row.station_name || row.loc_name }}
                 </template>
@@ -272,7 +277,7 @@
 
     // Columns
     const columns = [{
-        key: 'room_id',
+        key: 'room_ref',
         label: 'รหัสห้องประชุม',
     }, {
         key: 'room_name',
@@ -290,7 +295,7 @@
         key: 'floor_id',
         label: 'ชั้น',
     }, {
-        key: 'modified_by',
+        key: 'image',
         label: 'รูปภาพ',
     }, {
         key: 'actions',
