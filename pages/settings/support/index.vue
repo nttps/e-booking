@@ -196,9 +196,6 @@
         key: 'modified_date',
         label: 'แก้ไข',
     }, {
-        key: 'is_active',
-        label: 'สถานะ',
-    }, {
         key: 'actions',
         label: 'จัดการ',
     }]
