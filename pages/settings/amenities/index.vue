@@ -47,7 +47,7 @@
             <!-- Table -->
             <UTable
             
-                :rows="joinRoles"
+                :rows="joinRoles.slice((page - 1) * pageCount, (page) * pageCount)"
                 :columns="columns"
                 :loading="pending"
                 class="w-full"
