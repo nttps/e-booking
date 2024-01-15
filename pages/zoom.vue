@@ -178,7 +178,7 @@
         </UCard>
     </div>
 
-    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose">
+    <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose" @close="closeModal">
         <UForm :state="form" @submit="submit">
 
             <FormZoom :form="form" :auth="authStore" :items="items" :room="form.roomname" :view="view" @approve="approve"/> 
@@ -205,32 +205,34 @@
                     <template #footer>
                         <div class="flex justify-between">
                             <button type="submit" class="px-4 py-2 bg-red-600 text-base rounded-[5px] text-white">ตกลง</button>
-                            <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirmApprove = false;preventClose = false">ยกเลิก</button>
+                            <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirmApprove = false;preventClose = false; closeModal()">ยกเลิก</button>
                         </div>
                     </template>
                 </UCard>
             </UForm>
         </UModal>
+
+        <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
+            <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                <template #header>
+                    <div class="text-center">ยืนยันการจอง</div>
+                </template>
+
+                <div class="font-bold text-xl text-center">คุณต้องการยืนยันการจองนี้ใช่หรือไม่</div>
+
+                <template #footer>
+                    <div class="flex justify-between">
+                        <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
+                        <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
+                    </div>
+                </template>
+            </UCard>
+        </UModal>
         
     </UModal>
 
     <ModalAlertDelete v-model="modalDelete" @confirm="deleteItem"/>
-    <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
-        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-                <div class="text-center">ยืนยันการจอง</div>
-            </template>
-
-            <div class="font-bold text-xl text-center">คุณต้องการยืนยันการจองนี้ใช่หรือไม่</div>
-
-            <template #footer>
-                <div class="flex justify-between">
-                    <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
-                </div>
-            </template>
-        </UCard>
-    </UModal>
+   
 </template>
 
 <script setup>  
@@ -427,9 +429,13 @@ import moment from 'moment'
        modalConfirm.value = true
     }
 
+ 
+
     const submitConfirm = async ()  => {
 
         form.value.remark2 = itemJoin.value
+
+        console.log(form.value);
         const data = await postApi('/bk/book/save' , {
             booking: form.value,
             joiners: form.value.joiners.map(joiner => {
@@ -438,10 +444,16 @@ import moment from 'moment'
             staff: []
         })
 
-
+        closeModal()
         refresh()
 
         modalConfirm.value = false
+        modalAdd.value = false
+
+
+      
+
+
 
     }
 
