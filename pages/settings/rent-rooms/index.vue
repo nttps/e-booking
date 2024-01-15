@@ -378,29 +378,12 @@
         const data = await getApi(`/bk/room/DeleteRoomPhoto?room_id=${id}`)
     }
 
-    const addItems = (e) => {
-        const { value } = e.target
-
-        const index = items.value.indexOf(value);
-        if (index > -1) { // only splice array when item is found
-            items.value.splice(index, 1); // 2nd parameter means remove one item only
-        }else {
-            items.value.push(value)
-        }
-    } 
-
-    const checkedItems = (name) => {
-        return items.value.some(item => item == name)
-    }
-    
     const uploadImage = async (id)  => {
 
         var formdata = new FormData();
         images.value.forEach(image => {
             formdata.append("files", image.imageFile);
         })
-
-        console.log(formdata);
 
         const data = await imageUpload(`/bk/room/UploadRoomPhotos?room_id=${id}&created_by=${authStore.username}` , formdata )
 

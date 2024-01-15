@@ -61,6 +61,9 @@
                     <div class="p-1 w-10 h-5" :style="`background-color: ${row.type_color};`">
                     </div>
                 </template>
+                 <template #modified_date-data="{ row }">
+                    {{ row.modified_date ? moment(row.modified_date).format('DD/MM/YYYY HH:hh') : '-' }}
+                </template>
                 <template #actions-data="{ row }">
                     <div class="text-center">
                         <UButton

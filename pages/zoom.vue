@@ -181,7 +181,7 @@
     <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose" @close="closeModal">
         <UForm :state="form" @submit="submit">
 
-            <FormZoom :form="form" :auth="authStore" :items="items" :room="form.roomname" :view="view" @approve="approve"/> 
+            <FormZoom :form="form" :auth="authStore" :items="items" :room="form.roomname" :view="view" @approve="approve" :files="files"/> 
         </UForm>
 
         <UModal v-model="modalConfirmApprove" prevent-close @close="preventClose = false">
@@ -365,6 +365,7 @@ import moment from 'moment'
 
     const room = ref({})
 
+    const files = ref([])
 
 
     const dataForm = {
@@ -392,6 +393,8 @@ import moment from 'moment'
 
     const form = ref(dataForm)
     const items = ref([])
+
+    
 
     const itemJoin = computed(() => items.value.join(',')) 
 
@@ -429,13 +432,23 @@ import moment from 'moment'
        modalConfirm.value = true
     }
 
- 
+
+
+    const uploadFile = async (id)  => {
+
+        var formdata = new FormData();
+        files.value.forEach(image => {
+            formdata.append("files", image.file);
+        })
+
+        const data = await imageUpload(`/bk/book/UploadBookDocs?book_id=${id}&created_by=${authStore.username}` , formdata )
+
+        closeModal()
+        refresh()
+
+    }
 
     const submitConfirm = async ()  => {
-
-        form.value.remark2 = itemJoin.value
-
-        console.log(form.value);
         const data = await postApi('/bk/book/save' , {
             booking: form.value,
             joiners: form.value.joiners.map(joiner => {
@@ -443,9 +456,13 @@ import moment from 'moment'
             }),
             staff: []
         })
+        if(images.value.length > 0) {
+            uploadFile(data.rooms.room_id)
+        }else {
+            closeModal()
+            refresh()
 
-        closeModal()
-        refresh()
+        }
 
         modalConfirm.value = false
         modalAdd.value = false
