@@ -31,7 +31,7 @@ export const useAuthStore = defineStore("auth-store", {
     actions: {
         async login(loginForm) {
             const config = useRuntimeConfig();
-            const baseUrl = `${config.public.authUrl}/AppsLogin/LoginMini`;
+            const baseUrl = `${config.public.apiUrl}/AppsLogin/LoginMini`;
 
             await $fetch(`${baseUrl}`, {
                 method: "POST",
