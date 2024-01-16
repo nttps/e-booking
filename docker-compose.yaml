@@ -3,6 +3,7 @@ services:
   frontend:
     build:
       context: .
+      dockerfile: ./docker/Dockerfile
     container_name: ${NUXT_PUBLIC_APP_NAME}
     restart: unless-stopped
     ports:
@@ -11,7 +12,7 @@ services:
       - "${NUXT_PORT:-3000}"
     environment:
       - HOST=0.0.0.0
+      - PORT=${NUXT_PORT:-3000}
       - NODE_ENV=${NODE_ENV}
       - NUXT_PUBLIC_API_URL=${NUXT_PUBLIC_API_URL}
       - NUXT_PUBLIC_VERSION=${NUXT_PUBLIC_VERSION}
-      - TZ=Asia/Bangkok
