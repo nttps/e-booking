@@ -13,13 +13,13 @@ export default defineNuxtConfig({
 
     app: {
         baseURL: baseURL,
-        //buildAssetsDir: `${baseURL}_nuxt/`,
+        buildAssetsDir: `${baseURL}_nuxt/`,
     },
     nitro: {
         runtimeConfig: {
             app: {
                 baseURL: baseURL,
-                buildAssetsDir: "/_nuxt/",
+                buildAssetsDir: "_nuxt",
             },
         },
     },
