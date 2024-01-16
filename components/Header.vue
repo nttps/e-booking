@@ -25,8 +25,8 @@
         
             <div class="flex relative">
                 <button type="button" class="relative" @click="notificationBar = true" ref="buttonNotificationRef">
-                    <img v-if="notifications.length > 0" src="~/images/notification.svg" class="w-[50px]" alt="">
-                    <img v-else src="~/images/no-notification.svg" class="w-[50px]" alt="">
+                    <img v-if="notifications.length > 0" src="~/assets/images/notification.svg" class="w-[50px]" alt="">
+                    <img v-else src="~/assets/images/no-notification.svg" class="w-[50px]" alt="">
 
                    
                 </button>
