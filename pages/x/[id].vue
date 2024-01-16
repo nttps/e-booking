@@ -11,7 +11,7 @@ definePageMeta({
     const route = useRoute()
     const config = useRuntimeConfig();
 
-    const url = `${config.public.authUrl}/api/AppsLogin/GetCrossAppReq?request=${route.params.id}`;
+    const url = `${config.public.authUrl}/AppsLogin/GetCrossAppReq?request=${route.params.id}`;
     const authStore = useAuthStore();
 
 
