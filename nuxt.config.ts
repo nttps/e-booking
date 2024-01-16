@@ -8,8 +8,9 @@ const assetsDir = process.env.NUXT_BUILD_ASSETSDIR;
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    app: {
-        baseURL: assetsDir,
+    buildDir: "",
+    vite: {
+        base: assetsDir,
     },
     ssr: false,
     devtools: { enabled: false },
