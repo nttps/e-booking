@@ -4,9 +4,13 @@ const isDev = process.env.NODE_ENV === "development";
 const apiBaseUrl =
     process.env.NUXT_PUBLIC_API_URL || "https://dpm-vote.gooddev.net/api";
 const version = process.env.NUXT_PUBLIC_VERSION || "0.0.1";
+const assetsDir = process.env.NUXT_BUILD_ASSETSDIR;
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    app: {
+        buildAssetsDir: assetsDir,
+    },
     ssr: false,
     devtools: { enabled: false },
     modules: [
