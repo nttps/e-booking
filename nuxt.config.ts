@@ -11,7 +11,7 @@ const baseURL = process.env.NUXT_BASE_URL;
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     app: {
-        baseURL: baseURL || "/",
+        //baseURL: baseURL || "/",
         buildAssetsDir: `${baseURL}_nuxt/`,
     },
     nitro: {
@@ -46,10 +46,12 @@ export default defineNuxtConfig({
         display: "swap",
         prefetch: true,
         preconnect: true,
+        download: false,
         families: {
             Kanit: true,
         },
-        preload: true
+        preload: true,
+        useStylesheet: true,
     },
     colorMode: {
         preference: "light",
