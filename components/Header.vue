@@ -25,7 +25,10 @@
         
             <div class="flex relative">
                 <button type="button" class="relative" @click="notificationBar = true" ref="buttonNotificationRef">
-                    <img :src="`${notifications.length > 0 ? `~/images/notification.svg`: `~/images/no-notification.svg`}`" class="w-[50px]" alt="">
+                    <img v-if="notifications.length > 0" src="~/images/notification.svg" class="w-[50px]" alt="">
+                    <img v-else src="~/images/no-notification.svg" class="w-[50px]" alt="">
+
+                   
                 </button>
 
                 <USlideover v-model="notificationBar">
