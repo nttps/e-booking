@@ -21,6 +21,7 @@ export default defineNuxtConfig({
             },
         },
     },
+    
     ssr: false,
     devtools: { enabled: false },
     modules: [
@@ -56,6 +57,7 @@ export default defineNuxtConfig({
         preference: "light",
     },
     runtimeConfig: {
+
         public: {
             cookieLifetime: 7,
             version: version,
