@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     app: {
         buildAssetsDir: assetsDir,
     },
+    assetsDir: assetsDir,
     ssr: false,
     devtools: { enabled: false },
     modules: [
