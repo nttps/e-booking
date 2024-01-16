@@ -17,7 +17,7 @@ export default defineNuxtConfig({
     nitro: {
         runtimeConfig: {
             app: {
-                baseURL: baseURL || "/",
+                //baseURL: baseURL || "/",
                 //buildAssetsDir: "_nuxt",
             },
         },
