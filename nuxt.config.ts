@@ -49,6 +49,7 @@ export default defineNuxtConfig({
         families: {
             Kanit: true,
         },
+        preload: true
     },
     colorMode: {
         preference: "light",
