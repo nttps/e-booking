@@ -170,7 +170,7 @@ import { Qalendar } from "qalendar";
 
     
     const config = ref({
-        //locale: "th-TH",
+        locale: "th-TH",
         defaultMode: 'month',
         style: {
             // When adding a custom font, please also set the fallback(s) yourself
