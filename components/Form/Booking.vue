@@ -297,7 +297,7 @@
                 size="xl"
                 @click="emit('approve', true)" 
                 :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                v-if="form.bk_no && canApprove"
+                v-if="form.status !== 'อนุมัติ' && form.bk_no && canApprove"
             />
             <UButton  
                 label="ไม่อนุมัติ"
@@ -305,7 +305,7 @@
                 size="xl"
                 @click="emit('approve', false)" 
                 :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                v-if="form.bk_no && canApprove"
+                v-if="form.status !== 'ปฏิเสธ' && form.bk_no && canApprove"
             />
             
             <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>

@@ -257,7 +257,7 @@
                     size="xl"
                     @click="emit('approve', true)" 
                     :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                    v-if="authStore.isAdmin && form.bk_no"
+                    v-if="form.status !== 'อนุมัติ' && authStore.isAdmin && form.bk_no"
 
                 />
                 <UButton  
@@ -266,7 +266,7 @@
                     size="xl"
                     @click="emit('approve', false)" 
                     :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                    v-if="authStore.isAdmin && form.bk_no"
+                    v-if="form.status !== 'ปฏิเสธ' && authStore.isAdmin && form.bk_no"
                 />
                 
                 <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
