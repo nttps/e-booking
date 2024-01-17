@@ -12,7 +12,9 @@
 <script setup>
   const route = useRoute()
   useHead({
-    title: `DDPM E-Booking - ${route.meta.title}`,
+    titleTemplate: (titleChunk) => {
+      return titleChunk ? `DDPM E-Booking - ${titleChunk}` : 'DDPM E-Booking';
+    },
     meta: [{ property: 'og:title', content: `DDPM E-Booking - ${route.meta.title}` }]
   })
 </script>

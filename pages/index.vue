@@ -80,6 +80,10 @@
     })
 
 
+    useSeoMeta({
+        title: 'จองห้องประชุม'
+    })
+
     onMounted(() => {
     });
 

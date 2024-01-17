@@ -213,6 +213,9 @@
 <script setup>
     import moment from 'moment'
 
+    useSeoMeta({
+        title: 'รายการจองห้องประชุม'
+    })
     const authStore = useAuthStore()
 
     const modalEdit = ref(false)

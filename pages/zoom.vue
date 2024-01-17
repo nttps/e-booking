@@ -227,8 +227,11 @@
 </template>
 
 <script setup>  
-import moment from 'moment'
+    import moment from 'moment'
 
+    useSeoMeta({
+        title: 'จองห้องระบบ Zoom'
+    })
     const authStore = useAuthStore()
 
     const modalAdd = ref(false)

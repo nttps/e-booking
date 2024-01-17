@@ -30,6 +30,9 @@
     import { Qalendar } from "qalendar";
     import "qalendar/dist/style.css"
 
+    useSeoMeta({
+        title: 'ปฎิทิน'
+    })
 
     const nameSearch = ref('')
 
