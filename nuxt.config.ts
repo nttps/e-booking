@@ -11,17 +11,17 @@ const baseURL = process.env.NUXT_BASE_URL;
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     app: {
-        baseURL: "/" + baseURL || "/",
+        baseURL: baseURL ? "/" + baseURL : "/",
     },
     nitro: {
         runtimeConfig: {
             app: {
                 //baseURL: baseURL || "/",
-                buildAssetsDir: `${baseURL}_nuxt/`,
+                buildAssetsDir: `${baseURL ? "/" + baseURL : "/"}_nuxt/`,
             },
         },
     },
-    
+
     ssr: false,
     devtools: { enabled: false },
     modules: [
@@ -57,7 +57,6 @@ export default defineNuxtConfig({
         preference: "light",
     },
     runtimeConfig: {
-
         public: {
             cookieLifetime: 7,
             version: version,

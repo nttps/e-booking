@@ -6,7 +6,7 @@
 
         <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="auth" :items="items" :room="room" v-if="room" /> 
+            <FormBooking :form="form" :auth="auth" :items="items" :room="room" v-if="room" :files="files" /> 
 
             <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
                 <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -40,6 +40,7 @@
     const modalConfirm = ref(false)
     
     const items = ref([])
+    const files = ref([])
     const itemJoin = computed(() => items.value.join(',')) 
 
     const room = ref(null)
@@ -96,8 +97,25 @@
             staff: form.value.staff
         })
 
+        if(files.value.length > 0) {
+            await uploadFile(data.booking.bk_no)
+        }else {
+            await navigateTo('/booking-list')
+        }
 
+        
+    }
+
+    const uploadFile = async (id)  => {
+
+        var formdata = new FormData();
+        files.value.forEach(image => {
+            formdata.append("files", image.file);
+        })
+
+        const data = await imageUpload(`/bk/book/UploadBookDocs?book_id=${id}&created_by=${auth.username}` , formdata )
         await navigateTo('/booking-list')
+
     }
 
     

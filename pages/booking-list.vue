@@ -34,7 +34,7 @@
                             :value="true" 
                             :model-value="nameUserSearch !== ''" 
 
-                            label="แสดงรายการจองเฉพาะของคุณ"
+                            label="แสดงเฉพาะรายการจองของคุณ"
                             class="mb-2" 
                             :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 text-lg dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
                             @change="checkSearch"
@@ -166,7 +166,7 @@
     <UModal v-model="modalEdit" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose">
         <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" @approve="approve"/> 
+            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" @approve="approve" :files="files" /> 
         </UForm>
 
         <UModal v-model="modalConfirmApprove" prevent-close @close="preventClose = false">
@@ -341,6 +341,7 @@
     const form = ref({})
     const items = ref([])
     const view = ref(false)
+    const files = ref([])
 
     const itemJoin = computed(() => items.value.join(',')) 
 
@@ -362,7 +363,7 @@
         form.value = data.booking
         form.value.joiners = data.joiners
         form.value.staff = data.staff
-
+        files.value = data.docs
 
         
         room.value = dataRoom.rooms
@@ -401,12 +402,31 @@
             staff: form.value.staff
         })
 
+        if(files.value.length > 0) {
+            await uploadFile(data.booking.bk_no)
+        }else {
+             refresh()
+        }
 
-        refresh()
+
+       
 
         modalConfirm.value = false
         modalEdit.value = false
 
+
+    }
+
+    const uploadFile = async (id)  => {
+
+        var formdata = new FormData();
+        files.value.forEach(image => {
+            formdata.append("files", image.file);
+        })
+
+        const data = await imageUpload(`/bk/book/UploadBookDocs?book_id=${id}&created_by=${authStore.username}` , formdata )
+
+        refresh()
 
     }
 

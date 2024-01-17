@@ -358,6 +358,7 @@ import moment from 'moment'
         }
 
         view.value = false
+        items.value = []
     }
 
     
@@ -413,6 +414,7 @@ import moment from 'moment'
         form.value.joiners = data.joiners
 
         items.value = data.booking.remark2.split(',');
+        files.value = data.docs
         modalAdd.value = true 
         view.value = viewS
     }
@@ -456,8 +458,8 @@ import moment from 'moment'
             }),
             staff: []
         })
-        if(images.value.length > 0) {
-            uploadFile(data.rooms.room_id)
+        if(files.value.length > 0) {
+            uploadFile(data.booking.bk_no)
         }else {
             closeModal()
             refresh()

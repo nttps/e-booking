@@ -188,6 +188,24 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>แนบเอกสาร</td>
+                        <td class="text-zinc-400">
+                            <div class="relative flex ali justify-between" v-for="(file, index) in files">
+
+                                <a :href="file.file_url" class=" break-words">{{ file.file_id || file.file.name }}</a>
+                                <div> 
+                                    <UButton color="red" :padded="false" variant="solid" icon="i-heroicons-x-mark-20-solid" size="xl" class="rounded-full -my-1" @click="removeFile(index)" />
+                                </div>
+                                
+                            </div>
+                            <div class="relative">
+                                <button type="button" @click="fileSelect = true">
+                                    <Icon name="i-material-symbols-light-add-box-outline-sharp" size="50px" class="text-amber-500" />
+                                </button>
+                            </div>
+                        </td>
+                    </tr> 
+                    <tr>
                         <td>ผู้เข้าร่วมประชุม</td>
                         <td class="text-zinc-400">
                             <div class="flex space-x-2"  v-if="!view">
@@ -292,6 +310,24 @@
             <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
         </div>
     </div>
+
+    <UModal v-model="fileSelect">
+        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <template #header>
+            <div class="text-center">เลือกไฟล์</div>
+        </template>
+
+        <UInput type="file" @change="pickFile"/>
+
+        <img v-if="fileState.file &&isImageType.indexOf(fileState.file.type) > -1" :src="fileState.fileUrl" class="w-full"/>
+        <template #footer>
+            <div class="flex justify-between">
+                <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="confirmFile">ยืนยัน</button>
+                <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="fileSelect = false">ยกเลิก</button>
+            </div>
+        </template>
+        </UCard>
+    </UModal>
 </template>
 
 
@@ -299,10 +335,10 @@
     import moment from "moment"
 
 
-    const props = defineProps(['form', 'auth', 'items', 'room', 'view'])
+    const props = defineProps(['form', 'auth', 'items', 'room', 'view', 'files'])
     const emit = defineEmits(['approve', 'notApprove'])
     const authStore = useAuthStore()
-    
+    const fileSelect = ref(false)
 
 
 
@@ -407,20 +443,41 @@
         props.form.joiners.splice(index, 1); 
     }
 
-    const addItems = (e) => {
-        const { value } = e.target
-
-        const index = props.items.indexOf(value);
-        if (index > -1) { // only splice array when item is found
-            props.items.splice(index, 1); // 2nd parameter means remove one item only
-        }else {
-            props.items.push(value)
-        }
-    } 
-
-    const checkedItems = (name) => {
-        return props.items.some(item => item == name)
-    }
     
+    const fileState = ref({
+        file: null,
+        fileUrl: null
+    })
+    const fileStateType = ref(null)
+
+    const pickFile = (e) => {
+        const file = e.target.files[0]
+        const blob = URL.createObjectURL(file)
+
+        fileState.value.file = file
+        fileState.value.fileUrl = blob
+   }
+    const confirmFile = () => {
+        if(fileState.value.fileUrl == null) return
+        console.log(fileState.value);
+        
+        if(fileStateType.value !== null) {
+            props.files[fileStateType.value] = fileState.value
+        }else {
+            props.files.push(fileState.value)
+        }
+
+        fileState.value = {
+            file: null,
+            fileUrl: null
+        }
+        fileSelect.value = false
+    }
+
+    const removeFile = (index) => {
+        if (index > -1) { // only splice array when item is found
+            files.value.splice(index, 1); // 2nd parameter means remove one item only
+        }
+    }
 
 </script>

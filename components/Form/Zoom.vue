@@ -139,23 +139,18 @@
                     <tr>
                         <td>แนบเอกสาร</td>
                         <td class="text-zinc-400">
-                            <div class="flex space-x-2">
-                                <div class="mt-1 relative min-w-auto w-full">
-                                    <div class="flex space-x-4">
-                                        <div class="relative w-1/6" v-for="(file, index) in files">
-                                            <div class="absolute top-0 -right-2"> 
-                                                <UButton color="red" :padded="true" variant="solid" icon="i-heroicons-x-mark-20-solid" size="xs" class="rounded-full -my-1" @click="removeFile(index)" />
-                                            </div>
-                                            <img :src="file.fileUrl" class=" object-contain w-full h-full cursor-pointer" alt=""  @click="editFile(index)">
-                                            
-                                        </div>
-                                        <div class="relative w-1/6">
-                                            <button type="button" @click="fileSelect = true">
-                                                <Icon name="i-material-symbols-light-add-box-outline-sharp" size="100px" class="text-amber-500" />
-                                            </button>
-                                        </div>
-                                    </div>
+                            <div class="relative flex ali justify-between" v-for="(file, index) in files">
+
+                                <a :href="file.file_url" class=" break-words">{{ file.file_id || file.file.name }}</a>
+                                <div> 
+                                    <UButton color="red" :padded="false" variant="solid" icon="i-heroicons-x-mark-20-solid" size="xl" class="rounded-full -my-1" @click="removeFile(index)" />
                                 </div>
+                                
+                            </div>
+                            <div class="relative">
+                                <button type="button" @click="fileSelect = true">
+                                    <Icon name="i-material-symbols-light-add-box-outline-sharp" size="50px" class="text-amber-500" />
+                                </button>
                             </div>
                         </td>
                     </tr> 
@@ -278,23 +273,22 @@
         </div>
     </div>
     <UModal v-model="fileSelect">
-            <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-                <div class="text-center">เลือกไฟล์</div>
-            </template>
+        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <template #header>
+            <div class="text-center">เลือกไฟล์</div>
+        </template>
 
-            <UInput type="file" @change="pickFile"/>
+        <UInput type="file" @change="pickFile"/>
 
-            <img :src="fileState.fileUrl" class="w-full"/>
-
-            <template #footer>
-                <div class="flex justify-between">
-                    <button type="button" class="px-4 py-2 bg-red-600 text-base rounded-[5px] text-white" @click="confirmFile">ยืนยัน</button>
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="fileSelect = false">ยกเลิก</button>
-                </div>
-            </template>
-            </UCard>
-        </UModal>
+        <img v-if="fileState.file &&isImageType.indexOf(fileState.file.type) > -1" :src="fileState.fileUrl" class="w-full"/>
+        <template #footer>
+            <div class="flex justify-between">
+                <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="confirmFile">ยืนยัน</button>
+                <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="fileSelect = false">ยกเลิก</button>
+            </div>
+        </template>
+        </UCard>
+    </UModal>
         
 </template>
 
@@ -433,12 +427,15 @@
         fileState.value.fileUrl = blob
    }
     const confirmFile = () => {
-        if(fileState.value.imageFile == null) return
+        if(fileState.value.fileUrl == null) return
+        console.log(fileState.value);
+        
         if(fileStateType.value !== null) {
-            props.files.value[fileStateType.value] = fileState.value
+            props.files[fileStateType.value] = fileState.value
         }else {
-            props.files.value.push(fileState.value)
+            props.files.push(fileState.value)
         }
+
         fileState.value = {
             file: null,
             fileUrl: null
