@@ -188,8 +188,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>แนบเอกสาร</td>
+                        <td class="align-top">แนบเอกสาร</td>
                         <td class="text-zinc-400">
+                            <div class="text-lg">เอกสารที่แนบ</div>
                             <div class="relative flex ali justify-between" v-for="(file, index) in files">
 
                                 <a :href="file.file_url" target="_blank" class="hover:text-black break-words">{{ file.originFileName || file.file.name }}</a>
