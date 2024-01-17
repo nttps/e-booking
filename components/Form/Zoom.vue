@@ -141,7 +141,7 @@
                         <td class="text-zinc-400">
                             <div class="relative flex ali justify-between" v-for="(file, index) in files">
 
-                                <a :href="file.file_url" class=" break-words">{{ file.originFileName || file.file.name }}</a>
+                                <a :href="file.file_url" target="_blank" class="hover:text-black break-words">{{ file.originFileName || file.file.name }}</a>
                                 <div v-if="!view"> 
                                     <UButton color="red" :padded="false" variant="solid" icon="i-heroicons-x-mark-20-solid" size="xl" class="rounded-full -my-1" @click="removeFile(index)" />
                                 </div>
