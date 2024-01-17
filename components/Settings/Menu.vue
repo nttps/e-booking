@@ -44,7 +44,17 @@
             <SettingsLink to="/settings/amenities">สิ่งอำนวยความสะดวก</SettingsLink>
         </li>
 
-         <li class="children">
+        <li>
+            <span class="font-bold text-lg flex items-center"> <Icon name="ic:round-settings" size="30" /> <span class="ml-1">การตั้งค่าข้อมูลการจองพาหนะ</span></span>
+        </li>
+        <li class="children">
+            <SettingsLink to="/settings/vehicle">ประเภทรถยนต์</SettingsLink>
+        </li>
+        <li class="children">
+            <SettingsLink to="/settings/drivers">พนักงานขับรถ</SettingsLink>
+        </li>
+
+        <li class="children">
             <SettingsLink to="">ประวัติการใช้งาน</SettingsLink>
         </li>
     </ul>
