@@ -288,7 +288,7 @@
             click: () => edit(row.bk_no, true)
         }]
 
-        if(row.status === 'รออนุมัติ') {
+        if(row.status !== 'ปฏิเสธ') {
             btn.push({
                 label: 'แก้ไข',
                 icon: 'i-heroicons-pencil-solid',
