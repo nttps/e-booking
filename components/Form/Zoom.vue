@@ -142,12 +142,12 @@
                             <div class="relative flex ali justify-between" v-for="(file, index) in files">
 
                                 <a :href="file.file_url" class=" break-words">{{ file.file_id || file.file.name }}</a>
-                                <div> 
+                                <div v-if="!view"> 
                                     <UButton color="red" :padded="false" variant="solid" icon="i-heroicons-x-mark-20-solid" size="xl" class="rounded-full -my-1" @click="removeFile(index)" />
                                 </div>
                                 
                             </div>
-                            <div class="relative">
+                            <div class="relative" v-if="!view">
                                 <button type="button" @click="fileSelect = true">
                                     <Icon name="i-material-symbols-light-add-box-outline-sharp" size="50px" class="text-amber-500" />
                                 </button>

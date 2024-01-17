@@ -25,7 +25,7 @@ export default defineAppConfig({
                 size: "text-base",
             },
             th: {
-                base: "bg-[#FFA800] text-lg text-center first:rounded-tl-[10px] last:rounded-tr-[10px] border-[#FFA800]",
+                base: "bg-[#FFA800] first:rounded-tl-[10px] last:rounded-tr-[10px] border-[#FFA800]",
                 size: "text-base",
             },
         },

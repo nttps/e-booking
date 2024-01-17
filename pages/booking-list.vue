@@ -98,38 +98,11 @@
                
             </template>
             <template #actions-data="{ row }">
-                <div class="flex items-center">
-                    <UButton  
-                        icon="i-heroicons-eye-20-solid"
-                        square
-                        variant="link" 
-                        class=" self-center"
-                        @click="edit(row.bk_no, true)" 
-                    />
-                    <div v-if="row.status === 'รออนุมัติ'" class="flex items-center">
-                        <UButton  
-                            icon="i-heroicons-pencil-solid"
-                            color="emerald"
-                            square
-                            variant="link" 
-                            class=" self-center"
-                            @click="edit(row.bk_no)" 
-                        />
-                    </div>
-
-                    <div v-if="row.status !== 'อนุมัติ'">
-                        
-                        <UButton  
-                            icon="i-heroicons-trash-solid"
-                            color="red"
-                            square
-                            variant="link" 
-                            @click="modalDelete = true; dataDelete = row.bk_no"
-                        />
-                    </div>
-                   
+                <div class="text-center">
+                        <UDropdown :items="actionItems(row)" :popper="{ placement: 'bottom-start' }">
+                        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+                    </UDropdown>
                 </div>
-            
             </template>
             
         </UTable>
@@ -217,7 +190,23 @@
 
     <ModalAlertDelete v-model="modalDelete" @confirm="deleteItem"/>
     
+    <UModal v-model="modalCancle" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
+        <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+                <div class="text-center">ยืนยันรายการ</div>
+            </template>
 
+            <div class="font-bold text-xl text-center">คุณต้องการยกเลิกการจองนี้ใช่หรือไม่</div>
+
+            <template #footer>
+                <div class="flex justify-between">
+                    <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitApprove">ยืนยัน</button>
+                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalCancle = false">ยกเลิก</button>
+                </div>
+            </template>
+        </UCard>
+    </UModal>
+     
     
 </template>
 
@@ -235,6 +224,7 @@
     const buildingSearch = ref('')
     const statusSearch = ref('')
     const agedaSearch = ref('')
+    const modalCancle = ref(false)
     
 
 
@@ -301,8 +291,44 @@
         label: 'สถานะ',
     }, {
         key: 'actions',
-        label: 'จัดการ',
+        label: '',
     }]
+
+    const actionItems = (row) => {
+
+        let btn = [{
+            label: 'รายละเอียด',
+            icon: 'i-heroicons-eye-20-solid',
+            click: () => edit(row.bk_no, true)
+        }]
+
+        if(row.status === 'รออนุมัติ') {
+            btn.push({
+                label: 'แก้ไข',
+                icon: 'i-heroicons-pencil-solid',
+                click: () => edit(row.bk_no)
+            })
+        }
+
+        if(row.status !== 'ปฏิเสธ') {
+            btn.push({
+                label: 'ยกเลิก',
+                icon: 'i-heroicons-x-circle',
+                click: () => modalConfirmCancle(row.bk_no)
+            })
+        }
+
+        if(row.status !== 'อนุมัติ') {
+            btn.push({
+                label: 'ลบ',
+                icon: 'i-heroicons-trash-solid',
+                click: () => deleteConfirm(row.bk_no)
+            })
+        }
+    
+       
+        return [btn]
+    }
 
     const resetFilters = () => {
         nameSearch.value = "ทั้งหมด"
@@ -417,6 +443,10 @@
 
     }
 
+    const deleteConfirm = (id) => {
+        modalDelete.value = true; 
+        dataDelete.value = id
+    }
     const uploadFile = async (id)  => {
 
         var formdata = new FormData();
@@ -447,7 +477,13 @@
         modalConfirmApprove.value = false
         preventClose.value = false
         modalEdit.value = false
+        modalCancle.value = false
         refresh()
+    }
+    const modalConfirmCancle = (id) => {
+        modalCancle.value = true
+        dataApprove.value.bkNO = id
+        dataApprove.value.Action = 'ยกเลิก'
     }
 </script>
 
