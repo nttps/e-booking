@@ -293,7 +293,7 @@ import moment from 'moment'
             })
         }
 
-        if(row.status !== 'ปฏิเสธ') {
+        if(row.status !== 'ปฏิเสธ' && row.status !== 'ยกเลิก') {
             btn.push({
                 label: 'ยกเลิก',
                 icon: 'i-heroicons-x-circle',
