@@ -39,8 +39,12 @@
                         <Icon name="clarity:building-line" size="30px" /> <span>{{ room.building_id }}</span>
                     </div>
                     <div class="flex items-center space-x-2 mb-2 text-gray-500 text-lg">
+                        <span>หน่วยงาน </span><span>{{ room.department_id }}</span>
+                    </div>
+                    <div class="flex items-center space-x-2 mb-2 text-gray-500 text-lg">
                         <span>สถานะ</span> <span class="rounded-full px-4 text-black" :class="{ 'bg-green-400': room.status === 'ปกติ', 'bg-red-400': room.status !== 'ปกติ'}">{{ room.status }}</span>
                     </div>
+                    
                 </div>
                 <div class="w-1/2 self-end">
                     <div class="text-right">

@@ -46,7 +46,7 @@
                     >
                         ล้างค่าการค้นหา
                     </UButton>
-                    <UButton label="เพิ่มข้อมูล" color="amber" @click="modalAdd = true; form.facilities = amenities"/>
+                    <UButton label="เพิ่มข้อมูล" color="amber" @click="modalAdd = true; form.facilities = amenities; fetchDepartments()"/>
                 </div>
             </div>
             
@@ -171,6 +171,10 @@
                         />
                     </div>
                 </UFormGroup>
+                <UFormGroup label="หน่วยงาน" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
+                    <USelectMenu :options="departments" value-attribute="valueTXT" option-attribute="valueTXT" v-model="form.department_id" required />
+                </UFormGroup>
+
 
                 
                 <div class="flex space-x-2">
@@ -257,14 +261,27 @@
     const images = ref([])
     const amenities = ref([])
 
+    const departments = ref([])
     onMounted(() => {
         fetchAmenities()
     })
-   const fetchAmenities = async () => {
+    const fetchAmenities = async () => {
         const resObject = await getApi('/bk/type/ListRoomFacilitiesSelect') 
 
         amenities.value = resObject
     }
+    
+    const fetchDepartments = async () => {
+        const resObject = await postApi('/MasterType/ListData', {
+            MasterTypeID:"DEPARTMENT",
+            SearchText:"",
+            ShowSelectAll:false
+            
+        }) 
+
+        departments.value = resObject
+    }
+
 
     // Columns
     const columns = [{
@@ -321,6 +338,7 @@
         branch_id:"",//ชนิดถานี (ตอนนี้ยังไม่มี)
         building_id:"",//ชื่อหัวหน้าหน่วย
         floor_id:"",
+        department_id: "",
         created_by: authStore.username,//current user login 
         modified_by:"",//current user login กรณีที่ต้องการแก้ไข
         facilities: []
@@ -336,6 +354,7 @@
             branch_id:"",//ชนิดถานี (ตอนนี้ยังไม่มี)
             building_id:"",//ชื่อหัวหน้าหน่วย
             floor_id:"",
+            department_id: "",
             created_by: authStore.username,//current user login 
             modified_by:"",//current user login กรณีที่ต้องการแก้ไข
             facilities: []
@@ -351,6 +370,8 @@
 
     const edit = async (id) => {
         const data = await getApi(`/bk/room/GetDocSet?room_id=${id}`)
+
+        fetchDepartments()
 
         form.value = data.rooms
         form.value.facilities = data.facilities

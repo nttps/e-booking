@@ -24,6 +24,8 @@
         "@nuxt/ui": "npm:@nuxt/ui-edge@latest",
         "@pinia/nuxt": "^0.5.1",
         "@popperjs/core": "^2.11.8",
+        "@schedule-x/theme-default": "^1.9.0",
+        "@schedule-x/vue": "^1.5.0",
         "@trevoreyre/autocomplete-vue": "^2.4.1",
         "@vueuse/components": "^10.2.1",
         "@vueuse/core": "^10.2.1",

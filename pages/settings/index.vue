@@ -22,7 +22,7 @@
     if ( authStore.isAdmin) {
         await navigateTo('/settings/rent-rooms');
     }else {
-        await navigateTo('/settings/profile');
+        await navigateTo('/profile');
     }
 </script>
 
