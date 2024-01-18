@@ -1,5 +1,25 @@
 <template>
     <h2 class="text-3xl font-bold mb-4">จองห้องประชุม</h2>
+    <div class="text-xl font-bold">กรองช่วงเวลาที่จอง</div>
+    <div class="flex space-x-4 mb-4">
+        <div class="w-3/6">
+            
+            <UPopover :popper="{ placement: 'bottom-start' }">
+                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="xl" :label="labelStartDate" />
+                <template #panel="{ close }">
+                    <FormDatePicker v-model="searchDateBegin" @close="close" :date-time="true" />
+                </template>
+            </UPopover>
+        </div>
+        <div class="w-3/6">
+            <UPopover :popper="{ placement: 'bottom-start' }">
+                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="xl" :label="labelEndDate" />
+                <template #panel="{ close }">
+                    <FormDatePicker v-model="searchDateEnd" @close="close" :date-time="true"/>
+                </template>
+            </UPopover>
+        </div>
+    </div>
     <div class="flex space-x-4 mb-4">
         <div class="w-4/6">
             <UInput placeholder="ชื่อห้องประชุม" v-model="nameSearch" size="xl" />
@@ -78,6 +98,9 @@
 
 
 <script setup>
+
+    import moment from 'moment'
+
     definePageMeta({
         title: 'ความรู้มุ่งสู่ความสำเร็จ',
         middleware: 'auth'
@@ -96,6 +119,16 @@
     const buildingSearch = ref('')
     const statusSearch = ref('')
 
+    const dateNow = moment(new Date()).format('YYYY-MM-DDTHH:mm:00.000')
+
+    const searchDateBegin = ref(dateNow)
+    const searchDateEnd = ref(dateNow)
+
+
+
+    const labelStartDate = computed(() => searchDateBegin.value ? moment(searchDateBegin.value).format('DD/MM/YYYY เวลา HH:mm') : 'เลือกวันที่เริ่มจอง')
+    const labelEndDate = computed(() => searchDateEnd.value ?  moment(searchDateEnd.value).format('DD/MM/YYYY เวลา HH:mm') : 'เลือกวันที่สิ้นสุด')
+
 
 
          // Pagination
@@ -107,13 +140,13 @@
         RoomName: nameSearch.value,
         Capacity: capacitySearch.value,
         Building: buildingSearch.value,
-        Status: statusSearch.value
-
-
+        Status: statusSearch.value,
+        DateBegin: searchDateBegin.value,
+        DateEnd: searchDateEnd.value
        })
     , {
         default: () => [],
-        watch: [nameSearch, capacitySearch, buildingSearch, statusSearch]
+        watch: [nameSearch, capacitySearch, buildingSearch, statusSearch, searchDateBegin, searchDateEnd]
     })
 
     const rowRooms = computed(() => rooms.value.slice((page - 1) * pageCount, (page) * pageCount))
