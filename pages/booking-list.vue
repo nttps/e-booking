@@ -29,13 +29,16 @@
                             </template>
                         </UPopover>
                     </div>
-                    <div class="flex items-center" v-if="authStore.isAdmin">
+                    <div class="self-center">
+                       
+                        <URadioGroup v-model="selectedBy" :options="searchByoptions" />
                         <UCheckbox color="primary" 
+                            v-if="authStore.isAdmin"
                             :value="true" 
-                            :model-value="nameUserSearch !== ''" 
+                            v-model="searchAll"
 
-                            label="แสดงเฉพาะรายการจองของคุณ"
-                            class="mb-2" 
+                            label="แสดงรายการทั้งหมด"
+                            class="my-2" 
                             :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 text-lg dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
                             @change="checkSearch"
                         />
@@ -249,6 +252,17 @@
     }])
 
 
+    const searchAll = ref(false)
+
+    const searchByoptions = [{
+        value: 'me',
+        label: 'แสดงเฉพาะรายการจองของฉัน'
+    }, {
+        value: 'department',
+        label: 'แสดงรายการจองเฉพาะห้องในหน่วยงาน'
+    }]
+
+    const selectedBy = ref('me')
     onMounted(() => {
         fetchRooms()
     })
@@ -350,8 +364,11 @@
     const pageTo = computed(() => Math.min(page.value * pageCount.value, pageTotal.value))
 
     // Data
-    const { data: booking, pending, refresh } = await useAsyncData('booking', async () => await postApi('/bk/book/ListData' , {
-            OwnerUsername: nameUserSearch.value,
+
+    const departmentUser = ref(authStore.user.currentUserInfo.departmentID)
+    const { data: booking, pending, refresh } = await useAsyncData('booking', async () => {
+        return await postApi('/bk/book/ListData' , {
+            OwnerUsername: !searchAll.value ? selectedBy.value == 'me' ? nameUserSearch.value : '' : '',
             date_begin: searchDateBegin.value,
             date_end: searchDateEnd.value,
             Type: "จองห้องประชุม",
@@ -359,12 +376,14 @@
             RoomName: nameSearch.value  === 'ทั้งหมด' ? '' : nameSearch.value,
             Attendee: attendeeSearch.value,
             Building: buildingSearch.value,
-            Agenda:agedaSearch.value
+            Agenda:agedaSearch.value,
+            DepartmentID: !searchAll.value ? selectedBy.value == 'department' ? departmentUser.value : '' : ''
 
         }) 
+    }
     , {
         default: () => [],
-        watch: [page, pageFrom, pageCount, nameUserSearch, nameSearch, statusSearch, buildingSearch, attendeeSearch, searchDateBegin , searchDateEnd, agedaSearch]
+        watch: [page, pageFrom, pageCount, nameUserSearch, nameSearch, statusSearch, buildingSearch, attendeeSearch, searchDateBegin , searchDateEnd, agedaSearch, searchAll, selectedBy, departmentUser]
     })
 
     const form = ref({})

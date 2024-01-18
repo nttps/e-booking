@@ -172,7 +172,7 @@
                     </div>
                 </UFormGroup>
                 <UFormGroup label="หน่วยงาน" class="flex space-x-2 mb-4" size="xl" :ui="uiFormGroup">
-                    <USelectMenu :options="departments" value-attribute="valueTXT" option-attribute="valueTXT" v-model="form.department_id" required />
+                    <USelectMenu :options="departments" searchable searchable-placeholder="ค้นหาหน่วยงาน" value-attribute="valueTXT" option-attribute="valueTXT" v-model="form.department_id" required />
                 </UFormGroup>
 
 
