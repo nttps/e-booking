@@ -190,7 +190,7 @@
                     <tr>
                         <td class="align-top">แนบเอกสาร</td>
                         <td class="text-zinc-400">
-                            <div class="text-base text-black font-bold">เอกสารที่แนบ {{ view ? '(คลิกที่ชื่อไฟล์เพื่อดูเอกสารแนบ)' : '' }}</div>
+                            <div class="text-base text-black font-bold">เอกสารที่แนบ  <span class="text-red-500">(คลิกที่ชื่อไฟล์เพื่อดูเอกสารแนบ)</span></div>
                             <div class="relative flex ali justify-between" v-for="(file, index) in files">
 
                                 <a :href="file.file_url" target="_blank" class="hover:text-black break-words">{{ file.originFileName || file.file.name }}</a>
