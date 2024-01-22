@@ -55,7 +55,7 @@
         </li> -->
 
         <li class="children">
-            <SettingsLink to="">ประวัติการใช้งาน</SettingsLink>
+            <SettingsLink to="/settings/log-history">ประวัติการใช้งาน</SettingsLink>
         </li>
     </ul>
 </template>
