@@ -46,7 +46,7 @@
 
     <div class="bg-white flex space-x-4 p-4 mt-4 last-of-type:!mb-0 last:!border-b-0 border-2 border-[#FFA800] rounded-md" v-for="room in rooms.slice((page - 1) * pageCount, (page) * pageCount)" v-if="rooms.length > 0">
         <div class="w-4/12">
-            <img :src="room.photo ? room.photo_url : `/public/no-cover.jpg`" class="h-[250px]" alt="">
+            <img :src="room.photo ? room.photo_url : `/images/no-cover.jpg`" class="h-[250px]" alt="">
         </div>
         <div class="w-8/12">
             <div class="flex">
