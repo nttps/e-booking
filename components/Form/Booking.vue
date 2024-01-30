@@ -291,6 +291,9 @@
             </div>
         </div>
         <div v-if="!view" class="flex space-x-4 justify-center mb-6">
+            <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+        </div>
+        <div v-else  class="flex space-x-4 justify-center mb-6">
             <UButton  
                 label="อนุมัติ"
                 color="emerald"
@@ -307,10 +310,8 @@
                 :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
                 v-if="form.status !== 'ปฏิเสธ' && form.bk_no && canApprove || (room.department_id === authStore.user.currentUserInfo.departmentID)"
             />
-            
-            <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
         </div>
-    </div>
+    </div> 
 
     <UModal v-model="fileSelect">
         <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
