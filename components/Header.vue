@@ -32,7 +32,7 @@
                 </button>
 
                 <USlideover v-model="notificationBar">
-                    <Notification :notifications="notifications" @refresh="fetchNotification"/>
+                    <Notification :notifications="notifications" @refresh="refresh"/>
                 </USlideover>
                 
                 <button type="button" class="flex justify-center items-center space-x-4 relative" @click="toggleMenuBar"  ref="buttonProfileRef">
@@ -125,13 +125,7 @@
     const notificationBar = ref(false)
     const buttonProfileRef = ref(null);
     const buttonNotificationRef = ref(null);
-    const config = useRuntimeConfig();
-
     const props = defineProps(['tumbotron'])
-    const autocompleteResult = ref()
-    const searchText = ref('')
-    const searchBar = ref()
-
     const user = useAuthStore();
 
     onClickOutside(
@@ -150,10 +144,6 @@
         notificationBar.value = false
     }
 
-    const notifications = ref([])
 
-    const fetchNotification = async () => {
-        notifications.value = []
-    }
-
+    const { data: notifications, pending, refresh } = await useAsyncData('notifications', async () => await getApi(`/bk/book/ListNotify?user=${user.username}`))
 </script>
