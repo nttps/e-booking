@@ -27,7 +27,7 @@
                             <td>{{ room.room_name }}</td>
                         </tr> 
                         <tr>
-                            <td>จำนวนผุ้เข้าประชุม</td>
+                            <td>จำนวนผู้เข้าประชุม</td>
                             <td>{{ room.capacity }}</td>
                         </tr> 
                         <tr>
