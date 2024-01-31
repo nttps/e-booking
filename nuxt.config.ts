@@ -61,6 +61,7 @@ export default defineNuxtConfig({
             cookieLifetime: 7,
             version: version,
             apiUrl: apiBaseUrl,
+            baseUrl: baseURL,
             authUrl: "",
         },
     },
