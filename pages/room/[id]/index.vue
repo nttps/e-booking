@@ -7,7 +7,7 @@
         <div class="bg-white p-8">
             <div class="lg:flex lg:space-x-8">
                 <div class="lg:w-1/2 mb-4 lg:mb-0  transition-all delay-75">
-                    <img :src="room.photo ? room.photo_url : `${config.public.baseUrl ? config.public.baseUrl  : '/'}images/no-cover.jpg`" ref="mainImage" :alt="room.room_name"  class="object-contain w-full mb-4  transition-all delay-75"/>
+                    <img :src="room.photo ? room.photo_url : `${config.public.baseUrl ? '/' + config.public.baseUrl + '/' + config.public.baseUrl  : '/'}images/no-cover.jpg`" ref="mainImage" :alt="room.room_name"  class="object-contain w-full mb-4  transition-all delay-75"/>
 
                     <div class="flex space-x-4">
                         <div v-for="(image, index) in images" class="rounded-md  transition-all delay-75">
