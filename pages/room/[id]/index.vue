@@ -7,7 +7,7 @@
         <div class="bg-white p-8">
             <div class="lg:flex lg:space-x-8">
                 <div class="lg:w-1/2 mb-4 lg:mb-0  transition-all delay-75">
-                    <img src="https://i.imgur.com/Nsbh8SZ.png" ref="mainImage" :alt="room.room_name"  class="object-contain w-full mb-4  transition-all delay-75"/>
+                    <img :src="room.photo ? room.photo_url : `/public/images/no-cover.jpg`" ref="mainImage" :alt="room.room_name"  class="object-contain w-full mb-4  transition-all delay-75"/>
 
                     <div class="flex space-x-4">
                         <div v-for="(image, index) in images" class="rounded-md  transition-all delay-75">
@@ -29,10 +29,6 @@
                         <tr>
                             <td>จำนวนผุ้เข้าประชุม</td>
                             <td>{{ room.capacity }}</td>
-                        </tr> 
-                        <tr>
-                            <td>สาขา</td>
-                            <td>{{ room.branch_name }}</td>
                         </tr> 
                         <tr>
                             <td>อาคาร</td>
