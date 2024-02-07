@@ -30,14 +30,11 @@
                         </UPopover>
                     </div>
                     <div class="self-center">
-                       
-                        <URadioGroup v-model="selectedBy" :options="searchByoptions" />
                         <UCheckbox color="primary" 
-                            v-if="authStore.isAdmin"
                             :value="true" 
-                            v-model="searchAll"
+                            v-model="showMeOnly"
 
-                            label="แสดงรายการทั้งหมด"
+                            label="แสดงรายการจองเฉพาะของคุณ"
                             class="my-2" 
                             :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 text-lg dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
                             @change="checkSearch"
@@ -252,17 +249,7 @@
     }])
 
 
-    const searchAll = ref(false)
-
-    const searchByoptions = [{
-        value: 'me',
-        label: 'แสดงเฉพาะรายการจองของฉัน'
-    }, {
-        value: 'department',
-        label: 'แสดงรายการจองเฉพาะห้องในหน่วยงาน'
-    }]
-
-    const selectedBy = ref('me')
+    const showMeOnly = ref(false)
     onMounted(() => {
         fetchRooms()
     })
@@ -368,7 +355,7 @@
     const departmentUser = ref(authStore.user.currentUserInfo.departmentID)
     const { data: booking, pending, refresh } = await useAsyncData('booking', async () => {
         return await postApi('/bk/book/ListData' , {
-            OwnerUsername: !searchAll.value ? selectedBy.value == 'me' ? nameUserSearch.value : '' : '',
+            OwnerUsername: nameUserSearch.value,
             date_begin: searchDateBegin.value,
             date_end: searchDateEnd.value,
             Type: "จองห้องประชุม",
@@ -377,13 +364,13 @@
             Attendee: attendeeSearch.value,
             Building: buildingSearch.value,
             Agenda:agedaSearch.value,
-            DepartmentID: !searchAll.value ? selectedBy.value == 'department' ? departmentUser.value : '' : ''
+            IsShowMeOnly: showMeOnly.value,
 
         }) 
     }
     , {
         default: () => [],
-        watch: [page, pageFrom, pageCount, nameUserSearch, nameSearch, statusSearch, buildingSearch, attendeeSearch, searchDateBegin , searchDateEnd, agedaSearch, searchAll, selectedBy, departmentUser]
+        watch: [page, pageFrom, pageCount, nameUserSearch, nameSearch, statusSearch, buildingSearch, attendeeSearch, searchDateBegin , searchDateEnd, agedaSearch, showMeOnly, departmentUser]
     })
 
     const form = ref({})

@@ -42,8 +42,7 @@
                     </div>
                     <div class="flex items-center" v-if="authStore.isAdmin">
                         <UCheckbox color="primary" 
-                            :value="true"
-                            :model-value="nameUserSearch !== ''" 
+                            v-model="showMeOnly"
                             label="แสดงรายการจองเฉพาะของคุณ"
                             class="mb-2" 
                             :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 text-lg dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
@@ -239,8 +238,7 @@
     const modalCancle = ref(false)
     const dataDelete = ref(null)
     const nameUserSearch = ref(authStore.username)
-    const nameSearch = ref("")
-    const typeSearch = ref("")
+    const showMeOnly = ref(false)
     const view = ref(false)
     const modalConfirm = ref(false)
     const searchDateBegin = ref(null)
@@ -356,11 +354,12 @@
             RoomName: '',
             Attendee: attendeeSearch.value || null,
             Building: '',
-            Agenda: agedaSearch.value
+            Agenda: agedaSearch.value,
+            IsShowMeOnly: showMeOnly.value
         }) 
     , {
         default: () => [],
-         watch: [page, pageFrom, pageCount, nameUserSearch, statusSearch, attendeeSearch, searchDateBegin , searchDateEnd, agedaSearch]
+         watch: [page, pageFrom, pageCount, nameUserSearch, statusSearch, attendeeSearch, searchDateBegin , searchDateEnd, agedaSearch,showMeOnly]
     })
 
 

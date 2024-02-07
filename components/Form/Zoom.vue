@@ -250,14 +250,14 @@
                     </tr>
                 </table>
             </div>
-            <div v-if="!view" class="flex space-x-4 justify-center mb-6">
+            <div v-if="view" class="flex space-x-4 justify-center mb-6">
                 <UButton  
                     label="อนุมัติ"
                     color="emerald"
                     size="xl"
                     @click="emit('approve', true)" 
                     :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                    v-if="form.status !== 'อนุมัติ' && authStore.isAdmin && form.bk_no"
+                    v-if="form.status === 'รออนุมัติ' && authStore.isAdmin && form.bk_no"
 
                 />
                 <UButton  
@@ -266,10 +266,10 @@
                     size="xl"
                     @click="emit('approve', false)" 
                     :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
-                    v-if="form.status !== 'ปฏิเสธ' && authStore.isAdmin && form.bk_no"
+                    v-if="form.status === 'รออนุมัติ' && authStore.isAdmin && form.bk_no"
                 />
                 
-                <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+                <UButton type="submit" label="บันทึก" size="xl" v-if="!view" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
             </div>
         </div>
     </div>
