@@ -7,7 +7,7 @@
             <SettingsLink to="/profile">ข้อมูลส่วนตัว</SettingsLink>
         </li>
         <li class="children">
-            <SettingsLink to="">การแจ้งเตือน {{ authStore.user.userInGroups }}</SettingsLink>
+            <SettingsLink to="">การแจ้งเตือน</SettingsLink>
         </li>
     </ul>
     <ul class="text-lg menu-left" v-if="authStore.isAdmin">
