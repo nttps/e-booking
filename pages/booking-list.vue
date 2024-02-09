@@ -290,6 +290,9 @@
     }, {
         key: 'reason_desc',
         label: 'รายละเอียด',
+    },{
+        key: 'department_id',
+        label: 'หน่วยงานผู้จองห้อง',
     }, {
         key: 'status',
         label: 'สถานะ',
