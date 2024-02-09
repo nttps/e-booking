@@ -44,41 +44,39 @@
     </div>
 
 
-    <div class="bg-white flex space-x-4 p-4 mt-4 last-of-type:!mb-0 last:!border-b-0 border-2 border-[#FFA800] rounded-md" v-for="room in rooms.slice((page - 1) * pageCount, (page) * pageCount)" v-if="rooms.length > 0">
-        <div class="w-4/12">
-            <img :src="room.photo ? room.photo_url : `${config.public.baseUrl ? config.public.baseUrl  : '/'}images/no-cover.jpg`" class="h-[250px]" alt="">
-        </div>
-        <div class="w-8/12">
-            <div class="flex">
-                <div class="w-1/2">
-                    <div class="font-bold text-xl mb-2">{{ room.room_name }}</div>
-                    <div class="flex items-center space-x-2 mb-2 text-gray-500">
-                        <Icon name="heroicons:user-group-20-solid" size="30px" /> <span>{{ room.capacity }}</span>
-                    </div>
-                    <div class="flex items-center space-x-2 mb-2 text-gray-500">
-                        <Icon name="clarity:building-line" size="30px" /> <span>{{ room.building_id }}</span>
-                    </div>
-                    <div class="flex items-center space-x-2 mb-2 text-gray-500 text-lg">
-                        <span>หน่วยงาน </span><span>{{ room.department_id }}</span>
+    <div class="bg-white grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 px-4 mt-4" >
+        <div class="space-x-4 p-4 mt-4 bg-[#ffe5b1] border-2 border-[#FFA800] rounded-md" v-for="room in rooms.slice((page - 1) * pageCount, (page) * pageCount)" v-if="rooms.length > 0">
+            <img :src="room.photo ? room.photo_url : `${config.public.baseUrl ? config.public.baseUrl  : '/'}images/no-cover.jpg`" class="h-[250px] mx-auto mb-2" alt="">
+            <div>
+                <div class="text-center">
+                    <div class="font-bold text-xl mb-2 text-center">{{ room.room_name }}</div>
+                    <div class="flex items-center justify-between space-x-2 mb-2 text-white-500">
+                        <div>
+                            <Icon name="heroicons:user-group-20-solid" size="30px" /> <span>{{ room.capacity }}</span>
+                        </div>
+                        <div>
+                            <Icon name="clarity:building-line" size="30px" /> <span>{{ room.building_id }}</span>
+                        </div>
+                       <div>
+                         <span>หน่วยงาน </span><span>{{ room.department_id }}</span>
+                       </div>
                     </div>
                     <!-- <div class="flex items-center space-x-2 mb-2 text-gray-500 text-lg">
                         <span>สถานะ</span> <span class="rounded-full px-4 text-black" :class="{ 'bg-green-400': room.status === 'ปกติ', 'bg-red-400': room.status !== 'ปกติ'}">{{ room.status }}</span>
                     </div> -->
-                    
-                </div>
-                <div class="w-1/2 self-end">
-                    <div class="text-right">
+                    <div class="text-center">
                         <NuxtLink :to="`/room/${room.room_id}`" class="mr-4">ดูเพิ่มเติม</NuxtLink>
                         <UButton label="จอง" @click="navigateTo(`/room/${room.room_id}/booking`)" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
                     </div>
                 </div>
             </div>
         </div>
+        <div v-else class="bg-white text-red-600 text-center text-xl p-4 mt-4 border-2 border-[#FFA800] ">
+            ไม่พบรายการ
+        </div>
     </div>
-    <div v-else class="bg-white text-red-600 text-center text-xl p-4 mt-4 border-2 border-[#FFA800] ">
-        ไม่พบรายการ
-    </div>
-    <div class="bg-white py-4 border-r-2 border-l-2 border-b-2 border-[#FFA800]"  v-if="rooms.length > 0">
+    
+    <div class="bg-white py-4  "  v-if="rooms.length > 0">
         <UPagination
             v-model="page"
             :page-count="pageCount"
