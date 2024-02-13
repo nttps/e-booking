@@ -134,7 +134,7 @@
 
          // Pagination
     const page = ref(1)
-    const pageCount = ref(5)
+    const pageCount = ref(12)
 
      // Data
     const { data: rooms, pending, refresh } = await useAsyncData('rooms', async () => await listRooms({
