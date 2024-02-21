@@ -126,7 +126,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>จำนวนผู้เข้าประชุม</td>
+                        <td>จำนวนผู้เข้าประชุมวงใน</td>
                         <td class="text-zinc-400">
                             <div class="relative w-full min-w-[200px]">
                                 <input
@@ -139,6 +139,22 @@
                             </div>
                         </td>
                     </tr> 
+                    <tr>
+                        <td>จำนวนผู้เข้าประชุมวงนอก</td>
+                        <td class="text-zinc-400">
+                            <div class="relative w-full min-w-[200px]">
+                                <input
+                                    v-model.number="form.num_observer"
+                                    type="number"
+                                    required
+                                     :disabled="view" 
+                                    class="peer h-full w-full border-b border-zinc-400 bg-transparent outline py-1 outline-0 transition-all focus:border-black focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                                />
+                            </div>
+                        </td>
+                    </tr> 
+
+                    
                     <tr>
                         <td>หมายเหตุ</td>
                         <td class="text-zinc-400">
@@ -207,7 +223,7 @@
                         </td>
                     </tr> 
                     <tr>
-                        <td>ผู้เข้าร่วมประชุม</td>
+                        <td>ผู้เข้าร่วมประชุม </td>
                         <td class="text-zinc-400">
                             <div class="flex space-x-2"  v-if="!view">
                                 <div class="w-1/4">

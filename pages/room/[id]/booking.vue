@@ -66,6 +66,7 @@
         is_need_driver:true,//ต้องการพนักงานขับรถ 
         count_file:1,//
         num_attendee: null,//จำนวนผู้เข้าร่วม   
+        num_observer: null,//
         agenda:"",//รายละเอียดการประชุม
         date_begin: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
         date_end: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
