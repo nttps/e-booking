@@ -56,14 +56,10 @@
                             <td>ชื่อ - นามสกุล / ตำแหน่ง</td>
                             <td class=" text-zinc-400">{{ form.bk_by_fullname || auth.user.currentUserInfo.fullName}}</td>
                         </tr>
-                        <!-- <tr>
-                            <td>ฝ่าย</td>
-                            <td class="text-zinc-400">{{  auth.user.currentUserInfo.fullName }}</td>
-                        </tr>
                         <tr>
-                            <td>ตำแหน่ง</td>
-                            <td class="text-zinc-400">{{ auth.user.currentUserInfo.positionID}}</td>
-                        </tr> -->
+                            <td>หน่วยงาน</td>
+                            <td class="text-zinc-400">{{ form.department_id || auth.user.currentUserInfo.departmentID}}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
