@@ -38,8 +38,14 @@
                 <button type="button" class="flex justify-center items-center space-x-4 relative" @click="toggleMenuBar"  ref="buttonProfileRef">
                     <div class="flex justify-center items-center">
                         <img src="~/assets/images/user.svg" class="w-[38px] ml-4 mr-2" alt="">
-                        {{ $auth.user.currentUser }}
+                       
+                        <div class="text-left leading-5">
+                            <div>{{ user.fullName }}</div>
+                            <div>หน่วยงาน: {{ user.department }}</div>
+                        </div>
+                       
                     </div>
+                    
                     <Icon name="solar:alt-arrow-down-outline" class="text-3xl" color="#3E3E3E" />
                      <ProfileMenu  v-if="menuBar"/>
                 </button>

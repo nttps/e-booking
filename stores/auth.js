@@ -27,6 +27,7 @@ export const useAuthStore = defineStore("auth-store", {
         firstName: (state) => state.user?.currentUserInfo?.firstName || "",
         lastName: (state) => state.user?.currentUserInfo?.lastName || "",
         prefix: (state) => state.user?.currentUserInfo?.title || "",
+        department: (state) => state.user?.currentUserInfo?.departmentID || "",
     },
     actions: {
         async login(loginForm) {
