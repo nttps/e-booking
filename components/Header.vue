@@ -43,13 +43,11 @@
                             <div>{{ user.fullName }}</div>
                             <div>หน่วยงาน: {{ user.department }}</div>
                         </div>
-                       
                     </div>
                     
                     <Icon name="solar:alt-arrow-down-outline" class="text-3xl" color="#3E3E3E" />
                      <ProfileMenu  v-if="menuBar"/>
                 </button>
-               
             </div>
         </nav>
         
