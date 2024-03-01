@@ -66,7 +66,7 @@
                     </div> -->
                     <div class="text-center">
                         <NuxtLink :to="`/room/${room.room_id}`" class="mr-4">ดูเพิ่มเติม</NuxtLink>
-                        <UButton label="จอง" @click="navigateTo(`/room/${room.room_id}/booking`)" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+                        <UButton label="จอง" @click="goToBooking(`/room/${room.room_id}/booking`)" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
                     </div>
                 </div>
             </div>
@@ -124,14 +124,21 @@
 
 
     const config = useRuntimeConfig()
-
-
-
     const labelStartDate = computed(() => searchDateBegin.value ? moment(searchDateBegin.value).format('DD/MM/YYYY เวลา HH:mm') : 'เลือกวันที่เริ่มจอง')
     const labelEndDate = computed(() => searchDateEnd.value ?  moment(searchDateEnd.value).format('DD/MM/YYYY เวลา HH:mm') : 'เลือกวันที่สิ้นสุด')
 
 
+    const stateDateStart = useState('stateDateStart')
+    const stateDateEnd = useState('stateDateEnd')
 
+
+    const goToBooking = async (url) => {
+
+        stateDateStart.value = searchDateBegin.value
+        stateDateEnd.value = searchDateEnd.value
+        await navigateTo(url)
+    }
+   
          // Pagination
     const page = ref(1)
     const pageCount = ref(12)

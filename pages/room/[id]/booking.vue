@@ -45,10 +45,16 @@
 
     const room = ref(null)
     const data = await getApi(`/bk/room/GetDocSet?room_id=${route.params.id}`)
+
+    const stateDateStart = useState('stateDateStart')
+    const stateDateEnd = useState('stateDateEnd')
+
+
     room.value = data.rooms
     room.value.facilities = data.facilities
     onMounted(() => {
         fetchSupports()
+
     })
     const form = ref({
         bk_no:"",//กรณีเพิ่มใหม่ไม่ต้องส่งค่ามา แต่ถ้าเป็นการแก้ไขให้เลขเอกสารมา
@@ -68,8 +74,8 @@
         num_attendee: null,//จำนวนผู้เข้าร่วม   
         num_observer: null,//
         agenda:"",//รายละเอียดการประชุม
-        date_begin: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
-        date_end: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
+        date_begin: moment(stateDateStart.value || dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
+        date_end: moment(stateDateEnd.value || dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
         created_by: auth.username, //ผู้ทำรายการ
         modified_by:"",//ผู้แก้ไขรายการ
         joiners: [],
