@@ -195,7 +195,7 @@
 
                 <template #footer>
                     <div class="flex justify-between">
-                        <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
+                        <UButton type="button" color="green" class="px-4 py-2 text-base rounded-[5px] text-white" @click="submitConfirm" :loading="loading">ยืนยัน</UButton>
                         <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
                     </div>
                 </template>
@@ -484,7 +484,10 @@
 
     }
 
+    const loading = ref(false)
     const submitConfirm = async ()  => {
+
+        loading.value = true
         const data = await postApi('/bk/book/save' , {
             booking: form.value,
             joiners: form.value.joiners.map(joiner => {
@@ -502,6 +505,7 @@
 
         modalConfirm.value = false
         modalAdd.value = false
+        loading.value = false
     }
 
     const modalConfirmApprove = ref(false)

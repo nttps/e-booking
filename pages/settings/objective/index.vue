@@ -141,7 +141,7 @@
                
                 <template #footer>
                     <div class="text-center flex justify-center space-x-8">
-                        <UButton type="submit" label="เพิ่มข้อมูล" color="amber" size="xl" />
+                        <UButton type="submit" label="เพิ่มข้อมูล" color="amber" size="xl" :loading="loading" />
                         <UButton type="button" label="กลับ" color="gray" variant="outline" size="xl" @click="modalAdd = false; closeModal()" />
                     </div>  
                 </template>
@@ -261,7 +261,7 @@
 
     }
 
-
+    const loading = ref(false)
     const submit = async ()  => {
         
         const data = await postApi('/bk/type/save' , form.value)

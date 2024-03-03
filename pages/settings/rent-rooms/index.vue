@@ -198,7 +198,7 @@
                 </div>
                 <template #footer>
                     <div class="text-center flex justify-center space-x-8">
-                        <UButton type="submit" label="เพิ่มข้อมูล" color="amber" size="xl" />
+                        <UButton type="submit" label="เพิ่มข้อมูล" color="amber" :loading="loading" size="xl" />
                         <UButton type="button" label="กลับ" color="gray" variant="outline" size="xl" @click="modalAdd = false; closeModal()" />
                     </div>  
                 </template>
@@ -379,8 +379,10 @@
         modalAdd.value = true
 
     }
+
+    const loading = ref(false)
     const submit = async ()  => {
-        
+        loading.value = true
         const data = await postApi('/bk/room/save' ,{
             rooms: form.value,
             facilities: form.value.facilities
@@ -393,6 +395,8 @@
             closeModal()
             refresh()
         }
+
+        loading.value = false
     }
 
     const deleteImage = async (id) => {

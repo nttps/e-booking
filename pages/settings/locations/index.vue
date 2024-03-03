@@ -140,7 +140,7 @@
                 </UFormGroup>
                 <template #footer>
                     <div class="text-center flex justify-center space-x-8">
-                        <UButton type="submit" label="เพิ่มข้อมูล" color="amber" size="xl" />
+                        <UButton type="submit" label="เพิ่มข้อมูล" color="amber" :loading="loading" size="xl" />
                         <UButton type="button" label="กลับ" color="gray" variant="outline" size="xl" @click="modalAdd = false; closeModal()" />
                     </div>  
                 </template>
@@ -257,9 +257,10 @@
 
     }
 
+    const loading = ref(false)
 
     const submit = async ()  => {
-        
+        loading.value = true
         const data = await postApi('/bk/type/save' , form.value)
 
       
@@ -267,6 +268,7 @@
 
         closeModal()
         refresh()
+        loading.value = false
 
     }
 

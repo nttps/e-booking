@@ -6,7 +6,7 @@
 
         <UForm :state="form" @submit="submit">
 
-            <FormBooking :form="form" :auth="auth" :items="items" :room="room" v-if="room" :files="files" /> 
+            <FormBooking :form="form" :auth="auth" :items="items" :room="room" v-if="room" :files="files" :loading="loading" /> 
 
             <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
                 <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -18,7 +18,7 @@
 
                     <template #footer>
                         <div class="flex justify-between">
-                            <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitConfirm">ยืนยัน</button>
+                            <UButton label="ยืนยัน" color="green" class="px-4 py-2 text-base rounded-[5px] text-white" :loading="loading" @click="submitConfirm" />
                             <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirm = false">ยกเลิก</button>
                         </div>
                     </template>
@@ -34,6 +34,7 @@
     import moment from "moment"
     const route = useRoute()
 
+    const loading = ref(false)
     const auth = useAuthStore()
     const dateNow = ref(moment(new Date()))
     
@@ -95,6 +96,7 @@
 
      const submitConfirm = async ()  => {
 
+        loading.value = true
         form.value.room_id = room.value.room_id
         const data = await postApi('/bk/book/save' , {
             booking: form.value,

@@ -303,7 +303,7 @@
             </div>
         </div>
         <div v-if="!view" class="flex space-x-4 justify-center mb-6">
-            <UButton type="submit" label="บันทึก" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+            <UButton type="submit" label="บันทึก" :loading="loading" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
         </div>
         <div v-else  class="flex space-x-4 justify-center mb-6">
             <UButton  
@@ -349,7 +349,7 @@
     import moment from "moment"
 
 
-    const props = defineProps(['form', 'auth', 'items', 'room', 'view', 'files'])
+    const props = defineProps(['form', 'auth', 'items', 'room', 'view', 'files', 'loading'])
     const emit = defineEmits(['approve', 'notApprove'])
     const authStore = useAuthStore()
     const fileSelect = ref(false)
