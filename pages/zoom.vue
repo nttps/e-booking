@@ -177,7 +177,7 @@
 
                     <template #footer>
                         <div class="flex justify-between">
-                            <button type="submit" class="px-4 py-2 bg-red-600 text-base rounded-[5px] text-white">ตกลง</button>
+                            <UButton type="submit" color="red" class="px-4 py-2 bg-red-600 text-base rounded-[5px] text-white" label="ตกลง" :loading="loading" />
                             <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalConfirmApprove = false;preventClose = false; closeModal()">ยกเลิก</button>
                         </div>
                     </template>
@@ -520,6 +520,8 @@
     }
 
     const submitApprove = async () => {
+
+         loading.value = true
         const res = await postApi('/bk/book/UpdateStatus', dataApprove.value)
 
         modalConfirmApprove.value = false
@@ -527,6 +529,8 @@
         modalAdd.value = false
         modalCancle.value = false
         refresh()
+
+         loading.value = false
 
     }
     
