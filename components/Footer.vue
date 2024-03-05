@@ -13,7 +13,7 @@
     </footer>
 
     <div class=" fixed bottom-10 right-10">
-        <UButton size="xl" :ui="{ rounded: 'rounded-full' }" color="blue" label="DX" :to="config.public.homeUrl" />
+        <UButton size="xl" :ui="{ rounded: 'rounded-full', padding: { xl: 'px-5 py-4', }, }" color="blue" label="DX" :to="config.public.homeUrl" />
     </div>
 </template>
 
