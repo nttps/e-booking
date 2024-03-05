@@ -11,6 +11,10 @@
             <div>DDPM - E-Booking Version {{ config.public.version }}</div>
         </div>
     </footer>
+
+    <div class=" fixed bottom-10 right-10">
+        <UButton size="xl" :ui="{ rounded: 'rounded-full' }" color="blue" label="DX" :to="config.public.homeUrl" />
+    </div>
 </template>
 
 <script setup>
