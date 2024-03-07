@@ -15,7 +15,7 @@
             <div>
                 <a href="/" class="flex justify-center items-center">
                     <img src="~/assets/images/logo.png" class="w-[70px]" alt="E-Booking Logo">
-                    <div class="text-lg 2xl:text-xl ml-4 font-semibold">
+                    <div class="text-lg 2xl:text-xl ml-4">
                         <div>ระบบจองห้องประชุมออนไลน์</div> 
                         <div class="text-[#FFA133]">กรมป้องกันและบรรเทาสาธารณภัย</div> 
                     </div>
