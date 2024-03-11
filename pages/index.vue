@@ -146,7 +146,7 @@
      // Data
     const { data: rooms, pending, refresh } = await useAsyncData('rooms', async () => await listRooms({
         RoomName: nameSearch.value,
-        Capacity: capacitySearch.value,
+        Capacity: capacitySearch.value || null,
         Building: buildingSearch.value,
         Status: statusSearch.value,
         DateBegin: searchDateBegin.value,
