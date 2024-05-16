@@ -57,7 +57,7 @@
                 :columns="columns"
                 :loading="pending"
                 class="w-full"
-                :ui="{ td: { base: 'max-w-[0] truncate' } }"
+                
                 :loading-state="{ label: 'กำลังโหลด ...' }" 
                 :empty-state="{ label: 'ไม่พบรายการ' }"
             >
