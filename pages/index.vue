@@ -10,12 +10,15 @@
                     <FormDatePicker v-model="searchDateBegin" @close="close" :date-time="true" />
                 </template>
             </UPopover>
+            <div v-if="!isValidDateRange" class="text-red-500 text-sm">
+                *วันที่เริ่มต้องไม่เกินวันที่สิ้นสุด
+            </div>
         </div>
         <div class="w-3/6">
             <UPopover :popper="{ placement: 'bottom-start' }">
                 <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="xl" :label="labelEndDate" />
                 <template #panel="{ close }">
-                    <FormDatePicker v-model="searchDateEnd" @close="close" :date-time="true"/>
+                    <FormDatePicker v-model="searchDateEnd" :min-date="searchDateBegin" @close="close" :date-time="true"/>
                 </template>
             </UPopover>
         </div>
@@ -139,6 +142,14 @@
         await navigateTo(url)
     }
    
+    
+    const isValidDateRange = computed(() => {
+        if (searchDateBegin.value && searchDateEnd.value ) {
+            return moment(searchDateBegin.value).isSameOrBefore(moment(searchDateEnd.value ));
+        }
+        return true;
+    });
+
          // Pagination
     const page = ref(1)
     const pageCount = ref(12)
@@ -168,6 +179,8 @@
         capacitySearch.value = null
         buildingSearch.value = ''
         statusSearch.value = ''
+        searchDateBegin.value = dateNow
+        searchDateEnd.value= dateNow
     }
    
 </script>

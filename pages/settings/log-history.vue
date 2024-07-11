@@ -32,13 +32,16 @@
                                         <FormDatePicker v-model="loginSearchDateStart" @close="close"/>
                                     </template>
                                 </UPopover>
+                                <div v-if="!isValidDateRange" class="text-red-500 text-sm">
+                                    *วันที่เริ่มต้องไม่เกินวันที่สิ้นสุด
+                                </div>
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <label for="">ถึงวันที่</label>
                                 <UPopover :popper="{ placement: 'bottom-start' }">
                                     <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelLoginEndDate" />
                                     <template #panel="{ close }">
-                                        <FormDatePicker v-model="loginSearchDateEnd" @close="close"/>
+                                        <FormDatePicker v-model="loginSearchDateEnd" :min-date="loginSearchDateStart" @close="close"/>
                                     </template>
                                 </UPopover>
                             </div>
@@ -281,6 +284,14 @@
     const activitySearchDateEnd = ref(moment().format('YYYY-MM-DD'))
     const labelActivityStartDate = computed(() => moment(activitySearchDateStart.value).format('DD/MM/YYYY'))
     const labelActivityEndDate = computed(() => moment(activitySearchDateEnd.value).format('DD/MM/YYYY'))
+
+
+     const isValidDateRange = computed(() => {
+        if (loginSearchDateStart.value && loginSearchDateEnd.value) {
+            return moment(loginSearchDateStart.value).isSameOrBefore(moment(loginSearchDateEnd.value));
+        }
+        return true;
+    });
 
 
     // Columns

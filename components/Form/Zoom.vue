@@ -76,30 +76,34 @@
             <div class="flex justify-between">
                 <table class="border-separate border-spacing-2 w-full">
                     <tr>
-                        <td class="w-1/6">วันที่ - เวลาเริ่มการประชุม</td>
-                        <td class="w-5/6 text-zinc-400">
+                        <td colspan="1" class="w-1/6">วันที่ - เวลาเริ่มการประชุม</td>
+                        <td colspan="3" class="w-5/6 text-zinc-400">
                             <UPopover :popper="{ placement: 'bottom-start' }">
                                 <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelStartDate" :disabled="view" />
                                 <template #panel="{ close }">
                                     <FormDatePicker v-model="form.date_begin" @close="close" :date-time="true" />
                                 </template>
                             </UPopover>
+                            <div v-if="!isValidDateRange" class="text-red-500 text-sm">
+                                *วันที่ - เวลาเริ่มการประชุม ต้องไม่เกิน วันที่ - เวลาสิ้นสุด
+                            </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>วันที่ - เวลาสิ้นสุดการประชุม</td>
-                        <td class="text-zinc-400">
+                        <td colspan="1">วันที่ - เวลาสิ้นสุดการประชุม</td>
+                        <td colspan="3" class="text-zinc-400">
                             <UPopover :popper="{ placement: 'bottom-start' }">
                                 <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" :disabled="view"  />
                                 <template #panel="{ close }">
-                                    <FormDatePicker v-model="form.date_end" @close="close" :date-time="true"/>
+                                    <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="true"/>
                                 </template>
                             </UPopover>
+                           
                         </td>
                     </tr>
                     <tr>
-                        <td>หัวข้อการประชุม</td>
-                        <td class="text-zinc-400">
+                        <td colspan="1">หัวข้อการประชุม</td>
+                        <td colspan="3" class="text-zinc-400">
                             <div class="relative w-full min-w-[200px]">
                                 <input
                                 v-model="form.agenda"
@@ -110,8 +114,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>วัตถุประสงค์</td>
-                        <td class="text-zinc-400">
+                        <td >วัตถุประสงค์</td>
+                        <td class="text-zinc-400 min-w-[300px]">
                             <USelectMenu :options="objectives" v-model="form.reason_desc"  
                                 placeholder="เลือกวัตถุประสงค์" 
                                 value-attribute="type_name" 
@@ -121,8 +125,6 @@
                             />
                             
                         </td>
-                    </tr>
-                    <tr>
                         <td>จำนวนผู้เข้าประชุม</td>
                         <td class="text-zinc-400">
                             <div class="relative w-full min-w-[200px]">
@@ -135,10 +137,10 @@
                                 />
                             </div>
                         </td>
-                    </tr> 
+                    </tr>
                     <tr>
-                        <td class="align-top">แนบเอกสาร</td>
-                        <td class="text-zinc-400">
+                        <td colspan="1" class="align-top">แนบเอกสาร</td>
+                        <td colspan="3" class="text-zinc-400">
                             <div class="text-base text-black font-bold">เอกสารที่แนบ</div>
                             <div class="relative flex ali justify-between" v-for="(file, index) in files">
 
@@ -156,8 +158,8 @@
                         </td>
                     </tr> 
                     <tr>
-                        <td>หมายเหตุ</td>
-                        <td class="text-zinc-400">
+                        <td colspan="1">หมายเหตุ</td>
+                        <td colspan="3" class="text-zinc-400">
                             <div class="relative w-full min-w-[200px]">
                                 <input
                                     v-model="form.remark3"
@@ -168,8 +170,8 @@
                         </td>
                     </tr> 
                     <tr>
-                        <td>ผู้เข้าร่วมประชุม</td>
-                        <td class="text-zinc-400">
+                        <td colspan="1">ผู้เข้าร่วมประชุม</td>
+                        <td colspan="3" class="text-zinc-400">
                             <div class="flex space-x-2"  v-if="!view">
                                 <div class="w-1/4">
                                     <USelectMenu
@@ -204,8 +206,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td class="text-zinc-400">
+                        <td colspan="1"></td>
+                        <td colspan="3" class="text-zinc-400">
                             <UTable 
                                 :rows="form.joiners.slice((pagejoiner - 1) * pagejoinerCount, (pagejoiner) * pagejoinerCount)"
                                 :columns="joinerColumns"
@@ -269,7 +271,7 @@
                     v-if="view && form.status === 'รออนุมัติ' && authStore.isAdmin && form.bk_no"
                 />
             
-                <UButton type="submit" label="บันทึก" size="xl" v-if="!view" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+                <UButton type="submit" :disabled="!isValidDateRange" label="บันทึก" size="xl" v-if="!view" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
             </div>
         </div>
     </div>
@@ -313,7 +315,15 @@
         fetchAmenities()
     })
 
+
     const dateNow = ref(moment(new Date()))
+
+    const isValidDateRange = computed(() => {
+        if (props.form.date_begin && props.form.date_end) {
+            return moment(props.form.date_begin).isSameOrBefore(moment(props.form.date_end));
+        }
+        return true;
+    });
 
 
     const joiner = ref({

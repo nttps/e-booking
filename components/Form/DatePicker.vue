@@ -11,6 +11,10 @@ const props = defineProps({
   dateTime: {
     type: Boolean,
     default: false
+  },
+  minDate: {
+    type: String,
+    default: false
   }
 })
 
@@ -45,6 +49,7 @@ const attrs = [{
     :first-day-of-week="2"
     :mode="props.dateTime ? `dateTime` : `date`" is24hr
     hide-time-header
+    :min-date="props.minDate ? props.minDate : new Date()"
     locale="th"
   />
 </template>

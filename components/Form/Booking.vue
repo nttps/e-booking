@@ -79,6 +79,9 @@
                                     <FormDatePicker v-model="form.date_begin" @close="close" :date-time="true" />
                                 </template>
                             </UPopover>
+                             <div v-if="!isValidDateRange" class="text-red-500 text-sm">
+                                *วันที่ - เวลาเริ่มการประชุม ต้องไม่เกิน วันที่ - เวลาสิ้นสุด
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -87,7 +90,7 @@
                             <UPopover :popper="{ placement: 'bottom-start' }">
                                 <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" :disabled="view"  />
                                 <template #panel="{ close }">
-                                    <FormDatePicker v-model="form.date_end" @close="close" :date-time="true"/>
+                                    <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="true"/>
                                 </template>
                             </UPopover>
                         </td>
@@ -116,12 +119,13 @@
                                 value-attribute="type_name" 
                                 option-attribute="type_name" 
                                  :disabled="view" 
+                                class="w-[300px]"
                                 required
                             />
                             
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>จำนวนผู้เข้าประชุมวงใน</td>
                         <td class="text-zinc-400">
                             <div class="relative w-full min-w-[200px]">
@@ -148,7 +152,7 @@
                                 />
                             </div>
                         </td>
-                    </tr> 
+                    </tr>  -->
 
                     
                     <tr>
@@ -303,7 +307,7 @@
             </div>
         </div>
         <div v-if="!view" class="flex space-x-4 justify-center mb-6">
-            <UButton type="submit" label="บันทึก" :loading="loading" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
+            <UButton type="submit" label="บันทึก" :disabled="!isValidDateRange" :loading="loading" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
         </div>
         <div v-else  class="flex space-x-4 justify-center mb-6">
             <UButton  
@@ -364,6 +368,14 @@
     })
 
     const dateNow = ref(moment(new Date()))
+
+
+    const isValidDateRange = computed(() => {
+        if (props.form.date_begin && props.form.date_end) {
+            return moment(props.form.date_begin).isSameOrBefore(moment(props.form.date_end));
+        }
+        return true;
+    });
 
 
     const joiner = ref({
