@@ -31,6 +31,7 @@
                                 <FormDatePicker v-model="searchDateBegin" @close="close" />
                             </template>
                         </UPopover>
+                        
                     </div>
                     <div class="flex items-center">
                         <UPopover :popper="{ placement: 'bottom-start' }">
@@ -378,7 +379,7 @@
             remark3:"",//หมายเหตุุ
             is_need_driver:true,//ต้องการพนักงานขับรถ 
             count_file:1,//
-            num_attendee: null,//จำนวนผู้เข้าร่วม   
+            num_attendee: 0,//จำนวนผู้เข้าร่วม   
             agenda:"",//รายละเอียดการประชุม
             date_begin: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
             date_end: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 

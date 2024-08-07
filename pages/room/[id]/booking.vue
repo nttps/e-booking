@@ -4,7 +4,7 @@
             {{ room.room_name }}
         </div>
 
-        <UForm :state="form" @submit="submit">
+        <UForm :state="form" :schema="schema" @submit="submit">
 
             <FormBooking :form="form" :auth="auth" :items="items" :room="room" v-if="room" :files="files" :loading="loading" /> 
 
@@ -32,7 +32,15 @@
 
 <script setup>
     import moment from "moment"
+    import { object, string } from "yup"
     const route = useRoute()
+
+
+    const schema = object({
+        date_begin: string().required('กรุณาเลือกวันที่'),
+        date_end: string()
+            .required('กรุณาเลือกวันที่')
+    })
 
     const loading = ref(false)
     const auth = useAuthStore()
@@ -47,8 +55,8 @@
     const room = ref(null)
     const data = await getApi(`/bk/room/GetDocSet?room_id=${route.params.id}`)
 
-    const stateDateStart = useState('stateDateStart')
-    const stateDateEnd = useState('stateDateEnd')
+    const stateDateStart = ref()
+    const stateDateEnd = ref()
 
 
     room.value = data.rooms
@@ -72,11 +80,11 @@
         remark3:"",//หมายเหตุุ
         is_need_driver:true,//ต้องการพนักงานขับรถ 
         count_file:1,//
-        num_attendee: null,//จำนวนผู้เข้าร่วม   
-        num_observer: null,//
+        num_attendee: 0,//จำนวนผู้เข้าร่วม   
+        num_observer: 0,//
         agenda:"",//รายละเอียดการประชุม
-        date_begin: moment(stateDateStart.value || dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
-        date_end: moment(stateDateEnd.value || dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
+        date_begin: null,//วันเวลาที่จอง
+        date_end: null,// ถึงวันที่ 
         created_by: auth.username, //ผู้ทำรายการ
         modified_by:"",//ผู้แก้ไขรายการ
         joiners: [],

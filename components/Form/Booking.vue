@@ -73,12 +73,15 @@
                     <tr>
                         <td class="w-1/6">วันที่ - เวลาเริ่มการประชุม</td>
                         <td class="w-5/6 text-zinc-400">
-                            <UPopover :popper="{ placement: 'bottom-start' }">
-                                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelStartDate" :disabled="view" />
-                                <template #panel="{ close }">
-                                    <FormDatePicker v-model="form.date_begin" @close="close" :date-time="true" />
-                                </template>
-                            </UPopover>
+                            <UFormGroup name="date_begin">
+                                <UPopover :popper="{ placement: 'bottom-start' }">
+                                    <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelStartDate" :disabled="view" />
+                                    <template #panel="{ close }">
+                                        <FormDatePicker v-model="form.date_begin" @close="close" :date-time="true" />
+                                    </template>
+                                </UPopover>
+                            </UFormGroup>
+                            
                              <div v-if="!isValidDateRange" class="text-red-500 text-sm">
                                 *วันที่ - เวลาเริ่มการประชุม ต้องไม่เกิน วันที่ - เวลาสิ้นสุด
                             </div>
@@ -87,12 +90,14 @@
                     <tr>
                         <td>วันที่ - เวลาสิ้นสุดการประชุม</td>
                         <td class="text-zinc-400">
-                            <UPopover :popper="{ placement: 'bottom-start' }">
-                                <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" :disabled="view"  />
-                                <template #panel="{ close }">
-                                    <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="true"/>
-                                </template>
-                            </UPopover>
+                            <UFormGroup name="date_end">
+                                <UPopover :popper="{ placement: 'bottom-start' }">
+                                    <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" :disabled="view"  />
+                                    <template #panel="{ close }">
+                                        <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="true"/>
+                                    </template>
+                                </UPopover>
+                            </UFormGroup>
                         </td>
                     </tr>
                     <tr>
@@ -413,8 +418,8 @@
         }
     ]
 
-    const labelStartDate = computed(() => moment(props.form.date_begin).format('DD/MM/YYYY เวลา HH:mm'))
-    const labelEndDate = computed(() => moment(props.form.date_end).format('DD/MM/YYYY เวลา HH:mm'))
+    const labelStartDate = computed(() => props.form.date_begin ? moment(props.form.date_begin).format('DD/MM/YYYY เวลา HH:mm'): 'กรุณาเลือกวันที่')
+    const labelEndDate = computed(() => props.form.date_begin ? moment(props.form.date_end).format('DD/MM/YYYY เวลา HH:mm'): 'กรุณาเลือกวันที่')
     
    // Pagination
     const pagejoiner = ref(1)

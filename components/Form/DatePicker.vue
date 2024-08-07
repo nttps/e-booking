@@ -23,7 +23,7 @@ const emit = defineEmits(['update:model-value', 'close'])
 const date = computed({
   get: () => props.modelValue,
   set: (value) => {
-    emit('update:model-value', value ? props.dateTime ? moment(value).format('YYYY-MM-DDTHH:mm:00.000') : moment(value).format('YYYY-MM-DD') : null)
+    emit('update:model-value', value ? props.dateTime ? moment(value).format('YYYY-MM-DDTHH:mm') : moment(value).format('YYYY-MM-DD') : null)
     emit('close')
   }
 })
