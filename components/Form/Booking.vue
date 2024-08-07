@@ -419,7 +419,7 @@
     ]
 
     const labelStartDate = computed(() => props.form.date_begin ? moment(props.form.date_begin).format('DD/MM/YYYY เวลา HH:mm'): 'กรุณาเลือกวันที่')
-    const labelEndDate = computed(() => props.form.date_begin ? moment(props.form.date_end).format('DD/MM/YYYY เวลา HH:mm'): 'กรุณาเลือกวันที่')
+    const labelEndDate = computed(() => props.form.date_end ? moment(props.form.date_end).format('DD/MM/YYYY เวลา HH:mm'): 'กรุณาเลือกวันที่')
     
    // Pagination
     const pagejoiner = ref(1)

@@ -153,7 +153,7 @@
     </div>
 
     <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose" @close="closeModal">
-        <UForm :state="form" @submit="submit">
+        <UForm :state="form" :schema="schema"  @submit="submit">
 
             <FormZoom :form="form" :auth="authStore" :items="items" :room="form.roomname" :view="view" @approve="approve" :files="files"/> 
         </UForm>
@@ -228,7 +228,8 @@
 
 <script setup>  
     import moment from 'moment'
-
+    import { object, string } from "yup"
+   
     useSeoMeta({
         title: 'จองห้องระบบ Zoom'
     })
@@ -250,7 +251,12 @@
 
     const labelStartDate = computed(() => searchDateBegin.value ? moment(searchDateBegin.value).format('DD/MM/YYYY') : 'เลือกวันที่เริ่ม')
     const labelEndDate = computed(() => searchDateEnd.value ?  moment(searchDateEnd.value).format('DD/MM/YYYY') : 'เลือกวันที่สิ้นสุด')
-
+    
+    const schema = object({
+        date_begin: string().required('กรุณาเลือกวันที่'),
+        date_end: string()
+            .required('กรุณาเลือกวันที่')
+    })
 
     // Columns
     const columns = [{
@@ -381,8 +387,8 @@
             count_file:1,//
             num_attendee: 0,//จำนวนผู้เข้าร่วม   
             agenda:"",//รายละเอียดการประชุม
-            date_begin: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),//วันเวลาที่จอง
-            date_end: moment(dateNow.value).format('YYYY-MM-DDTHH:mm'),// ถึงวันที่ 
+            date_begin: null,//วันเวลาที่จอง
+            date_end: null,// ถึงวันที่ 
             created_by: authStore.username, //ผู้ทำรายการ
             modified_by:"",//ผู้แก้ไขรายการ
             joiners: []
