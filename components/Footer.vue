@@ -13,7 +13,9 @@
     </footer>
 
     <div class=" fixed bottom-10 right-10">
-        <UButton size="xl" :ui="{ rounded: 'rounded-full', padding: { xl: 'px-5 py-4', }, }" color="blue" label="DX" :to="config.public.homeUrl" />
+        <a :href="config.public.homeUrl" class="bg-white block rounded-full">
+            <img src="~/assets/images/home-button_0.png" alt="">
+        </a>
     </div>
 </template>
 
