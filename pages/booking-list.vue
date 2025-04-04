@@ -40,9 +40,7 @@
                             @change="checkSearch"
                         />
                     </div>
-                   
                 </div>
-
                 <div class="flex items-center justify-center gap-3">
                     <div class="flex items-center">
                         <UInput v-model="buildingSearch" placeholder="อาคาร" size="xl" />
@@ -50,8 +48,7 @@
                     <div class="flex items-center">
                         <USelect :options="['ทั้งหมด', 'รออนุมัติ', 'อนุมัติ', 'ปฏิเสธ']" v-model="statusSearch" placeholder="สถานะ" size="xl" />
                     </div>
-                   
-                     <div class="flex items-center">
+                    <div class="flex items-center">
                         <UButton
                             color="gray"
                             size="xl"
@@ -62,12 +59,10 @@
                         </UButton>
                     </div>
                 </div>
-           
         </div>
         
         <!-- Table -->
         <UTable
-        
             :rows="booking.slice((page - 1) * pageCount, (page) * pageCount)"
             :columns="columns"
             :loading="pending"
@@ -81,6 +76,18 @@
                 <NuxtLink to="">รายละเอียด </NuxtLink>
             </template>
 
+            <template #room_name-data="{ row }">
+                <div class="whitespace-normal">
+                    {{ row.room_name }}
+                </div>
+            </template>
+
+            <template #agenda-data="{ row }">
+                <div class=" whitespace-normal">
+                    {{ row.agenda }}
+                </div>
+            </template>
+
             <template #bk_date-data="{ row }">
                 {{ moment(row.bk_date).format('DD/MM/YYYY') }}
             </template>
@@ -90,12 +97,7 @@
             </template>
 
             <template #date_end-data="{ row }">
-               {{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}
-            </template>
-
-
-            <template #status-data="{ row }">
-               
+                {{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}
             </template>
             <template #actions-data="{ row }">
                 <div class="text-center">
@@ -104,7 +106,6 @@
                     </UDropdown>
                 </div>
             </template>
-            
         </UTable>
         <div class="flex flex-wrap justify-between items-center bg-white px-4 pb-4 pt-4">
             <div>
@@ -138,7 +139,11 @@
 
     <UModal v-model="modalEdit" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose">
         <UForm :state="form" @submit="submit">
-
+            <div class="flex justify-end">
+                <div>
+                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-circle" size="xl" @click="modalEdit = false"/>
+                </div>
+            </div>
             <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" @approve="approve" :files="files" /> 
         </UForm>
 
@@ -309,7 +314,7 @@
             click: () => edit(row.bk_no, true)
         }]
 
-        if(row.status !== 'ปฏิเสธ') {
+        if(row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ') {
             btn.push({
                 label: 'แก้ไข',
                 icon: 'i-heroicons-pencil-solid',

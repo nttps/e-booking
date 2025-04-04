@@ -71,32 +71,47 @@
             <div class="flex justify-between">
                 <table class="border-separate border-spacing-2 w-full">
                     <tr>
-                        <td class="w-1/6">วันที่ - เวลาเริ่มการประชุม</td>
+                        <td class="w-1/6">วันที่เริ่มการประชุม</td>
                         <td class="w-5/6 text-zinc-400">
                             <UFormGroup name="date_begin">
                                 <UPopover :popper="{ placement: 'bottom-start' }">
                                     <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelStartDate" :disabled="view" />
                                     <template #panel="{ close }">
-                                        <FormDatePicker v-model="form.date_begin" @close="close" :date-time="true" />
+                                        <FormDatePicker v-model="form.date_begin" @close="close" :date-time="false" />
                                     </template>
                                 </UPopover>
                             </UFormGroup>
-                            
-                             <div v-if="!isValidDateRange" class="text-red-500 text-sm">
-                                *วันที่ - เวลาเริ่มการประชุม ต้องไม่เกิน วันที่ - เวลาสิ้นสุด
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w-1/6">เวลาเริ่มการประชุม</td>
+                        <td class="w-5/6 text-zinc-400">
+                            <UFormGroup name="time_begin">
+                                <UInput v-model="timeBegin" type="time" :disabled="view"  />
+                            </UFormGroup>
+                            <div v-if="!isValidDateRange" class="text-red-500 text-sm">
+                                *วันที่เริ่มการประชุมต้องไม่เกินวันที่สิ้นสุด
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>วันที่ - เวลาสิ้นสุดการประชุม</td>
+                        <td>วันที่สิ้นสุดการประชุม</td>
                         <td class="text-zinc-400">
                             <UFormGroup name="date_end">
                                 <UPopover :popper="{ placement: 'bottom-start' }">
                                     <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" :disabled="view"  />
                                     <template #panel="{ close }">
-                                        <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="true"/>
+                                        <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="false"/>
                                     </template>
                                 </UPopover>
+                            </UFormGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>เวลาสิ้นสุดการประชุม</td>
+                        <td class="text-zinc-400">
+                            <UFormGroup name="time_end">
+                                <UInput v-model="timeEnd" placeholder="เลือกเวลา" type="time" :disabled="view"  />
                             </UFormGroup>
                         </td>
                     </tr>
@@ -110,7 +125,7 @@
                             <div class="relative w-full min-w-[200px]">
                                 <input
                                 v-model="form.agenda"
-                                 :disabled="view" 
+                                :disabled="view" 
                                 required
                                 class="peer h-full w-full border-b border-zinc-400 bg-transparent outline py-1 outline-0 transition-all focus:border-black focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
                             </div>
@@ -123,7 +138,7 @@
                                 placeholder="เลือกวัตถุประสงค์" 
                                 value-attribute="type_name" 
                                 option-attribute="type_name" 
-                                 :disabled="view" 
+                                :disabled="view" 
                                 class="w-[300px]"
                                 required
                             />
@@ -366,7 +381,6 @@
 
 
     const objectives = ref([])
-    const supports = ref([])
 
     onMounted(() => {
         fetchType()
@@ -374,12 +388,62 @@
 
     const dateNow = ref(moment(new Date()))
 
+    watch(props.form.time_begin, (newVal) => {
+        console.log(newVal);
+    })
+
+    watch(props.form.time_end, (newVal) => {
+        console.log(newVal);
+    })
+
+    const timeBegin = computed({
+        get: () => props.form.date_begin ? moment(props.form.date_begin).format('HH:mm') : '',
+        set: (newVal) => {
+            if (props.form.date_begin) {
+                const date = moment(props.form.date_begin).format('YYYY-MM-DD');
+                props.form.date_begin = moment(date + ' ' + newVal).format('YYYY-MM-DDTHH:mm');
+            }
+        }
+    })
+
+    const timeEnd = computed({
+        get: () => props.form.date_end ? moment(props.form.date_end).format('HH:mm') : '',
+        set: (newVal) => {
+            if (props.form.date_end) {
+                const date = moment(props.form.date_end).format('YYYY-MM-DD');
+                props.form.date_end = moment(date + ' ' + newVal).format('YYYY-MM-DDTHH:mm');
+            }
+        }
+    })
+
+    watch(() => props.form.date_begin, (newVal) => {
+        if (newVal && timeBegin.value) {
+            const date = moment(newVal).format('YYYY-MM-DD');
+            props.form.date_begin = moment(date + ' ' + timeBegin.value).format('YYYY-MM-DDTHH:mm');
+        }
+    })
+
+    watch(() => props.form.date_end, (newVal) => {
+        if (newVal && timeEnd.value) {
+            const date = moment(newVal).format('YYYY-MM-DD');
+            props.form.date_end = moment(date + ' ' + timeEnd.value).format('YYYY-MM-DDTHH:mm');
+        }
+    })
 
     const isValidDateRange = computed(() => {
-        if (props.form.date_begin && props.form.date_end) {
-            return moment(props.form.date_begin).isSameOrBefore(moment(props.form.date_end));
+        if (!props.form.date_begin || !props.form.date_end) return false;
+        
+        const startDateTime = moment(props.form.date_begin);
+        const endDateTime = moment(props.form.date_end);
+        
+        // ตรวจสอบว่าเป็นวันเดียวกันหรือไม่
+        if (startDateTime.isSame(endDateTime, 'day')) {
+            // ถ้าเป็นวันเดียวกัน ต้องตรวจสอบเวลา
+            return startDateTime.isBefore(endDateTime);
         }
-        return true;
+        
+        // ถ้าเป็นคนละวัน ตรวจสอบว่าเริ่มต้นก่อนสิ้นสุด
+        return startDateTime.isBefore(endDateTime);
     });
 
 
@@ -418,17 +482,15 @@
         }
     ]
 
-    const labelStartDate = computed(() => props.form.date_begin ? moment(props.form.date_begin).format('DD/MM/YYYY เวลา HH:mm'): 'กรุณาเลือกวันที่')
-    const labelEndDate = computed(() => props.form.date_end ? moment(props.form.date_end).format('DD/MM/YYYY เวลา HH:mm'): 'กรุณาเลือกวันที่')
+    const labelStartDate = computed(() => props.form.date_begin ? moment(props.form.date_begin).format('DD/MM/YYYY'): 'กรุณาเลือกวันที่')
+    const labelEndDate = computed(() => props.form.date_end ? moment(props.form.date_end).format('DD/MM/YYYY'): 'กรุณาเลือกวันที่')
+    const startTime = computed(() => props.form.date_begin ? moment(props.form.date_begin).format('HH:mm'): 'กรุณาเลือกเวลา')
+    const endTime = computed(() => props.form.date_end ? moment(props.form.date_end).format('HH:mm'): 'กรุณาเลือกเวลา')
     
    // Pagination
     const pagejoiner = ref(1)
     const pagejoinerCount = ref(10)
     const pagejoinerTotal = computed(() => props.form.joiners.length) // This value should be dynamic coming from the API
-    const pagejoinerFrom = computed(() => (pagejoiner.value - 1) * pagejoinerCount.value + 1)
-    const pagejoinerTo = computed(() => Math.min(pagejoiner.value * pagejoinerCount.value, pagejoinerTotal.value))
-
-
     const searchUser = async (q) => {
         const users = await postApi('/Person/ListUserInfoWithPage' , {
             Search: q,

@@ -21,11 +21,11 @@ export default defineAppConfig({
             },
             tbody: "bg-white",
             td: {
-                base: "first:border-l border-r border-b border-[#FFA800] ",
+                base: "first:border-l border-r border-b border-[#FFA800] !whitespace-wrap ",
                 size: "text-base",
             },
             th: {
-                base: "bg-[#FFA800] first:rounded-tl-[10px] last:rounded-tr-[10px] border-[#FFA800]",
+                base: "bg-[#FFA800] first:rounded-tl-[10px] last:rounded-tr-[10px] border-[#FFA800] !whitespace-wrap",
                 size: "text-base",
             },
         },

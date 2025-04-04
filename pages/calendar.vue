@@ -107,7 +107,6 @@
                 <div v-if="viewEventCurrent.with"><span class="font-bold">จองโดย</span> : {{ viewEventCurrent.with }} </div>
                 <div><span class="font-bold">รายละเอียด</span> : {{ viewEventCurrent.description || viewEventCurrent.title }} </div>
                 <div><span class="font-bold">ช่วงเวลา</span> {{ viewEventCurrent.time.start }} ถึง {{ viewEventCurrent.time.end }} </div>
-                <div><span class="font-bold">หน่วยงานผู้จองห้อง</span> {{ viewEventCurrent.time.start }} ถึง {{ viewEventCurrent.time.end }} </div>
 
             </div>
         </UCard>
