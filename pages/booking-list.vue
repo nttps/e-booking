@@ -315,39 +315,15 @@
             click: () => edit(row.bk_no, true)
         }]
 
-        
-        if(row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ') {
-            btn.push({
-                label: 'อนุมัติ',
-                color: 'green',
-                icon: 'i-heroicons-check-circle',
-                click: () => approve(row.bk_no, true)
-            })
-            btn.push({
-                label: 'ปฏิเสธ',
-                color: 'red',
-                icon: 'i-heroicons-x-circle',
-                click: () => approve(row.bk_no, false)
-            })
-        }
-    
-
         if(row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ') {
             btn.push({
                 label: 'แก้ไข',
-                icon: 'i-heroicons-pencil-solid',
+                icon: 'i-heroicons-pencil-square-20-solid',
                 click: () => edit(row.bk_no)
             })
         }
 
-        if(row.status !== 'ปฏิเสธ' && row.status !== 'ยกเลิก') {
-            btn.push({
-                label: 'ยกเลิก',
-                icon: 'i-heroicons-x-circle',
-                click: () => modalConfirmCancle(row.bk_no)
-            })
-        }
-
+    
         if(row.status !== 'อนุมัติ') {
             btn.push({
                 label: 'ลบ',
@@ -356,8 +332,25 @@
             })
         }
 
-       
-        return [btn]
+        const btnApprove = []
+
+        if(row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ') {
+            btnApprove.push({
+                label: 'อนุมัติ',
+                icon: 'i-heroicons-check-circle-20-solid',
+                click: () => approve(row.bk_no, true)
+            },{
+                label: 'ปฏิเสธ',
+                icon: 'i-heroicons-x-circle-20-solid',
+                click: () => approve(row.bk_no, false)
+            },
+            {
+                label: 'ยกเลิก',
+                icon: 'i-heroicons-x-circle',
+                click: () => modalConfirmCancle(row.bk_no)
+            })
+        }
+        return [btn, btnApprove]
     }
 
     const resetFilters = () => {
