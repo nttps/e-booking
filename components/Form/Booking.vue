@@ -71,24 +71,29 @@
             <div class="flex justify-between">
                 <table class="border-separate border-spacing-2 w-full">
                     <tr>
-                        <td class="w-1/6">วันที่เริ่มการประชุม</td>
+                        <td class="w-1/6">วันที่ - เวลาเริ่มการประชุม</td>
                         <td class="w-5/6 text-zinc-400">
-                            <UFormGroup name="date_begin">
-                                <UPopover :popper="{ placement: 'bottom-start' }">
-                                    <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelStartDate" :disabled="view" />
-                                    <template #panel="{ close }">
-                                        <FormDatePicker v-model="form.date_begin" @close="close" :date-time="false" />
-                                    </template>
-                                </UPopover>
-                            </UFormGroup>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="w-1/6">เวลาเริ่มการประชุม</td>
-                        <td class="w-5/6 text-zinc-400">
-                            <UFormGroup name="time_begin">
-                                <UInput v-model="timeBegin" type="time" :disabled="view"  />
-                            </UFormGroup>
+                            <div class="flex gap-2">
+                                <UFormGroup name="date_begin" label="วันที่">
+                                    <UPopover :popper="{ placement: 'bottom-start' }">
+                                        <UButton icon="i-heroicons-calendar-days-20-solid" color="gray" class="el-input el-input--prefix el-input--suffix el-date-editor el-date-editor--time w-full el-tooltip__trigger el-tooltip__trigger" size="md" :label="labelStartDate" :disabled="view" />
+                                        <template #panel="{ close }">
+                                            <FormDatePicker v-model="form.date_begin" @close="close" :date-time="false"  @update:modelValue="updateTimeBegin" />
+                                        </template>
+                                    </UPopover>
+                                </UFormGroup>
+                                <UFormGroup name="time_begin" label="เวลา">
+                                    <el-time-picker
+                                        v-model="form.time_begin"
+                                        ref="timeBeginRef"
+                                        value-format="HH:mm"
+                                        format="HH:mm"
+                                        placeholder="เลือกเวลา"
+                                        class="w-full bg-gray-50 hover:bg-gray-100"
+                                        :disabled="view"
+                                    />
+                                </UFormGroup>
+                            </div>
                             <div v-if="!isValidDateRange" class="text-red-500 text-sm">
                                 *วันที่เริ่มการประชุมต้องไม่เกินวันที่สิ้นสุด
                             </div>
@@ -97,22 +102,27 @@
                     <tr>
                         <td>วันที่สิ้นสุดการประชุม</td>
                         <td class="text-zinc-400">
-                            <UFormGroup name="date_end">
-                                <UPopover :popper="{ placement: 'bottom-start' }">
-                                    <UButton icon="i-heroicons-calendar-days-20-solid" color="gray"  class="w-full border-b border-zinc-400" size="md" :label="labelEndDate" :disabled="view"  />
-                                    <template #panel="{ close }">
-                                        <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="false"/>
-                                    </template>
-                                </UPopover>
-                            </UFormGroup>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>เวลาสิ้นสุดการประชุม</td>
-                        <td class="text-zinc-400">
-                            <UFormGroup name="time_end">
-                                <UInput v-model="timeEnd" placeholder="เลือกเวลา" type="time" :disabled="view"  />
-                            </UFormGroup>
+                            <div class="flex gap-2">
+                                <UFormGroup name="date_end" label="วันที่">
+                                    <UPopover :popper="{ placement: 'bottom-start' }">
+                                        <UButton icon="i-heroicons-calendar-days-20-solid" color="gray" class="el-input el-input--prefix el-input--suffix el-date-editor el-date-editor--time w-full el-tooltip__trigger el-tooltip__trigger" size="md" :label="labelEndDate" :disabled="view"  />
+                                        <template #panel="{ close }">
+                                            <FormDatePicker v-model="form.date_end" :min-date="form.date_begin" @close="close" :date-time="false" @update:modelValue="updateTimeEnd"/>
+                                        </template>
+                                    </UPopover>
+                                </UFormGroup>
+                                <UFormGroup name="time_end" label="เวลา">
+                                    <el-time-picker
+                                        ref="timeEndRef"
+                                        v-model="form.time_end"
+                                        value-format="HH:mm"
+                                        format="HH:mm"
+                                        placeholder="เลือกเวลา"
+                                        class="w-full bg-gray-50 hover:bg-gray-100"
+                                        :disabled="view"
+                                    />
+                                </UFormGroup>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -329,7 +339,7 @@
         <div v-if="!view" class="flex space-x-4 justify-center mb-6">
             <UButton type="submit" label="บันทึก" :disabled="!isValidDateRange" :loading="loading" size="xl" :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"/>
         </div>
-        <div v-else  class="flex space-x-4 justify-center mb-6">
+        <!-- <div v-else  class="flex space-x-4 justify-center mb-6">
             <UButton  
                 label="อนุมัติ"
                 color="emerald"
@@ -346,7 +356,7 @@
                 :ui="{ size: {xl: 'text-lg text-black'}, padding: { xl: 'px-4 py-1'} }"
                 v-if="form.status !== 'ปฏิเสธ' && form.bk_no && canApprove || (room.department_id === authStore.user.currentUserInfo.departmentID)"
             />
-        </div>
+        </div> -->
     </div> 
 
     <UModal v-model="fileSelect">
@@ -374,7 +384,7 @@
 
 
     const props = defineProps(['form', 'auth', 'items', 'room', 'view', 'files', 'loading'])
-    const emit = defineEmits(['approve', 'notApprove'])
+    const emit = defineEmits(['approve', 'notApprove', 'update:form'])
     const authStore = useAuthStore()
     const fileSelect = ref(false)
 
@@ -386,55 +396,26 @@
         fetchType()
     })
 
+    const timeBeginRef = ref(null)
+    const timeEndRef = ref(null)
+
+    const updateTimeBegin = (value) => {
+        timeBeginRef.value.focus()
+    }
+
+    const updateTimeEnd = (value) => {
+        timeEndRef.value.focus()
+    }
+
     const dateNow = ref(moment(new Date()))
-
-    watch(props.form.time_begin, (newVal) => {
-        console.log(newVal);
-    })
-
-    watch(props.form.time_end, (newVal) => {
-        console.log(newVal);
-    })
-
-    const timeBegin = computed({
-        get: () => props.form.date_begin ? moment(props.form.date_begin).format('HH:mm') : '',
-        set: (newVal) => {
-            if (props.form.date_begin) {
-                const date = moment(props.form.date_begin).format('YYYY-MM-DD');
-                props.form.date_begin = moment(date + ' ' + newVal).format('YYYY-MM-DDTHH:mm');
-            }
-        }
-    })
-
-    const timeEnd = computed({
-        get: () => props.form.date_end ? moment(props.form.date_end).format('HH:mm') : '',
-        set: (newVal) => {
-            if (props.form.date_end) {
-                const date = moment(props.form.date_end).format('YYYY-MM-DD');
-                props.form.date_end = moment(date + ' ' + newVal).format('YYYY-MM-DDTHH:mm');
-            }
-        }
-    })
-
-    watch(() => props.form.date_begin, (newVal) => {
-        if (newVal && timeBegin.value) {
-            const date = moment(newVal).format('YYYY-MM-DD');
-            props.form.date_begin = moment(date + ' ' + timeBegin.value).format('YYYY-MM-DDTHH:mm');
-        }
-    })
-
-    watch(() => props.form.date_end, (newVal) => {
-        if (newVal && timeEnd.value) {
-            const date = moment(newVal).format('YYYY-MM-DD');
-            props.form.date_end = moment(date + ' ' + timeEnd.value).format('YYYY-MM-DDTHH:mm');
-        }
-    })
-
+    
     const isValidDateRange = computed(() => {
         if (!props.form.date_begin || !props.form.date_end) return false;
         
-        const startDateTime = moment(props.form.date_begin);
-        const endDateTime = moment(props.form.date_end);
+        const startDateTime = moment(props.form.date_begin + ' ' + props.form.time_begin);
+        const endDateTime = moment(props.form.date_end + ' ' + props.form.time_end);
+
+        console.log(startDateTime, endDateTime)
         
         // ตรวจสอบว่าเป็นวันเดียวกันหรือไม่
         if (startDateTime.isSame(endDateTime, 'day')) {

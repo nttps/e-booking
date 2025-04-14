@@ -85,6 +85,8 @@
         agenda:"",//รายละเอียดการประชุม
         date_begin: null,//วันเวลาที่จอง
         date_end: null,// ถึงวันที่ 
+        time_begin: null,//วันเวลาที่จอง
+        time_end: null,// ถึงวันที่ 
         created_by: auth.username, //ผู้ทำรายการ
         modified_by:"",//ผู้แก้ไขรายการ
         joiners: [],
@@ -104,10 +106,17 @@
 
      const submitConfirm = async ()  => {
 
+        const booking = {
+            ...form.value,
+            date_begin: moment(form.value.date_begin + ' ' + form.value.time_begin).format('YYYY-MM-DDTHH:mm:ss.000'),
+            date_end: moment(form.value.date_end + ' ' + form.value.time_end).format('YYYY-MM-DDTHH:mm:ss.000'),
+        }
+        delete booking.time_begin
+        delete booking.time_end
         loading.value = true
         form.value.room_id = room.value.room_id
         const data = await postApi('/bk/book/save' , {
-            booking: form.value,
+            booking: booking,
             joiners: form.value.joiners.map(joiner => {
                 return {username: joiner.username, join_role: joiner.join_role }
             }),

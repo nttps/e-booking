@@ -13,8 +13,8 @@ const props = defineProps({
     default: false
   },
   minDate: {
-    type: String,
-    default: false
+    type: Date,
+    default: new Date()
   }
 })
 

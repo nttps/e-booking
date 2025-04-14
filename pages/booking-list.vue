@@ -136,18 +136,7 @@
             />
         </div>
     </div>
-
-    <UModal v-model="modalEdit" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose">
-        <UForm :state="form" @submit="submit">
-            <div class="flex justify-end">
-                <div>
-                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-circle" size="xl" @click="modalEdit = false"/>
-                </div>
-            </div>
-            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" @approve="approve" :files="files" /> 
-        </UForm>
-
-        <UModal v-model="modalConfirmApprove" prevent-close @close="preventClose = false">
+    <UModal v-model="modalConfirmApprove" prevent-close @close="preventClose = false">
             <UForm :state="dataApprove" @submit="submitApprove">
                 <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                     <template #header>
@@ -174,6 +163,18 @@
                 </UCard>
             </UForm>
         </UModal>
+
+    <UModal v-model="modalEdit" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose">
+        <UForm :state="form" @submit="submit">
+            <div class="flex justify-end">
+                <div>
+                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-circle" size="xl" @click="modalEdit = false"/>
+                </div>
+            </div>
+            <FormBooking :form="form" :auth="authStore" :items="items" :room="room" :view="view" @approve="approve" :files="files" /> 
+        </UForm>
+
+      
         <UModal v-model="modalConfirm" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
             <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                 <template #header>
@@ -314,6 +315,23 @@
             click: () => edit(row.bk_no, true)
         }]
 
+        
+        if(row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ') {
+            btn.push({
+                label: 'อนุมัติ',
+                color: 'green',
+                icon: 'i-heroicons-check-circle',
+                click: () => approve(row.bk_no, true)
+            })
+            btn.push({
+                label: 'ปฏิเสธ',
+                color: 'red',
+                icon: 'i-heroicons-x-circle',
+                click: () => approve(row.bk_no, false)
+            })
+        }
+    
+
         if(row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ') {
             btn.push({
                 label: 'แก้ไข',
@@ -337,7 +355,7 @@
                 click: () => deleteConfirm(row.bk_no)
             })
         }
-    
+
        
         return [btn]
     }
@@ -407,6 +425,10 @@
         form.value.joiners = data.joiners
         form.value.staff = data.staff
         files.value = data.docs
+        form.value.time_begin = moment(form.value.date_begin).format('HH:mm')
+        form.value.time_end = moment(form.value.date_end).format('HH:mm')
+
+        console.log(form.value.time_begin, form.value.time_end)
 
         
         room.value = dataRoom.rooms
@@ -452,8 +474,6 @@
         }
 
 
-       
-
         modalConfirm.value = false
         modalEdit.value = false
 
@@ -480,7 +500,8 @@
     const modalConfirmApprove = ref(false)
     const preventClose = ref(false)
 
-    const approve = async (status) => {
+    const approve = async (id, status) => {
+        dataApprove.value.bkNO = id
         preventClose.value = true
         await nextTick()
         dataApprove.value.Action = status ? "อนุมัติ" : "ปฏิเสธ"
