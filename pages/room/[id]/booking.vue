@@ -70,10 +70,11 @@
         bk_date: dateNow.value.format('YYYY-MM-DDTHH:mm:ss.000'),//วันที่จอง
         reason_id:"",//รหัสเหตุผลเชื่อมกับตาราง bk_type(REASON)
         reason_desc:"",//เหตุผลในการจอง
-        room_id: '',
+        room_id: route.params.id,
         bk_type:"จองห้องประชุม",//จองห้องประชุม, จองยานพาหนะ ,จองพนักงานขับรถ
         bk_by_username: auth.username,//จองด้วยชื่อยูสเซอร์
         bk_by_fullname: auth.fullName, //จองด้วยชื่อเต็ม
+        department_id: auth.user.currentUserInfo.departmentID,
         bk_for_dep_id:"",//จำนวนเอกสารแนบ 
         remark1:"",//จุดหมายปลายทาง
         remark2: itemJoin.value,//สัมภาระ
@@ -114,7 +115,6 @@
         delete booking.time_begin
         delete booking.time_end
         loading.value = true
-        form.value.room_id = room.value.room_id
         const data = await postApi('/bk/book/save' , {
             booking: booking,
             joiners: form.value.joiners.map(joiner => {
