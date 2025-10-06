@@ -39,7 +39,7 @@
                 </button>
 
                 <USlideover v-model="notificationBar">
-                    <Notification :notifications="notifications.concat(unReaded)" @refresh="refreshAndGoToNotification"/>
+                    <Notification :notifications="unReaded.concat(notifications)" @refresh="refreshAndGoToNotification"/>
                 </USlideover>
                 
                 <button type="button" class="flex justify-center items-center space-x-4 relative" @click="toggleMenuBar"  ref="buttonProfileRef">
