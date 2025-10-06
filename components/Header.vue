@@ -25,14 +25,21 @@
         
             <div class="flex relative">
                 <button type="button" class="relative" @click="notificationBar = true" ref="buttonNotificationRef">
-                    <img v-if="notifications.length > 0" src="~/assets/images/notification.svg" class="w-[50px]" alt="">
-                    <img v-else src="~/assets/images/no-notification.svg" class="w-[50px]" alt="">
+                    <UChip :text="notifications.length" size="2xl">
+                        <UButton icon="i-heroicons-bell-solid" color="gray" size="md" class="text-[#FFA133] hover:text-[#FFA133]"  variant="link" :ui="{
+                            icon: {
+                                size: {
+                                    md: 'h-10 w-10'
+                                }
+                            }
+                        }"/>
+                    </UChip>
 
                    
                 </button>
 
                 <USlideover v-model="notificationBar">
-                    <Notification :notifications="notifications" @refresh="refresh"/>
+                    <Notification :notifications="notifications.concat(unReaded)" @refresh="refreshAndGoToNotification"/>
                 </USlideover>
                 
                 <button type="button" class="flex justify-center items-center space-x-4 relative" @click="toggleMenuBar"  ref="buttonProfileRef">
@@ -150,8 +157,14 @@
 
 
     const { data: notifications, pending, refresh } = await useAsyncData('notifications', async () => await getApi(`/bk/book/ListNotify?user=${user.user.currentUser}&isShowReaded=0`))
+    const { data: unReaded, pending: pendingUnReaded, refresh: refreshUnReaded } = await useAsyncData('unReaded', async () => await getApi(`/bk/book/ListNotify?user=${user.user.currentUser}&isShowReaded=1`))
 
-    const onClickNotification = (id) => {
-        navigateTo(`/notification/${id}`)
-    }
+const refreshAndGoToNotification = async (id) => {
+    await refreshUnReaded()
+    await refresh()
+    notificationBar.value = false
+    navigateTo(`/booking-list?notification=${id}`)
+}
+
+
 </script>

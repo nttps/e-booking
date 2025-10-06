@@ -240,7 +240,8 @@
     const statusSearch = ref('')
     const agedaSearch = ref('')
     const modalCancle = ref(false)
-    
+
+    const params = computed(() => useRoute().query)
 
 
     const reason = ref()
@@ -264,6 +265,14 @@
     const showMeOnly = ref(false)
     onMounted(() => {
         fetchRooms()
+        
+    })
+
+    watch(() => params.value, () => {
+        console.log(params.value.notification)
+        if (params.value.notification) {
+            edit(params.value.notification, true)
+        }
     })
 
     const fetchRooms = async () => {
