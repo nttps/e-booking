@@ -197,6 +197,7 @@
     <ModalAlertDelete v-model="modalDelete" @confirm="deleteItem"/>
     
     <UModal v-model="modalCancle" :ui="{ width: 'sm:max-w-6xl'}" prevent-close>
+        <UForm :state="dataApprove" @submit="submitApprove">
         <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
             <template #header>
                 <div class="text-center">ยืนยันรายการ</div>
@@ -204,13 +205,18 @@
 
             <div class="font-bold text-xl text-center">คุณต้องการยกเลิกการจองนี้ใช่หรือไม่</div>
 
+            <UFormGroup label="กรอกเหตุผล" name="Reason" size="xl">
+                <UTextarea v-model="dataApprove.Reason" placeholder="" ref="reason" required/>
+            </UFormGroup>
+
             <template #footer>
                 <div class="flex justify-between">
-                    <button type="button" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white" @click="submitApprove">ยืนยัน</button>
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalCancle = false">ยกเลิก</button>
+                    <UButton type="submit" color="green" class="px-4 py-2 bg-green-600 text-base rounded-[5px] text-white">ยืนยัน</UButton>
+                    <UButton type="button" color="gray" class="px-4 py-2 bg-gray-500 text-base rounded-[5px] text-white" @click="modalCancle = false">ยกเลิก</UButton>
                 </div>
             </template>
         </UCard>
+        </UForm>
     </UModal>
      
     
@@ -343,8 +349,11 @@
                 label: 'ปฏิเสธ',
                 icon: 'i-heroicons-x-circle-20-solid',
                 click: () => approve(row.bk_no, false)
-            },
-            {
+            })
+        }
+
+        if(row.status !== 'ยกเลิก') {
+            btnApprove.push({
                 label: 'ยกเลิก',
                 icon: 'i-heroicons-x-circle',
                 click: () => modalConfirmCancle(row.bk_no)

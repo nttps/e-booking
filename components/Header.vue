@@ -149,5 +149,9 @@
     }
 
 
-    const { data: notifications, pending, refresh } = await useAsyncData('notifications', async () => await getApi(`/bk/book/ListNotify?user=${user.username}`))
+    const { data: notifications, pending, refresh } = await useAsyncData('notifications', async () => await getApi(`/bk/book/ListNotify?user=${user.user.currentUser}&isShowReaded=0`))
+
+    const onClickNotification = (id) => {
+        navigateTo(`/notification/${id}`)
+    }
 </script>
