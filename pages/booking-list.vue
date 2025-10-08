@@ -107,7 +107,7 @@
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">{{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}</td>
                             <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.agenda }}</td>
                             <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.reason_desc }}</td>
-                            <td class="px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.department_id }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.bk_by_dep_id }}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.status }}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">
                                 <UDropdown :items="actionItems(row)" :popper="{ placement: 'bottom-start' }">
