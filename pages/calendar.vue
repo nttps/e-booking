@@ -27,7 +27,7 @@
             <template #weekDayEvent="eventProps">
                
                 <div class="p-2" :style="{ backgroundColor: eventProps.eventData.color, color: '#000', width: '100%', height: '100%', overflow: 'hidden' }">
-                    <div class="flex items-center is-title">
+                    <div class="flex items-center is-title truncate">
                         {{ eventProps.eventData.title }}
                     </div>
                     <div class="flex items-center is-time">
@@ -65,10 +65,10 @@
                 </div>
                 
                 <div v-for="(event, index) in dayData.events" class=" w-full mb-1" @click="clickDay(event)">
-                    <div v-if="index < 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer">
+                    <div v-if="index < 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer truncate">
                         {{ event.title }}
                     </div>
-                    <div v-if="selectDate == dayData.dateTimeString && index > 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer">
+                    <div v-if="selectDate == dayData.dateTimeString && index > 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer truncate">
                         {{ event.title }}
                     </div>
                 </div>
