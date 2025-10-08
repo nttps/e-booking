@@ -76,80 +76,90 @@
             </div>
             
             <!-- Table -->
-            <UTable
-            
-                :rows="booking.slice((page - 1) * pageCount, (page) * pageCount)"
-                :columns="columns"
-                :loading="pending"
-                class="w-full"
-                :loading-state="{ label: 'กำลังโหลด ...' }" 
-                :empty-state="{ label: 'ไม่พบรายการ' }"
-            >
-
-
-                <template #detail-data="{ row }">
-                    <NuxtLink to="">รายละเอียด </NuxtLink>
-                </template>
-
-                <template #bk_date-data="{ row }">
-                    {{ moment(row.bk_date).format('DD/MM/YYYY') }}
-                </template>
-
-                <template #date_begin-data="{ row }">
-                    {{ moment(row.date_begin).format('DD/MM/YYYY เวลา HH:mm') }}
-                </template>
-
-                <template #date_end-data="{ row }">
-                    {{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}
-                </template>
-
-
-                <template #status-data="{ row }">
-                
-                </template>
-                <template #actions-data="{ row }">
-                    <div class="text-center">
-                         <UDropdown :items="actionItems(row)" :popper="{ placement: 'bottom-start' }">
-                            <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-                        </UDropdown>
-                    </div>
-                 
-                </template>
-                
-            </UTable>
-            <!-- Number of rows & Pagination -->
-            <template #footer>
-                <div class="flex flex-wrap justify-between items-center">
-                    <div>
-                        <span class="text-sm leading-5">
-                            Showing
-                            <span class="font-medium">{{ pageFrom }}</span>
-                            to
-                            <span class="font-medium">{{ pageTo }}</span>
-                            of
-                            <span class="font-medium">{{ pageTotal }}</span>
-                            results
-                        </span>
-                    </div>
-
-                    <UPagination
-                        v-model="page"
-                        :page-count="pageCount"
-                        :total="booking.length"
-                        :ui="{
-                            wrapper: 'flex items-center gap-1',
-                            rounded: '!rounded-full min-w-[32px] justify-center',
-                            default: {
-                                activeButton: {
-                                    variant: 'outline'
-                                }
-                            }
-                        }"
-                    />
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">เลขที่เอกสาร</th>
+                                <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">วันที่จอง</th>
+                                <th scope="col" colspan="2" class="px-3 py-2 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-b border-r border-gray-200">วัน/เวลาที่จอง</th>
+                                <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">หัวข้อการประชุม</th>
+                                <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">รายละเอียด</th>
+                                <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">สถานะ</th>
+                                <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900"></th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="px-3 py-2 text-center text-sm font-semibold bg-[#FFA800] text-gray-900 border-r border-gray-200">ตั้งแต่</th>
+                                <th scope="col" class="px-3 py-2 text-center text-sm font-semibold bg-[#FFA800] text-gray-900 border-r border-gray-200">ถึง</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            <tr v-if="pending">
+                                <td colspan="8" class="px-3 py-12 text-center text-sm text-gray-500">
+                                    <div class="flex justify-center items-center">
+                                        <svg class="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span class="ml-2">กำลังโหลด ...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr v-else-if="booking.length === 0">
+                                <td colspan="8" class="px-3 py-12 text-center text-sm text-gray-500">
+                                    ไม่พบรายการ
+                                </td>
+                            </tr>
+                            <tr v-else v-for="row in booking.slice((page - 1) * pageCount, (page) * pageCount)" :key="row.bk_no" class="hover:bg-gray-50">
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.bk_no }}</td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ moment(row.bk_date).format('DD/MM/YYYY') }}</td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">{{ moment(row.date_begin).format('DD/MM/YYYY เวลา HH:mm') }}</td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">{{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}</td>
+                                <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.agenda }}</td>
+                                <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.reason_desc }}</td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.status }}</td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">
+                                    <UDropdown :items="actionItems(row)" :popper="{ placement: 'bottom-start' }">
+                                        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+                                    </UDropdown>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </template>
+            </div>
             
         </UCard>
+        
+        <div class="flex flex-wrap justify-between items-center bg-white px-4 pb-4 pt-4">
+            <div>
+                <span class="text-sm leading-5">
+                    Showing
+                    <span class="font-medium">{{ pageFrom }}</span>
+                    to
+                    <span class="font-medium">{{ pageTo }}</span>
+                    of
+                    <span class="font-medium">{{ pageTotal }}</span>
+                    results
+                </span>
+            </div>
+
+            <UPagination
+                v-model="page"
+                :page-count="pageCount"
+                :total="booking.length"
+                :ui="{
+                    wrapper: 'flex items-center gap-1',
+                    rounded: '!rounded-full min-w-[32px] justify-center',
+                    default: {
+                        activeButton: {
+                            variant: 'outline'
+                        }
+                    }
+                }"
+            />
+        </div>
     </div>
 
     <UModal v-model="modalAdd" :ui="{ width: 'sm:max-w-6xl'}" :prevent-close="preventClose" @close="closeModal">
