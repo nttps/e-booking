@@ -450,9 +450,6 @@
         files.value = data.docs
         form.value.time_begin = moment(form.value.date_begin).format('HH:mm')
         form.value.time_end = moment(form.value.date_end).format('HH:mm')
-
-        console.log(form.value.time_begin, form.value.time_end)
-
         
         room.value = dataRoom.rooms
         room.value.facilities = dataRoom.facilities

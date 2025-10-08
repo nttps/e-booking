@@ -58,7 +58,7 @@
                         </tr>
                         <tr>
                             <td>หน่วยงาน</td>
-                            <td class="text-zinc-400">{{ form.department_id || auth.user.currentUserInfo.departmentID}}</td>
+                            <td class="text-zinc-400">{{ form.bk_by_dep_id || auth.user.currentUserInfo.departmentID}}</td>
                         </tr>
                     </table>
                 </div>
