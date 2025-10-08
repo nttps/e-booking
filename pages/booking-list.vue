@@ -72,10 +72,10 @@
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">วันที่จอง</th>
                             <th scope="col" colspan="2" class="px-3 py-2 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-b border-r border-gray-200">วัน/เวลาที่ประชุม</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">หัวข้อการประชุม</th>
-                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">รายละเอียด</th>
+                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">วัตถุประสงค์</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">หน่วยงานผู้จองห้อง</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">สถานะ</th>
-                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900"></th>
+                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900">รายละเอียด</th>
                         </tr>
                         <tr>
                             <th scope="col" class="px-3 py-2 text-center text-sm font-semibold bg-[#FFA800] text-gray-900  border-r border-gray-200">ตั้งแต่</th>
