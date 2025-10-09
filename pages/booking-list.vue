@@ -361,7 +361,7 @@
 
         const btnApprove = []
 
-        if(authStore.isAdmin && (row.status !== 'ปฏิเสธ' || row.status !== 'อนุมัติ')) {
+        if(authStore.isAdmin && (row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ')) {
             btnApprove.push({
                 label: 'อนุมัติ',
                 icon: 'i-heroicons-check-circle-20-solid',
@@ -404,7 +404,7 @@
     const departmentUser = ref(authStore.user.currentUserInfo.departmentID)
     const { data: booking, pending, refresh } = await useAsyncData('booking', async () => {
         return await postApi('/bk/book/ListData' , {
-            OwnerUsername: showMeOnly.value ? nameUserSearch.value : '',
+            OwnerUsername: nameUserSearch.value,
             date_begin: searchDateBegin.value,
             date_end: searchDateEnd.value,
             Type: "จองห้องประชุม",
@@ -413,7 +413,7 @@
             Attendee: attendeeSearch.value,
             Building: buildingSearch.value,
             Agenda:agedaSearch.value,
-            //IsShowMeOnly: showMeOnly.value,
+            IsShowMeOnly: showMeOnly.value,
 
         }) 
     }
