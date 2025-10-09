@@ -41,6 +41,7 @@
                             </template>
                         </UPopover>
                     </div>
+                    
                     <div class="flex items-center" v-if="authStore.isAdmin">
                         <UCheckbox color="primary" 
                             v-model="showMeOnly"
@@ -311,8 +312,21 @@
             })
         }
 
-        if(row.status !== 'ปฏิเสธ' && row.status !== 'ยกเลิก') {
-            btn.push({
+        const btnApprove = []
+        if(authStore.isAdmin && (row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ')) {
+            btnApprove.push({
+                label: 'อนุมัติ',
+                icon: 'i-heroicons-check-circle-20-solid',
+                click: () => approve(row.bk_no, true)
+            },{
+                label: 'ปฏิเสธ',
+                icon: 'i-heroicons-x-circle-20-solid',
+                click: () => approve(row.bk_no, false)
+            })
+        }
+
+        if(row.status !== 'ปฏิเสธ') {
+            btnApprove.push({
                 label: 'ยกเลิก',
                 icon: 'i-heroicons-x-circle',
                 click: () => modalConfirmCancle(row.bk_no)
@@ -328,7 +342,7 @@
         }
     
        
-        return [btn]
+        return [btn, btnApprove]
     }
 
 
