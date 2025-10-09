@@ -35,15 +35,7 @@
                     <table class="border-separate border-spacing-x-2 ">
                         <tr>
                             <td>รหัสพนักงาน</td>
-                            <td class=" text-zinc-400">{{ auth.user.currentUserInfo.fullName}}</td>
-                        </tr>
-                        <tr>
-                            <td>สำนัก</td>
-                            <td class="text-zinc-400">{{ auth.user.currentUserInfo.positionID}}</td>
-                        </tr>
-                        <tr>
-                            <td>ประเภทงาน</td>
-                            <td class="text-zinc-400">{{ auth.user.currentUserInfo.positionID}}</td>
+                            <td class=" text-zinc-400">{{ form.bk_by_username }}</td>
                         </tr>
                         <tr>
                             <td>เบอร์ติดต่อ</td>
@@ -55,15 +47,11 @@
                     <table class="border-separate border-spacing-x-2 ">
                         <tr>
                             <td>ชื่อ - นามสกุล</td>
-                            <td class=" text-zinc-400">{{ auth.user.currentUserInfo.fullName}}</td>
+                            <td class=" text-zinc-400">{{ form.bk_by_fullname }}</td>
                         </tr>
                         <tr>
-                            <td>ฝ่าย</td>
-                            <td class="text-zinc-400">{{  auth.user.currentUserInfo.fullName }}</td>
-                        </tr>
-                        <tr>
-                            <td>ตำแหน่ง</td>
-                            <td class="text-zinc-400">{{ auth.user.currentUserInfo.positionID}}</td>
+                            <td>หน่วยงาน</td>
+                            <td class="text-zinc-400">{{ form.bk_by_dep_desc }}</td>
                         </tr>
                     </table>
                 </div>
