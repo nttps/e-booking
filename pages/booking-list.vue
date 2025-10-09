@@ -413,7 +413,7 @@
             Attendee: attendeeSearch.value,
             Building: buildingSearch.value,
             Agenda:agedaSearch.value,
-            //IsShowMeOnly: showMeOnly.value,
+            IsShowMeOnly: showMeOnly.value,
 
         }) 
     }
