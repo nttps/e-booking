@@ -433,10 +433,6 @@
         role: null,
         positionID: null
     })
-
-    const canApprove = computed(() => authStore.user.userInGroups.some(p => p.userGroupId === "แอดมิน Meeting/Booking" && p.isInGroup === true))
-  
-
     const fetchType = async () => {
         const resObject = await postApi('/bk/type/ListData' , {
             TypeKey: "OBJECTIVE",

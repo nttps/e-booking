@@ -26,7 +26,7 @@
 const { $auth } = useNuxtApp();
 
 const authStore = useAuthStore()
-const isAdmin = computed(() => authStore.user.userInGroups.some(g => g.userGroupID === "ADMIN"))
+const isAdmin = computed(() => authStore.user?.userInGroups && authStore.user?.userInGroups?.some(g => g.userGroupID === "ADMIN"))
 
 
 const logout = () => {

@@ -37,7 +37,7 @@
                             label="แสดงรายการจองเฉพาะของคุณ"
                             class="my-2" 
                             :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 text-lg dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
-                            @change="checkSearch"
+                           
                         />
                     </div>
                 </div>
@@ -274,7 +274,7 @@
     }])
 
 
-    const showMeOnly = ref(false)
+    const showMeOnly = ref(authStore.isAdmin ? false : true)
     onMounted(() => {
         fetchRooms()
         
@@ -404,7 +404,7 @@
     const departmentUser = ref(authStore.user.currentUserInfo.departmentID)
     const { data: booking, pending, refresh } = await useAsyncData('booking', async () => {
         return await postApi('/bk/book/ListData' , {
-            OwnerUsername: nameUserSearch.value,
+            OwnerUsername: showMeOnly.value ? nameUserSearch.value : '',
             date_begin: searchDateBegin.value,
             date_end: searchDateEnd.value,
             Type: "จองห้องประชุม",
@@ -413,7 +413,7 @@
             Attendee: attendeeSearch.value,
             Building: buildingSearch.value,
             Agenda:agedaSearch.value,
-            IsShowMeOnly: showMeOnly.value,
+            //IsShowMeOnly: showMeOnly.value,
 
         }) 
     }
