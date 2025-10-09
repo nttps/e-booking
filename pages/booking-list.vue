@@ -29,7 +29,7 @@
                             </template>
                         </UPopover>
                     </div>
-                    <div class="self-center">
+                    <div class="self-center" v-if="authStore.isAdmin">
                         <UCheckbox color="primary" 
                             :value="true" 
                             v-model="showMeOnly"
