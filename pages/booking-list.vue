@@ -361,7 +361,7 @@
 
         const btnApprove = []
 
-        if(row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ') {
+        if(authStore.isAdmin && (row.status !== 'ปฏิเสธ' || row.status !== 'อนุมัติ')) {
             btnApprove.push({
                 label: 'อนุมัติ',
                 icon: 'i-heroicons-check-circle-20-solid',
@@ -413,7 +413,7 @@
             Attendee: attendeeSearch.value,
             Building: buildingSearch.value,
             Agenda:agedaSearch.value,
-            IsShowMeOnly: showMeOnly.value,
+            //IsShowMeOnly: showMeOnly.value,
 
         }) 
     }

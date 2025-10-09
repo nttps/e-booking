@@ -12,7 +12,7 @@ export const useAuthStore = defineStore("auth-store", {
     getters: {
         isLoggedIn: (state) => !!state.user,
         isAdmin: (state) =>
-            state.user?.userInGroups && state.user?.userInGroups?.some(
+            state.user?.userInGroups?.some(
                 (p) =>
                     p.userGroupId === "แอดมิน Meeting/Booking" &&
                     p.isInGroup === true
