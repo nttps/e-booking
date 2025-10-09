@@ -68,12 +68,12 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">เลขที่เอกสาร</th>
-                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">ห้องประชุม</th>
+                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">หน่วยงานผู้จองห้อง</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">วันที่จอง</th>
                             <th scope="col" colspan="2" class="px-3 py-2 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-b border-r border-gray-200">วัน/เวลาที่ประชุม</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">หัวข้อการประชุม</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">วัตถุประสงค์</th>
-                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">หน่วยงานผู้จองห้อง</th>
+                            <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">ห้องประชุม</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900 border-r border-gray-200">สถานะ</th>
                             <th scope="col" rowspan="2" class="px-3 py-3.5 text-center bg-[#FFA800] text-sm font-semibold text-gray-900">รายละเอียด</th>
                         </tr>
@@ -101,13 +101,13 @@
                         </tr>
                         <tr v-else v-for="row in booking.slice((page - 1) * pageCount, (page) * pageCount)" :key="row.bk_no" class="hover:bg-gray-50">
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.bk_no }}</td>
-                            <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.room_name }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.bk_by_dep_id  }}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ moment(row.bk_date).format('DD/MM/YYYY') }}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">{{ moment(row.date_begin).format('DD/MM/YYYY เวลา HH:mm') }}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">{{ moment(row.date_end).format('DD/MM/YYYY เวลา HH:mm') }}</td>
                             <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.agenda }}</td>
                             <td class="px-3 py-4 text-sm text-gray-900 whitespace-normal border border-gray-200">{{ row.reason_desc }}</td>
-                            <td class="px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.bk_by_dep_id }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.room_name}}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 border border-gray-200">{{ row.status }}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-center border border-gray-200">
                                 <UDropdown :items="actionItems(row)" :popper="{ placement: 'bottom-start' }">
