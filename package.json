@@ -21,6 +21,11 @@
         "sass": "^1.63.6"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.19",
+        "@fullcalendar/daygrid": "^6.1.19",
+        "@fullcalendar/list": "^6.1.19",
+        "@fullcalendar/timegrid": "^6.1.19",
+        "@fullcalendar/vue3": "^6.1.19",
         "@nuxt/ui": "npm:@nuxt/ui-edge@latest",
         "@pinia/nuxt": "^0.5.1",
         "@popperjs/core": "^2.11.8",

@@ -4,11 +4,20 @@
         
         <div class="mb-2 flex justify-between items-center space-x-4">
             <UFormGroup label="ค้นหาห้องประชุม" class="w-4/6">
-
-                <USelectMenu value-attribute="room_name" class="w-full" option-attribute="room_name" :options="rooms" v-model="nameSearch" searchable placeholder="ค้นหาห้องประชุม" size="xl" searchable-placeholder="ค้นหาห้องประชุม" />
+                <USelectMenu 
+                    value-attribute="room_name" 
+                    class="w-full" 
+                    option-attribute="room_name" 
+                    :options="rooms" 
+                    v-model="nameSearch" 
+                    searchable 
+                    placeholder="ค้นหาห้องประชุม" 
+                    size="xl" 
+                    searchable-placeholder="ค้นหาห้องประชุม" 
+                />
             </UFormGroup>
             <div class="w-2/6 self-end">
-                 <UButton
+                <UButton
                     color="gray"
                     size="xl"
                     :disabled="nameSearch === ''"
@@ -18,69 +27,11 @@
                 </UButton>
             </div>
         </div>
-        <Qalendar 
-            :events="events"
-            :config="config"
-            
-        >
 
-            <template #weekDayEvent="eventProps">
-               
-                <div class="p-2" :style="{ backgroundColor: eventProps.eventData.color, color: '#000', width: '100%', height: '100%', overflow: 'hidden' }">
-                    <div class="flex items-center is-title truncate">
-                        {{ eventProps.eventData.title }}
-                    </div>
-                    <div class="flex items-center is-time">
-                        <Icon
-                            name="i-material-symbols-alarm-outline"
-                        />
-                        <span class="ml-2">{{ getEventTime(eventProps.eventData) }}</span>
-                    </div>
-                    <div
-                        v-if="eventProps.eventData.with"
-                        class="flex items-center is-with"
-                    >
-                        <Icon
-                            name="i-material-symbols-person-book"
-                        />
-                        <span class="ml-2">{{ eventProps.eventData.with }}</span>
-                    </div>
-                    <div
-                        v-if="eventProps.eventData.description"
-                        class="flex items-center is-description"
-                    >
-                        <Icon
-                            name="i-material-symbols-description"
-                        />
-                        <!-- eslint-disable vue/no-v-html -->
-                        <p class="ml-2" v-html="eventProps.eventData.description" />
-                        <!--eslint-enable-->
-                    </div>
-                </div>
-            </template>
-            <template #dayCell="{dayData}">
-                <div>
-                    <div class="text-center"> {{ dayData.dateTimeString.substring(8, 10).startsWith('0') ? dayData.dateTimeString.substring(9, 10) : dayData.dateTimeString.substring(8, 10) }}</div>
-                    
-                </div>
-                
-                <div v-for="(event, index) in dayData.events" class=" w-full mb-1" @click="clickDay(event)">
-                    <div v-if="index < 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer truncate">
-                        {{ event.title }}
-                    </div>
-                    <div v-if="selectDate == dayData.dateTimeString && index >= 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer truncate">
-                        {{ event.title }}
-                    </div>
-                </div>
-                <div
-                    v-if="selectDate != dayData.dateTimeString && dayData.events.length >= 4"
-                    class="text-sm"
-                    @click="showMore(dayData.dateTimeString)"
-                >
-                    ดูรายการเพิ่มเติม
-                </div>
-            </template>
-        </Qalendar>
+        <FullCalendar 
+            :options="calendarOptions"
+            @eventClick="handleEventClick"
+        />
     </div>
 
     <UModal v-model="viewEvent">
@@ -104,130 +55,310 @@
             </template>
 
             <div>
-                <div v-if="viewEventCurrent.with"><span class="font-bold">จองโดย</span> : {{ viewEventCurrent.with }} </div>
-                <div><span class="font-bold">รายละเอียด</span> : {{ viewEventCurrent.description || viewEventCurrent.title }} </div>
-                <div><span class="font-bold">ช่วงเวลา</span> {{ viewEventCurrent.time.start }} ถึง {{ viewEventCurrent.time.end }} </div>
-
+                <div v-if="viewEventCurrent.extendedProps?.with">
+                    <span class="font-bold">จองโดย</span> : {{ viewEventCurrent.extendedProps.with }} 
+                </div>
+                <div>
+                    <span class="font-bold">รายละเอียด</span> : {{ viewEventCurrent.extendedProps?.description || viewEventCurrent.title }} 
+                </div>
+                <div>
+                    <span class="font-bold">ช่วงเวลา</span> : {{ formatEventDateTime(viewEventCurrent.start) }} ถึง {{ formatEventDateTime(viewEventCurrent.end) }}
+                </div>
             </div>
         </UCard>
     </UModal>
 </template>
 
 <script setup>
-import { Qalendar } from "qalendar";
-    import "qalendar/dist/style.css"
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import listPlugin from '@fullcalendar/list'
+import { ref, computed } from 'vue'
 
-    useSeoMeta({
-        title: 'ปฎิทิน'
+useSeoMeta({
+    title: 'ปฎิทิน'
+})
+
+const nameSearch = ref('')
+const viewEvent = ref(false)
+const viewEventCurrent = ref(null)
+
+const rooms = ref([{
+    room_name: 'ทั้งหมด'
+}])
+
+const resetFilters = () => {
+    nameSearch.value = "ทั้งหมด"
+}
+
+onMounted(() => {
+    fetchRooms()
+})
+
+const fetchRooms = async () => {
+    const resObject = await listRooms({ })
+    rooms.value = rooms.value.concat(resObject)
+}
+
+// แปลงข้อมูลจาก API ให้เป็นรูปแบบ FullCalendar
+const { data: events, pending, refresh } = await useAsyncData('events', async () => {
+    const rawEvents = await postApi('/bk/book/ListCalendar' , {
+        search: nameSearch.value === 'ทั้งหมด' ? '' : nameSearch.value,
     })
-
-    const nameSearch = ref('')
-    const viewEvent = ref(false)
-    const viewEventCurrent = ref(null)
-
-
-    const rooms = ref([{
-        room_name: 'ทั้งหมด'
-    }])
-
-    const resetFilters = () => {
-        nameSearch.value = "ทั้งหมด"
-    }
-
-    onMounted(() => {
-        fetchRooms()
-    })
-
-    const fetchRooms = async () => {
-        const resObject = await listRooms({ })
-
-        rooms.value = rooms.value.concat(resObject)
-    }
-
-
-    const { data: events, pending, refresh } = await useAsyncData('events', async () => await postApi('/bk/book/ListCalendar' , {
-            search: nameSearch.value === 'ทั้งหมด' ? '' : nameSearch.value,
-
-        }) 
-    , {
-        default: () => [],
-        watch: [nameSearch]
-    })
-
-    const clickDay = (data) =>{
-        viewEvent.value = true
-        viewEventCurrent.value = data
-    }
-
-
-    const selectDate = ref(null)
-
-    const showMore = (day) => {
-        selectDate.value = day
-
-    }
-    const mode = ref('month')
-
     
-    const config = ref({
-        //locale: "th-TH",
-        defaultMode: 'month',
-        style: {
-            // When adding a custom font, please also set the fallback(s) yourself
-            fontFamily: `'Kanit', sans-serif`,
-        },
-    })
-
-    const getEventTime = (event) => {
-      return (
-        getLocalizedTime(event.time.start) +
-        ' - ' +
-        getLocalizedTime(event.time.end)
-      );
-    }
-
-    const getAllVariablesFromDateTimeString = (dateTimeString) => {
+    return rawEvents.map(event => {
+        // เอาตัวเลขเวลาออกจากชื่อ event
+        const cleanTitle = event.title
+            .replace(/^[\d\s:\.]+/, '') // เอาตัวเลข เวลา และจุดที่ขึ้นต้น
+            .replace(/^\d+[:\s\.]+\d*\s*/, '') // เอาตัวเลขเวลาที่ขึ้นต้น
+            .replace(/^[0-9]+[:\s\.]*[0-9]*\s*/, '') // เอาตัวเลขใดๆ ที่ขึ้นต้น
+            .trim()
+        
         return {
-            year: +dateTimeString.substring(0, 4),
-            month: +dateTimeString.substring(5, 7) - 1,
-            date: +dateTimeString.substring(8, 10),
-            hour: hourFrom(dateTimeString),
-            minutes: minutesFrom(dateTimeString),
-        };
-    }
+            id: event.id,
+            title: cleanTitle,
+            start: event.time.start,
+            end: event.time.end,
+            backgroundColor: event.color,
+            textColor: event.color === '#ff0000' ? 'white' : 'black',
+            extendedProps: {
+                with: event.with,
+                description: event.description,
+                originalEvent: event
+            }
+        }
+    })
+}, {
+    default: () => [],
+    watch: [nameSearch]
+})
 
-    const  getLocalizedTime = (dateTimeString) => {
-        // Though only displaying time, the exact date is needed, because otherwise time will be displayed
-        // incorrectly on days when daylight saving time changes
-        const {
-            year,
-            month,
-            date,
-            hour,
-            minutes,
-        } = getAllVariablesFromDateTimeString(dateTimeString);
-        const d = new Date(year, month, date, hour, minutes);
+const handleEventClick = (info) => {
+    // ปิด popup ของ FullCalendar ก่อน
+    const popovers = document.querySelectorAll('.fc-popover')
+    popovers.forEach(popover => {
+        popover.style.display = 'none'
+    })
+    
+    viewEvent.value = true
+    viewEventCurrent.value = info.event
+}
 
-        return d.toLocaleTimeString('th-TH', {
-            hour: "numeric",
-            minute: "numeric",
-        });
+const formatEventDateTime = (date) => {
+    if (!date) return ''
+    const d = new Date(date)
+    
+    const dateStr = d.toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    })
+    
+    // ตรวจสอบว่ามีเวลาหรือไม่
+    const hasTime = d.getHours() !== 0 || d.getMinutes() !== 0
+    
+    if (hasTime) {
+        const timeStr = d.toLocaleTimeString('th-TH', {
+            hour: '2-digit',
+            minute: '2-digit'
+        })
+        return `${dateStr} เวลา ${timeStr}`
     }
+    
+    return dateStr
+}
 
-    const hourFrom = (dateTimeString) => {
-        return +dateTimeString.substring(11, 13);
-    }
-
-    const minutesFrom = (dateTimeString) => {
-        return +dateTimeString.substring(14, 16);
-    }
+const calendarOptions = computed(() => ({
+    plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
+    initialView: 'dayGridMonth',
+    locale: 'th',
+    headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+    },
+    buttonText: {
+        today: 'วันนี้',
+        month: 'เดือน',
+        week: 'สัปดาห์',
+        day: 'วัน',
+        list: 'รายการ'
+    },
+    views: {
+        dayGridMonth: {
+            titleFormat: { year: 'numeric', month: 'long' }
+        },
+        timeGridWeek: {
+            titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+        },
+        timeGridDay: {
+            titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+        },
+        listWeek: {
+            titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+        }
+    },
+    events: events.value,
+    eventDisplay: 'block',
+    dayMaxEvents: 3,
+    moreLinkClick: 'popover',
+    height: 'auto',
+    aspectRatio: 1.8,
+    eventClick: handleEventClick,
+    // ซ่อนเวลาที่แสดงในปฏิทิน (เฉพาะ month view)
+    displayEventTime: false,
+    displayEventEnd: false,
+    // เปลี่ยนข้อความ moreLink
+    moreLinkText: 'แสดงเพิ่มเติม',
+    // ตั้งค่าสำหรับ week และ day view
+    slotMinTime: '06:00:00',
+    slotMaxTime: '22:00:00',
+    slotDuration: '01:00:00',
+    slotLabelInterval: '01:00:00',
+    allDaySlot: true,
+    nowIndicator: true
+}))
 </script>
 
-<style lang="css">
-   .calendar-month__weekday {
-        @apply !min-h-[150px] !max-h-[250px] px-2 overflow-y-auto ;
-   }
-   .calendar-month__event {
-        @apply !text-base
-   }
+<style>
+/* ปรับแต่งสไตล์ FullCalendar */
+.fc {
+    font-family: 'Kanit', sans-serif;
+}
+
+.fc-event {
+    border-radius: 4px;
+    border: none;
+    font-size: 0.875rem;
+    padding: 2px 4px;
+}
+
+.fc-daygrid-event {
+    margin: 1px 0;
+}
+
+.fc-daygrid-day-number {
+    font-weight: 500;
+}
+
+.fc-toolbar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.fc-button {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    color: #374151;
+    font-weight: 500;
+}
+
+.fc-button:hover {
+    background-color: #e5e7eb;
+}
+
+.fc-button:focus {
+    box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.fc-button-primary {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.fc-button-primary:hover {
+    background-color: #2563eb;
+}
+
+/* Multi-day events styling */
+.fc-event.fc-event-start {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.fc-event.fc-event-end {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.fc-event.fc-event-start.fc-event-end {
+    border-radius: 4px;
+}
+
+/* แก้ไข z-index ของ popup รายการเพิ่มเติม */
+.fc-popover {
+    z-index: 1000 !important;
+}
+
+/* แก้ไข z-index ของ modal รายละเอียด */
+.fc-event-popover {
+    z-index: 1001 !important;
+}
+
+/* ตรวจสอบว่า modal ของ Nuxt UI มี z-index สูงกว่า */
+[data-headlessui-portal] {
+    z-index: 99999 !important;
+}
+
+/* เพิ่ม z-index สำหรับ modal และ overlay */
+.relative {
+    z-index: 99999 !important;
+}
+
+/* แก้ไข z-index ของ UModal */
+[data-headlessui-portal] > div {
+    z-index: 99999 !important;
+}
+
+/* แก้ไข z-index ของ backdrop */
+.fixed.inset-0 {
+    z-index: 99998 !important;
+}
+
+/* แก้ไข z-index ของ modal content */
+.relative.z-50 {
+    z-index: 99999 !important;
+}
+
+/* ปรับแต่งสไตล์สำหรับ week และ day view */
+.fc-timegrid-slot {
+    height: 2.5em;
+}
+
+.fc-timegrid-event {
+    font-size: 0.875rem;
+    padding: 2px 4px;
+}
+
+.fc-timegrid-event .fc-event-title {
+    font-weight: 500;
+}
+
+.fc-timegrid-axis {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.fc-timegrid-slot-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* ปรับแต่งสไตล์สำหรับ list view */
+.fc-list-event {
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 2px 0;
+}
+
+.fc-list-event-title {
+    font-weight: 500;
+}
+
+.fc-list-event-time {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
 </style>
