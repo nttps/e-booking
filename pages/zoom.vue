@@ -42,13 +42,13 @@
                         </UPopover>
                     </div>
                     
-                    <div class="flex items-center" v-if="authStore.isAdmin">
+                    <div class="flex items-center" v-if="authStore.isAdmin || authStore.isStaff">
                         <UCheckbox color="primary" 
                             v-model="showMeOnly"
                             label="แสดงรายการจองเฉพาะของคุณ"
                             class="mb-2" 
                             :ui="{container: 'flex items-center h-6', base: 'h-5 w-5 text-lg dark:checked:bg-current dark:checked:border-transparent dark:indeterminate:bg-current dark:indeterminate:border-transparent disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent'}"
-                            @change="checkSearch"
+                           
                         />
                     </div>
                    
@@ -251,7 +251,7 @@
     const modalCancle = ref(false)
     const dataDelete = ref(null)
     const nameUserSearch = ref(authStore.username)
-    const showMeOnly = ref(false)
+    const showMeOnly = ref(authStore.isAdmin || authStore.isStaff ? false : true)
     const view = ref(false)
     const modalConfirm = ref(false)
     const searchDateBegin = ref(null)
@@ -313,7 +313,7 @@
         }
 
         const btnApprove = []
-        if(authStore.isAdmin && (row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ')) {
+        if((authStore.isAdmin || authStore.isStaff) && (row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ')) {
             btnApprove.push({
                 label: 'อนุมัติ',
                 icon: 'i-heroicons-check-circle-20-solid',

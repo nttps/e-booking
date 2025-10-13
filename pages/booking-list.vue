@@ -29,7 +29,7 @@
                             </template>
                         </UPopover>
                     </div>
-                    <div class="self-center" v-if="authStore.isAdmin">
+                    <div class="self-center" v-if="authStore.isAdmin || authStore.isStaff">
                         <UCheckbox color="primary" 
                             :value="true" 
                             v-model="showMeOnly"
@@ -274,7 +274,7 @@
     }])
 
 
-    const showMeOnly = ref(authStore.isAdmin ? false : true)
+    const showMeOnly = ref(authStore.isAdmin || authStore.isStaff ? false : true)
     onMounted(() => {
         fetchRooms()
         
@@ -361,7 +361,7 @@
 
         const btnApprove = []
 
-        if(authStore.isAdmin && (row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ')) {
+        if((authStore.isAdmin || authStore.isStaff) && (row.status !== 'ปฏิเสธ' && row.status !== 'อนุมัติ')) {
             btnApprove.push({
                 label: 'อนุมัติ',
                 icon: 'i-heroicons-check-circle-20-solid',

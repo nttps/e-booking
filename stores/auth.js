@@ -11,6 +11,12 @@ export const useAuthStore = defineStore("auth-store", {
     }),
     getters: {
         isLoggedIn: (state) => !!state.user,
+        isStaff: (state) =>
+            state.user?.userInGroups?.some(
+                (p) =>
+                    p.userGroupId === "ผู้ใช้งาน ทส." &&
+                    p.isInGroup === true
+            ),
         isAdmin: (state) =>
             state.user?.userInGroups?.some(
                 (p) =>
