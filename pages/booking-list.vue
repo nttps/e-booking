@@ -414,6 +414,7 @@
             Building: buildingSearch.value,
             Agenda:agedaSearch.value,
             IsShowMeOnly: showMeOnly.value,
+            Department: authStore.isStaff ? '' : departmentUser.value
 
         }) 
     }

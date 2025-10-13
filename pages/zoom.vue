@@ -376,6 +376,7 @@
     const pageTo = computed(() => Math.min(page.value * pageCount.value, pageTotal.value))
 
     // Data
+    const departmentUser = ref(authStore.user.currentUserInfo.departmentID)
     const { data: booking, pending, refresh } = await useAsyncData('booking', async () => await postApi('/bk/book/ListData' , {
             OwnerUsername: nameUserSearch.value,
             date_begin: searchDateBegin.value,
@@ -386,7 +387,8 @@
             Attendee: attendeeSearch.value || null,
             Building: '',
             Agenda: agedaSearch.value,
-            IsShowMeOnly: showMeOnly.value
+            IsShowMeOnly: showMeOnly.value,
+            Department: authStore.isStaff ? '' : departmentUser.value
         }) 
     , {
         default: () => [],
