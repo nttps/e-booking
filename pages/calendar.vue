@@ -68,7 +68,7 @@
                     <div v-if="index < 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer truncate">
                         {{ event.title }}
                     </div>
-                    <div v-if="selectDate == dayData.dateTimeString && index > 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer truncate">
+                    <div v-if="selectDate == dayData.dateTimeString && index >= 3" :style="`background-color: ${event.color}; color:${event.color == '#ff0000' ? 'white' : 'black'}`" class="px-2 w-full cursor-pointer truncate">
                         {{ event.title }}
                     </div>
                 </div>
@@ -225,7 +225,7 @@ import { Qalendar } from "qalendar";
 
 <style lang="css">
    .calendar-month__weekday {
-        @apply !min-h-[150px] px-2 ;
+        @apply !min-h-[150px] !max-h-[250px] px-2 overflow-y-auto ;
    }
    .calendar-month__event {
         @apply !text-base
