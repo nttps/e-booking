@@ -297,30 +297,11 @@ const calendarOptions = computed(() => ({
     z-index: 1001 !important;
 }
 
-/* ตรวจสอบว่า modal ของ Nuxt UI มี z-index สูงกว่า */
-[data-headlessui-portal] {
-    z-index: 99999 !important;
-}
-
 /* เพิ่ม z-index สำหรับ modal และ overlay */
 .relative {
     z-index: 99999 !important;
 }
 
-/* แก้ไข z-index ของ UModal */
-[data-headlessui-portal] > div {
-    z-index: 99999 !important;
-}
-
-/* แก้ไข z-index ของ backdrop */
-.fixed.inset-0 {
-    z-index: 99998 !important;
-}
-
-/* แก้ไข z-index ของ modal content */
-.relative.z-50 {
-    z-index: 99999 !important;
-}
 
 /* ปรับแต่งสไตล์สำหรับ week และ day view */
 .fc-timegrid-slot {
